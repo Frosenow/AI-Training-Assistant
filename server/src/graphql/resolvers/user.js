@@ -1,8 +1,10 @@
-import User from "../../models/User.mjs";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { UserInputError } from "apollo-server";
 import { config } from "dotenv";
 config();
+
+import User from "../../models/User.mjs";
 
 const usersResolvers = {
   Mutation: {
@@ -14,6 +16,14 @@ const usersResolvers = {
     ) {
       // TODO: Validate user data
       // TODO: Make sure user doesnt already exits
+      const user = await User.findOne({ username });
+      if (user) {
+        throw new UserInputError("Username is taken", {
+          errors: {
+            username: "This username is taken",
+          },
+        });
+      }
 
       // Hash password and sent to DB
       password = await bcrypt.hash(password, 12);
