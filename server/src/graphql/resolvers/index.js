@@ -1,8 +1,12 @@
-import { commentsResolver } from "./comments.js";
+import { commentsResolvers } from "./comments.js";
+import { usersResolvers } from "./user.js";
 
 const resolvers = {
   Query: {
-    ...commentsResolver.Query,
+    ...commentsResolvers.Query,
+  },
+  Mutation: {
+    ...usersResolvers.Mutation,
   },
 };
 

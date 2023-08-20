@@ -1,6 +1,6 @@
 import Comment from "../../models/Comment.mjs";
 
-const commentsResolver = {
+const commentsResolvers = {
   Query: {
     async getComments() {
       try {
@@ -13,4 +13,4 @@ const commentsResolver = {
   },
 };
 
-export { commentsResolver };
+export { commentsResolvers };
