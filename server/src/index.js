@@ -1,37 +1,10 @@
 import { ApolloServer } from "apollo-server";
-import { gql } from "graphql-tag";
 import mongoose from "mongoose";
 import { config } from "dotenv";
 config();
 
-import User from "./models/User.mjs";
-import Comment from "./models/Comment.mjs";
-
-const typeDefs = gql`
-  type Comment {
-    id: ID
-    name: String
-    email: String
-    text: String
-    date: String
-  }
-  type Query {
-    getComments: [Comment]
-  }
-`;
-
-const resolvers = {
-  Query: {
-    async getComments() {
-      try {
-        const comments = await Comment.find();
-        return comments;
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-  },
-};
+import { resolvers } from "./graphql/resolvers/index.js";
+import { typeDefs } from "./graphql/TypeDefs.js";
 
 const server = new ApolloServer({ typeDefs, resolvers });
 

@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index"
   },
   "author": "Filip Potepa",
   "license": "ISC",
@@ -15,5 +16,8 @@
     "graphql": "^16.7.1",
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
