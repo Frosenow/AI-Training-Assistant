@@ -1,4 +1,5 @@
 import Comment from "../../models/Comment.mjs";
+import { authUser } from "../../util/check-auth.js";
 
 const commentsResolvers = {
   Query: {
@@ -24,7 +25,20 @@ const commentsResolvers = {
     },
   },
   Mutation: {
-    async createComment(_, { body }, context) {},
+    async createComment(_, { body }, context) {
+      const user = authUser(context);
+
+      const newComment = new Comment({
+        body,
+        user: user.id,
+        username: user.username,
+        createdAt: new Date().toISOString(),
+      });
+
+      const comment = await newComment.save();
+
+      return comment;
+    },
   },
 };
 

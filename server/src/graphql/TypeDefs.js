@@ -3,10 +3,9 @@ import { gql } from "graphql-tag";
 const typeDefs = gql`
   type Comment {
     id: ID!
-    name: String!
-    email: String
-    text: String!
-    date: String
+    body: String!
+    createdAt: String!
+    username: String!
   }
   type User {
     id: ID!
