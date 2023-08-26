@@ -6,7 +6,11 @@ config();
 import { resolvers } from "./graphql/resolvers/index.js";
 import { typeDefs } from "./graphql/TypeDefs.js";
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req }) => ({ req }),
+});
 
 try {
   await mongoose.connect(process.env.MONGODB_CONNECTION_STRING, {

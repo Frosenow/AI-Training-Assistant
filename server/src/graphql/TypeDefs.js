@@ -24,10 +24,13 @@ const typeDefs = gql`
   }
   type Query {
     getComments: [Comment]
+    getComment(commentId: ID!): Comment
   }
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(username: String!, password: String!): User!
+    createComment(body: String!): Comment!
+    deleteComment(commentId: ID!): String!
   }
 `;
 
