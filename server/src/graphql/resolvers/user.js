@@ -72,7 +72,7 @@ const usersResolvers = {
       if (!valid) {
         throw new UserInputError("Errors", { errors });
       }
-      // TODO: Make sure user doesnt already exits
+      // Make sure user doesnt already exits
       const user = await User.findOne({ username });
       if (user) {
         throw new UserInputError("Username is taken", {
