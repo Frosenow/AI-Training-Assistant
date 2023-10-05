@@ -36,6 +36,25 @@ const commentsResolvers = {
     },
     deleteComment: async (_, { postId, commentId }, context) => {
       const { username } = authUser(context);
+
+      const post = await Post.findById(postId);
+
+      if (post) {
+        // Find index of the comment that should be deleted
+        const commentIdx = post.comments.findIndex(
+          (comment) => comment.id === commentId
+        );
+
+        // Check if the logged user own the comment
+        if (post.comments[commentIdx].username === username) {
+          // Delete the comment if the logged user own the comment
+          post.comments.splice(commentIdx, 1);
+
+          // Save the updated post back to DB
+          await post.save();
+          return post;
+        } else throw new AuthenticationError("Action not allowed");
+      } else throw new UserInputError("Post not found");
     },
   },
 };
