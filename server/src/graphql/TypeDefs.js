@@ -30,6 +30,17 @@ const typeDefs = gql`
     token: String!
     createdAt: String
   }
+  type Exercise {
+    id: ID!
+    exerciseName: String!
+    muscleGroup: String
+  }
+  type ExerciseList {
+    id: ID!
+    owner: String!
+    name: String!
+    exercises: [Exercise]!
+  }
   input RegisterInput {
     username: String!
     password: String!
@@ -48,6 +59,7 @@ const typeDefs = gql`
     createComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
+    createExerciseList(listName: String!): ExerciseList!
   }
 `;
 
