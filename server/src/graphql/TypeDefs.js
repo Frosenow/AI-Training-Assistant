@@ -70,6 +70,7 @@ const typeDefs = gql`
       exerciseListId: ID!
       exercise: ExerciseInput!
     ): ExerciseList!
+    deleteExerciseFromList(exerciseListId: ID!, exerciseId: ID!): ExerciseList!
   }
 `;
 

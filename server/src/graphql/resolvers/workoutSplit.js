@@ -27,12 +27,13 @@ const exerciseResolvers = {
         });
       }
 
-      const exerciseListName = await ExerciseList.find({ name: listName });
+      const usersExerciseList = await ExerciseList.find({ owner: username });
 
-      if (exerciseListName.length > 0) {
+      // Check if user already created a list
+      if (usersExerciseList.length > 0) {
         throw new UserInputError("List already exist", {
           errors: {
-            body: `Exercise list with name: ${listName} already exists`,
+            body: `Users can create only one exercise list`,
           },
         });
       }
@@ -92,6 +93,29 @@ const exerciseResolvers = {
             muscleGroup,
           });
 
+          await exerciseList.save();
+          return exerciseList;
+        } else throw new AuthenticationError("Action not allowed");
+      } else throw new UserInputError("Exercise List not found");
+    },
+    async deleteExerciseFromList(_, { exerciseListId, exerciseId }, context) {
+      const { username } = authUser(context);
+
+      // Find the ExerciseLit in DB
+      const exerciseList = await ExerciseList.findById(exerciseListId);
+
+      if (exerciseList) {
+        // Find index of the exercise that should be deleted
+        const exerciseIdx = exerciseList.exercises.findIndex(
+          (exercise) => exercise.id === exerciseId
+        );
+
+        // Check if the logged user own the exercise list
+        if (exerciseList.owner === username) {
+          // Delete the exercise if the loffed user own the exercise list
+          exerciseList.exercises.splice(exerciseIdx, 1);
+
+          // Save the updated exercise list back to DB
           await exerciseList.save();
           return exerciseList;
         } else throw new AuthenticationError("Action not allowed");
