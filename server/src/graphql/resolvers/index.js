@@ -10,6 +10,7 @@ const resolvers = {
   },
   Query: {
     ...postsResolvers.Query,
+    ...exerciseResolvers.Query,
   },
   Mutation: {
     ...usersResolvers.Mutation,

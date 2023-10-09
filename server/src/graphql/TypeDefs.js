@@ -47,9 +47,14 @@ const typeDefs = gql`
     confirmPassword: String!
     email: String!
   }
+  input ExerciseInput {
+    exerciseName: String!
+    muscleGroup: String
+  }
   type Query {
     getPosts: [Post]
     getPost(postId: ID!): Post
+    getExercisesList: [ExerciseList]
   }
   type Mutation {
     register(registerInput: RegisterInput): User!
@@ -60,6 +65,11 @@ const typeDefs = gql`
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
     createExerciseList(listName: String!): ExerciseList!
+    deleteExerciseList(exerciseListId: ID!): String!
+    addExerciseToList(
+      exerciseListId: ID!
+      exercise: ExerciseInput!
+    ): ExerciseList!
   }
 `;
 
