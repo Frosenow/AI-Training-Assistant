@@ -34,12 +34,31 @@ const typeDefs = gql`
     id: ID!
     exerciseName: String!
     muscleGroup: String
+    sets: Int
+    reps: Int
+    weight: Int
   }
   type ExerciseList {
     id: ID!
     owner: String!
     name: String!
     exercises: [Exercise]!
+  }
+  type WorkoutSplitItem {
+    dayOfTheWeek: String!
+    exercises: [Exercise!]!
+  }
+  type progressTrackerItem {
+    trainingDate: String!
+    progression: [Exercise]!
+  }
+  type WorkoutPlan {
+    id: ID!
+    name: String!
+    owner: String!
+    createdAt: String
+    workoutSplit: [WorkoutSplitItem]!
+    progressTracker: [progressTrackerItem!]
   }
   input RegisterInput {
     username: String!
@@ -55,6 +74,7 @@ const typeDefs = gql`
     getPosts: [Post]
     getPost(postId: ID!): Post
     getExercisesList: [ExerciseList]
+    getWorkouts: [WorkoutPlan]
   }
   type Mutation {
     register(registerInput: RegisterInput): User!
@@ -71,6 +91,8 @@ const typeDefs = gql`
       exercise: ExerciseInput!
     ): ExerciseList!
     deleteExerciseFromList(exerciseListId: ID!, exerciseId: ID!): ExerciseList!
+    createWorkoutPlan(name: String!): WorkoutPlan!
+    deleteWorkoutPlan(workoutPlanId: ID!): String!
   }
 `;
 
