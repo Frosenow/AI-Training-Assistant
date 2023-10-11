@@ -83,10 +83,32 @@ const workoutResolvers = {
           });
 
           await workoutPlan.save();
-          console.log(workoutPlan);
           return workoutPlan;
         } else throw new AuthenticationError("Action not allowed");
       } else throw new UserInputError("Workout plan not found");
+    },
+    async deleteFromWorkoutSplit(
+      _,
+      { workoutPlanId, exerciseId, exerciseDay },
+      context
+    ) {
+      const { username } = authUser(context);
+
+      const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
+
+      if (workoutPlan) {
+        if (workoutPlan.owner === username) {
+          // Find the index of the exercise that should be deleted
+          const workoutPlanUpdated = workoutPlan.workoutSplit[
+            exerciseDay
+          ].filter((exercise) => exercise.id !== exerciseId);
+          workoutPlan.workoutSplit[exerciseDay] = workoutPlanUpdated;
+          await workoutPlan.save();
+          return workoutPlan;
+        }
+        throw new AuthenticationError("Action not allowed");
+      }
+      throw new UserInputError("Workout plan not found");
     },
   },
 };

@@ -31,6 +31,7 @@ const typeDefs = gql`
     createdAt: String
   }
   type Exercise {
+    id: ID!
     exerciseName: String!
     muscleGroup: String!
     sets: Int
@@ -93,6 +94,11 @@ const typeDefs = gql`
     addToWorkoutSplit(
       workoutPlanId: ID!
       exercise: ExerciseSplitInput!
+    ): WorkoutPlan!
+    deleteFromWorkoutSplit(
+      workoutPlanId: ID!
+      exerciseId: ID!
+      exerciseDay: String!
     ): WorkoutPlan!
   }
 `;
