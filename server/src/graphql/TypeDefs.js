@@ -31,22 +31,20 @@ const typeDefs = gql`
     createdAt: String
   }
   type Exercise {
-    id: ID!
     exerciseName: String!
-    muscleGroup: String
+    muscleGroup: String!
     sets: Int
-    reps: Int
+    reps: [Int]
     weight: Int
   }
-  type ExerciseList {
-    id: ID!
-    owner: String!
-    name: String!
-    exercises: [Exercise]!
-  }
-  type WorkoutSplitItem {
-    dayOfTheWeek: String!
-    exercises: [Exercise!]!
+  type WorkoutSplitItems {
+    monday: [Exercise!]
+    tuesday: [Exercise!]
+    wednesday: [Exercise!]
+    thursday: [Exercise!]
+    friday: [Exercise!]
+    saturday: [Exercise!]
+    sunday: [Exercise!]
   }
   type progressTrackerItem {
     trainingDate: String!
@@ -57,7 +55,7 @@ const typeDefs = gql`
     name: String!
     owner: String!
     createdAt: String
-    workoutSplit: [WorkoutSplitItem]!
+    workoutSplit: WorkoutSplitItems!
     progressTracker: [progressTrackerItem!]
   }
   input RegisterInput {
@@ -68,12 +66,18 @@ const typeDefs = gql`
   }
   input ExerciseInput {
     exerciseName: String!
-    muscleGroup: String
+    muscleGroup: String!
+  }
+  input ExerciseSplitInput {
+    exerciseDay: String!
+    exerciseName: String!
+    muscleGroup: String!
+    sets: Int!
+    reps: [Int!]!
   }
   type Query {
     getPosts: [Post]
     getPost(postId: ID!): Post
-    getExercisesList: [ExerciseList]
     getWorkouts: [WorkoutPlan]
   }
   type Mutation {
@@ -84,15 +88,12 @@ const typeDefs = gql`
     createComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
-    createExerciseList(listName: String!): ExerciseList!
-    deleteExerciseList(exerciseListId: ID!): String!
-    addExerciseToList(
-      exerciseListId: ID!
-      exercise: ExerciseInput!
-    ): ExerciseList!
-    deleteExerciseFromList(exerciseListId: ID!, exerciseId: ID!): ExerciseList!
     createWorkoutPlan(name: String!): WorkoutPlan!
     deleteWorkoutPlan(workoutPlanId: ID!): String!
+    addToWorkoutSplit(
+      workoutPlanId: ID!
+      exercise: ExerciseSplitInput!
+    ): WorkoutPlan!
   }
 `;
 

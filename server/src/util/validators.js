@@ -54,3 +54,52 @@ export function validateLoginInput(username, password) {
     valid: Object.keys(errors).length < 1,
   };
 }
+
+const days = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+];
+
+export function validateExercise(exerciseObj) {
+  const errors = {};
+
+  // Check for empty string
+  if (exerciseObj.exerciseDay.trim() === "") {
+    errors.exerciseDay = "Day of the week field cannot be empty";
+  }
+
+  // Check for non-existing day of the week
+  if (!days.includes(exerciseObj.exerciseDay.toLowerCase())) {
+    errors.exerciseDay = "Incorrect day of the week";
+  }
+
+  if (exerciseObj.exerciseName.trim() === "") {
+    errors.exerciseName = "Exercise name field cannot be empty";
+  }
+
+  if (exerciseObj.muscleGroup.trim() === "") {
+    errors.muscleGroup = "Muscle group field cannot be empty";
+  }
+
+  if (!Number.isInteger(exerciseObj.sets)) {
+    errors.sets = "Sets number must be an integer";
+  }
+
+  const checkIfInteger = (array) =>
+    array.every((element) => Number.isInteger(element));
+
+  if (!checkIfInteger(exerciseObj.reps)) {
+    errors.reps = "Each rep number must be an integer";
+  }
+
+  return {
+    errors,
+    // Check if there are any errors
+    valid: Object.keys(errors).length < 1,
+  };
+}
