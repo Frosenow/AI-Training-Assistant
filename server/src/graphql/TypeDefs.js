@@ -54,7 +54,7 @@ const typeDefs = gql`
   }
   type progressTrackerItem {
     trainingDate: String!
-    progression: [ExerciseProgres!]!
+    progression: ExerciseProgres!
   }
   type WorkoutPlan {
     id: ID!

@@ -4,6 +4,7 @@ import { authUser } from "../../util/check-auth.js";
 import {
   validateExercise,
   validateProgression,
+  validateTrainingDay,
 } from "../../util/validators.js";
 
 const workoutResolvers = {
@@ -120,10 +121,8 @@ const workoutResolvers = {
           workoutPlan.workoutSplit[exerciseDay] = workoutPlanUpdated;
           await workoutPlan.save();
           return workoutPlan;
-        }
-        throw new AuthenticationError("Action not allowed");
-      }
-      throw new UserInputError("Workout plan not found");
+        } else throw new AuthenticationError("Action not allowed");
+      } else throw new UserInputError("Workout plan not found");
     },
     async addProgression(
       _,
@@ -133,7 +132,7 @@ const workoutResolvers = {
       const { username } = authUser(context);
 
       // Validate progression input
-      const { valid, errors } = validateExercise(progression);
+      const { valid, errors } = validateProgression(progression);
 
       if (!valid) {
         throw new UserInputError("Errors", { errors });
@@ -142,20 +141,35 @@ const workoutResolvers = {
       const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
 
       if (workoutPlan) {
-        const exercises = workoutPlan.workoutSplit[trainingDay];
-        const exerciseToSaveProgress = exercises.find(
-          (exercise) => exercise.id === exerciseId
-        );
+        if (workoutPlan.owner === username) {
+          // Transform to fit key in object and validate
+          const trainingDayTransformed = trainingDay.trim().toLowerCase();
 
-        exerciseToSaveProgress.progressTracker.trainingDate = new Date()
-          .toISOString()
-          .slice(0, 10);
-        exerciseToSaveProgress.progressTracker.progression = {
-          sets: progression.sets,
-          reps: progression.reps,
-          weight: progression.weight,
-        };
-      }
+          const { valid, errors } = validateTrainingDay(trainingDayTransformed);
+
+          if (!valid) {
+            throw new UserInputError("Errors", { errors });
+          }
+
+          // Get all exercises from current training day
+          const exercises = workoutPlan.workoutSplit[trainingDay];
+
+          const progressedExerciseIdx = exercises.findIndex(
+            (exercise) => exercise.id === exerciseId
+          );
+
+          exercises[progressedExerciseIdx].progressTracker.trainingDate =
+            new Date().toISOString().slice(0, 10);
+          exercises[progressedExerciseIdx].progressTracker.progression = {
+            sets: progression.sets,
+            reps: progression.reps,
+            weight: progression.weight,
+          };
+
+          await workoutPlan.save();
+          return workoutPlan;
+        } else throw new AuthenticationError("Action not allowed");
+      } else throw new Error("Workout Plan not found");
     },
   },
 };

@@ -105,16 +105,11 @@ export function validateExercise(exerciseObj) {
 }
 
 export function validateProgression(progressionObj) {
-  errors = {};
+  const errors = {};
 
   // Chceck if sets isNaN
   if (isNaN(progressionObj.sets)) {
     errors.sets = "Sets amount must be a number";
-  }
-
-  // Check if is empty
-  if (progressionObj.trim() === "") {
-    errors.sets = "Sets input cannot be empty";
   }
 
   // Check for array will be done on frontend
@@ -124,9 +119,24 @@ export function validateProgression(progressionObj) {
     errors.weight = "Weight amount must be a number";
   }
 
-  // Check if is empty
-  if (progressionObj.trim() === "") {
-    errors.weight = "Weight input cannot be empty";
+  return {
+    errors,
+    // Check if there are any errors
+    valid: Object.keys(errors).length < 1,
+  };
+}
+
+export function validateTrainingDay(trainingDay) {
+  const errors = {};
+
+  // Check for empty string
+  if (trainingDay.trim() === "") {
+    errors.trainingDay = "Day of the week field cannot be empty";
+  }
+
+  // Check for non-existing day of the week
+  if (!days.includes(trainingDay.toLowerCase())) {
+    errors.trainingDay = "Incorrect day of the week";
   }
 
   return {
