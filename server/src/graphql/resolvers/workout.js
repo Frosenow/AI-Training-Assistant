@@ -126,7 +126,7 @@ const workoutResolvers = {
     },
     async addProgression(
       _,
-      { workoutPlanId, exerciseId, trainingDay, progression },
+      { workoutPlanId, exerciseId, progression },
       context
     ) {
       const { username } = authUser(context);
@@ -143,7 +143,9 @@ const workoutResolvers = {
       if (workoutPlan) {
         if (workoutPlan.owner === username) {
           // Transform to fit key in object and validate
-          const trainingDayTransformed = trainingDay.trim().toLowerCase();
+          const trainingDayTransformed = progression.trainingDay
+            .trim()
+            .toLowerCase();
 
           const { valid, errors } = validateTrainingDay(trainingDayTransformed);
 
@@ -152,8 +154,9 @@ const workoutResolvers = {
           }
 
           // Get all exercises from current training day
-          const exercises = workoutPlan.workoutSplit[trainingDay];
+          const exercises = workoutPlan.workoutSplit[trainingDayTransformed];
 
+          // Get index of the exercised that was progressed
           const progressedExerciseIdx = exercises.findIndex(
             (exercise) => exercise.id === exerciseId
           );
@@ -167,21 +170,73 @@ const workoutResolvers = {
             },
           };
 
-          // TODO: ProgressTracker is an array so we need to change the method of updating it
-          // exercises[progressedExerciseIdx].progressTracker.trainingDate =
-          //   progression.trainingDate;
-          // exercises[progressedExerciseIdx].progressTracker.progression = {
-          //   sets: progression.sets,
-          //   reps: progression.reps,
-          //   weight: progression.weight,
-          // };
-
           exercises[progressedExerciseIdx].progressTracker.push(newProgress);
 
           await workoutPlan.save();
           return workoutPlan;
         } else throw new AuthenticationError("Action not allowed");
       } else throw new Error("Workout Plan not found");
+    },
+    async editProgression(
+      _,
+      { workoutPlanId, exerciseId, progressionId, progression },
+      context
+    ) {
+      const { username } = authUser(context);
+
+      // Validate progression input
+      const { valid, errors } = validateProgression(progression);
+
+      if (!valid) {
+        throw new UserInputError("Errors", { errors });
+      }
+
+      const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
+
+      if (workoutPlan) {
+        if (workoutPlan.owner === username) {
+          // Transform to fit key in object and validate
+          const trainingDayTransformed = progression.trainingDay
+            .trim()
+            .toLowerCase();
+
+          const { valid, errors } = validateTrainingDay(trainingDayTransformed);
+
+          if (!valid) {
+            throw new UserInputError("Errors", { errors });
+          }
+
+          // Get all exercises from current training day
+          const exercises = workoutPlan.workoutSplit[trainingDayTransformed];
+
+          // Get index of the exercised that was progressed
+          const progressedExerciseIdx = exercises.findIndex(
+            (exercise) => exercise.id === exerciseId
+          );
+
+          const progressionToUpdatedIdx = exercises[
+            progressedExerciseIdx
+          ].progressTracker.findIndex(
+            (progression) => progression.id === progressionId
+          );
+
+          exercises[progressedExerciseIdx].progressTracker[
+            progressionToUpdatedIdx
+          ].trainingDate = progression.trainingDate;
+          exercises[progressedExerciseIdx].progressTracker[
+            progressionToUpdatedIdx
+          ].progression = {
+            sets: progression.sets,
+            reps: progression.reps,
+            weight: progression.weight,
+          };
+
+          console.log(exercises[progressedExerciseIdx].progressTracker);
+
+          await workoutPlan.save();
+          return workoutPlan;
+        }
+      }
     },
   },
 };
