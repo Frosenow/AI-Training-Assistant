@@ -36,7 +36,12 @@ const typeDefs = gql`
     muscleGroup: String!
     sets: Int
     reps: [Int]
-    weight: Int
+    progressTracker: progressTrackerItem
+  }
+  type ExerciseProgres {
+    sets: Int!
+    reps: [Int!]!
+    weight: Int!
   }
   type WorkoutSplitItems {
     monday: [Exercise!]
@@ -49,7 +54,7 @@ const typeDefs = gql`
   }
   type progressTrackerItem {
     trainingDate: String!
-    progression: [Exercise]!
+    progression: [ExerciseProgres!]!
   }
   type WorkoutPlan {
     id: ID!
@@ -57,7 +62,6 @@ const typeDefs = gql`
     owner: String!
     createdAt: String
     workoutSplit: WorkoutSplitItems!
-    progressTracker: [progressTrackerItem!]
   }
   input RegisterInput {
     username: String!
@@ -76,10 +80,16 @@ const typeDefs = gql`
     sets: Int!
     reps: [Int!]!
   }
+  input ProgressionInput {
+    sets: Int!
+    reps: [Int!]!
+    weight: Int!
+  }
   type Query {
     getPosts: [Post]
     getPost(postId: ID!): Post
     getWorkouts: [WorkoutPlan]
+    getWorkout(workoutPlanId: ID!): WorkoutPlan!
   }
   type Mutation {
     register(registerInput: RegisterInput): User!
@@ -99,6 +109,12 @@ const typeDefs = gql`
       workoutPlanId: ID!
       exerciseId: ID!
       exerciseDay: String!
+    ): WorkoutPlan!
+    addProgression(
+      workoutPlanId: ID!
+      exerciseId: ID!
+      trainingDay: ID!
+      progression: ProgressionInput!
     ): WorkoutPlan!
   }
 `;

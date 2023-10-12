@@ -5,7 +5,14 @@ const ExerciseSchema = new Schema({
   muscleGroup: String,
   sets: Number,
   reps: [Number],
-  weight: Number,
+  progressTracker: {
+    trainingDate: String,
+    progression: {
+      sets: Number,
+      reps: { type: Array, default: [] },
+      weight: Number,
+    },
+  },
 });
 
 const WorkoutSchema = new Schema({
@@ -21,19 +28,6 @@ const WorkoutSchema = new Schema({
     saturday: [ExerciseSchema],
     sunday: [ExerciseSchema],
   },
-  progressTracker: [
-    {
-      trainingDate: String,
-      progression: [
-        {
-          exerciseName: String,
-          sets: Number,
-          reps: { type: Array, default: [] },
-          weight: Number,
-        },
-      ],
-    },
-  ],
 });
 
 export default model("WorkoutPlan", WorkoutSchema);

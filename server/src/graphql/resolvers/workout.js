@@ -1,7 +1,10 @@
 import { AuthenticationError, UserInputError } from "apollo-server";
 import WorkoutPlan from "../../models/WorkoutPlan.mjs";
 import { authUser } from "../../util/check-auth.js";
-import { validateExercise } from "../../util/validators.js";
+import {
+  validateExercise,
+  validateProgression,
+} from "../../util/validators.js";
 
 const workoutResolvers = {
   Query: {
@@ -9,6 +12,18 @@ const workoutResolvers = {
       try {
         const workouts = await WorkoutPlan.find();
         return workouts;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async getWorkout(_, { workoutPlanId }) {
+      try {
+        const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
+        if (workoutPlan) {
+          return workoutPlan;
+        } else {
+          throw new Error("Workout Plan not found");
+        }
       } catch (err) {
         throw new Error(err);
       }
@@ -109,6 +124,38 @@ const workoutResolvers = {
         throw new AuthenticationError("Action not allowed");
       }
       throw new UserInputError("Workout plan not found");
+    },
+    async addProgression(
+      _,
+      { workoutPlanId, exerciseId, trainingDay, progression },
+      context
+    ) {
+      const { username } = authUser(context);
+
+      // Validate progression input
+      const { valid, errors } = validateExercise(progression);
+
+      if (!valid) {
+        throw new UserInputError("Errors", { errors });
+      }
+
+      const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
+
+      if (workoutPlan) {
+        const exercises = workoutPlan.workoutSplit[trainingDay];
+        const exerciseToSaveProgress = exercises.find(
+          (exercise) => exercise.id === exerciseId
+        );
+
+        exerciseToSaveProgress.progressTracker.trainingDate = new Date()
+          .toISOString()
+          .slice(0, 10);
+        exerciseToSaveProgress.progressTracker.progression = {
+          sets: progression.sets,
+          reps: progression.reps,
+          weight: progression.weight,
+        };
+      }
     },
   },
 };
