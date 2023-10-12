@@ -36,12 +36,13 @@ const typeDefs = gql`
     muscleGroup: String!
     sets: Int
     reps: [Int]
-    progressTracker: progressTrackerItem
+    progressTracker: [ProgressTrackerItem!]
   }
   type ExerciseProgres {
     sets: Int!
     reps: [Int!]!
-    weight: Int!
+    weight: Float!
+    volume: Float
   }
   type WorkoutSplitItems {
     monday: [Exercise!]
@@ -52,7 +53,8 @@ const typeDefs = gql`
     saturday: [Exercise!]
     sunday: [Exercise!]
   }
-  type progressTrackerItem {
+  type ProgressTrackerItem {
+    id: ID!
     trainingDate: String!
     progression: ExerciseProgres!
   }
@@ -81,9 +83,10 @@ const typeDefs = gql`
     reps: [Int!]!
   }
   input ProgressionInput {
+    trainingDate: String!
     sets: Int!
     reps: [Int!]!
-    weight: Int!
+    weight: Float!
   }
   type Query {
     getPosts: [Post]

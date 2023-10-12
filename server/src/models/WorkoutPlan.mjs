@@ -5,14 +5,16 @@ const ExerciseSchema = new Schema({
   muscleGroup: String,
   sets: Number,
   reps: [Number],
-  progressTracker: {
-    trainingDate: String,
-    progression: {
-      sets: Number,
-      reps: { type: Array, default: [] },
-      weight: Number,
+  progressTracker: [
+    {
+      trainingDate: String,
+      progression: {
+        sets: Number,
+        reps: { type: Array, default: [] },
+        weight: Number,
+      },
     },
-  },
+  ],
 });
 
 const WorkoutSchema = new Schema({

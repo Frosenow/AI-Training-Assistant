@@ -8,6 +8,10 @@ const resolvers = {
     likesCount: (parent) => parent.likes.length,
     commentsCount: (parent) => parent.comments.length,
   },
+  ExerciseProgres: {
+    volume: (parent) =>
+      parent.weight * parent.reps.reduce((acc, prev) => acc + prev),
+  },
   Query: {
     ...postsResolvers.Query,
     ...workoutResolvers.Query,

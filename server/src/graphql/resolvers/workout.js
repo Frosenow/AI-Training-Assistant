@@ -158,13 +158,25 @@ const workoutResolvers = {
             (exercise) => exercise.id === exerciseId
           );
 
-          exercises[progressedExerciseIdx].progressTracker.trainingDate =
-            new Date().toISOString().slice(0, 10);
-          exercises[progressedExerciseIdx].progressTracker.progression = {
-            sets: progression.sets,
-            reps: progression.reps,
-            weight: progression.weight,
+          const newProgress = {
+            trainingDate: progression.trainingDate,
+            progression: {
+              sets: progression.sets,
+              reps: progression.reps,
+              weight: progression.weight,
+            },
           };
+
+          // TODO: ProgressTracker is an array so we need to change the method of updating it
+          // exercises[progressedExerciseIdx].progressTracker.trainingDate =
+          //   progression.trainingDate;
+          // exercises[progressedExerciseIdx].progressTracker.progression = {
+          //   sets: progression.sets,
+          //   reps: progression.reps,
+          //   weight: progression.weight,
+          // };
+
+          exercises[progressedExerciseIdx].progressTracker.push(newProgress);
 
           await workoutPlan.save();
           return workoutPlan;
