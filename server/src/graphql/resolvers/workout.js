@@ -214,6 +214,7 @@ const workoutResolvers = {
             (exercise) => exercise.id === exerciseId
           );
 
+          // Index of the progression that should be edited
           const progressionToUpdatedIdx = exercises[
             progressedExerciseIdx
           ].progressTracker.findIndex(
@@ -231,12 +232,55 @@ const workoutResolvers = {
             weight: progression.weight,
           };
 
-          console.log(exercises[progressedExerciseIdx].progressTracker);
+          await workoutPlan.save();
+          return workoutPlan;
+        } else throw new AuthenticationError("Action not allowed");
+      } else throw new Error("Workout Plan not found");
+    },
+    async deleteProgression(
+      _,
+      { workoutPlanId, exerciseId, progressionId, trainingDay },
+      context
+    ) {
+      const { username } = authUser(context);
+
+      const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
+
+      if (workoutPlan) {
+        if (workoutPlan.owner === username) {
+          // Transform to fit key in object and validate
+          const trainingDayTransformed = trainingDay.trim().toLowerCase();
+
+          const { valid, errors } = validateTrainingDay(trainingDayTransformed);
+
+          if (!valid) {
+            throw new UserInputError("Errors", { errors });
+          }
+
+          // Get all exercises from current training day
+          const exercises = workoutPlan.workoutSplit[trainingDayTransformed];
+
+          // Get index of the exercised that was progressed
+          const progressedExerciseIdx = exercises.findIndex(
+            (exercise) => exercise.id === exerciseId
+          );
+
+          // Index of the progression that should be deleted
+          const progressionToDeleteIdx = exercises[
+            progressedExerciseIdx
+          ].progressTracker.findIndex(
+            (progression) => progression.id === progressionId
+          );
+
+          exercises[progressedExerciseIdx].progressTracker.splice(
+            progressionToDeleteIdx,
+            1
+          );
 
           await workoutPlan.save();
           return workoutPlan;
-        }
-      }
+        } else throw new AuthenticationError("Action not allowed");
+      } else throw new Error("Workout Plan not found");
     },
   },
 };

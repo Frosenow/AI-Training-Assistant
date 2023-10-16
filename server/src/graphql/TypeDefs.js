@@ -83,7 +83,7 @@ const typeDefs = gql`
     reps: [Int!]!
   }
   input ProgressionInput {
-    trainingDay: ID!
+    trainingDay: String!
     trainingDate: String!
     sets: Int!
     reps: [Int!]!
@@ -124,6 +124,12 @@ const typeDefs = gql`
       exerciseId: ID!
       progressionId: ID!
       progression: ProgressionInput!
+    ): WorkoutPlan!
+    deleteProgression(
+      workoutPlanId: ID!
+      exerciseId: ID!
+      progressionId: ID!
+      trainingDay: String!
     ): WorkoutPlan!
   }
 `;
