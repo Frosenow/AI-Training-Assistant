@@ -1,14 +1,14 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { UserInputError } from "apollo-server";
-import { config } from "dotenv";
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { UserInputError } from 'apollo-server';
+import { config } from 'dotenv';
 config();
 
 import {
   validateRegisterInput,
   validateLoginInput,
-} from "../../util/validators.js";
-import User from "../../models/User.mjs";
+} from '../../util/validators.js';
+import User from '../../models/User.mjs';
 
 function generateToken(user) {
   return jwt.sign(
@@ -18,7 +18,7 @@ function generateToken(user) {
       username: user.username,
     },
     String(process.env.JWT_KEY),
-    { expiresIn: "1h" }
+    { expiresIn: '1h' }
   );
 }
 
@@ -28,15 +28,15 @@ const usersResolvers = {
       const { valid, errors } = validateLoginInput(username, password);
 
       if (!valid) {
-        throw new UserInputError("Invalid Login input", { errors });
+        throw new UserInputError('Invalid Login input', { errors });
       }
 
       const user = await User.findOne({ username });
 
       // Error from DB
       if (!user) {
-        errors.general = "User not found";
-        throw new UserInputError("User not found", { errors });
+        errors.general = 'User not found';
+        throw new UserInputError('User not found', { errors });
       }
 
       const isInputPasswordMatchingUserPassword = await bcrypt.compare(
@@ -44,8 +44,8 @@ const usersResolvers = {
         user.password
       );
       if (!isInputPasswordMatchingUserPassword) {
-        errors.general = "Wrong credentials";
-        throw new UserInputError("Wrong credentials", { errors });
+        errors.general = 'Wrong credentials';
+        throw new UserInputError('Wrong credentials', { errors });
       }
 
       const token = generateToken(user);
@@ -70,14 +70,14 @@ const usersResolvers = {
         confirmPassword
       );
       if (!valid) {
-        throw new UserInputError("Errors", { errors });
+        throw new UserInputError('Errors', { errors });
       }
       // Make sure user doesnt already exits
       const user = await User.findOne({ username });
       if (user) {
-        throw new UserInputError("Username is taken", {
+        throw new UserInputError('Username is taken', {
           errors: {
-            username: "This username is taken",
+            username: 'This username is taken',
           },
         });
       }

@@ -1,10 +1,10 @@
-import { ApolloServer } from "apollo-server";
-import mongoose from "mongoose";
-import { config } from "dotenv";
+import { ApolloServer } from 'apollo-server';
+import mongoose from 'mongoose';
+import { config } from 'dotenv';
 config();
 
-import { resolvers } from "./graphql/resolvers/index.js";
-import { typeDefs } from "./graphql/TypeDefs.js";
+import { resolvers } from './graphql/resolvers/index.js';
+import { typeDefs } from './graphql/TypeDefs.js';
 
 const server = new ApolloServer({
   typeDefs,
@@ -16,7 +16,7 @@ try {
   await mongoose.connect(process.env.MONGODB_CONNECTION_STRING, {
     useNewUrlParser: true,
   });
-  console.log("Connected to DB...");
+  console.log('Connected to DB...');
 } catch (error) {
   console.log(error);
 } finally {

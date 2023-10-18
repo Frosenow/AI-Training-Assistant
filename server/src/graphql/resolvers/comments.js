@@ -1,8 +1,8 @@
-import { AuthenticationError } from "apollo-server";
-import { UserInputError } from "apollo-server";
+import { AuthenticationError } from 'apollo-server';
+import { UserInputError } from 'apollo-server';
 
-import Post from "../../models/Post.mjs";
-import { authUser } from "../../util/check-auth.js";
+import Post from '../../models/Post.mjs';
+import { authUser } from '../../util/check-auth.js';
 
 const commentsResolvers = {
   Mutation: {
@@ -10,10 +10,10 @@ const commentsResolvers = {
       const { username } = authUser(context);
 
       // If someone try to add empty comment
-      if (body.trim() === "") {
-        throw new UserInputError("Empty comment", {
+      if (body.trim() === '') {
+        throw new UserInputError('Empty comment', {
           errors: {
-            body: "Comment body must not be empty",
+            body: 'Comment body must not be empty',
           },
         });
       }
@@ -32,7 +32,7 @@ const commentsResolvers = {
         // Update post with newly added comment in DB
         await post.save();
         return post;
-      } else throw new UserInputError("Post not found");
+      } else throw new UserInputError('Post not found');
     },
     deleteComment: async (_, { postId, commentId }, context) => {
       const { username } = authUser(context);
@@ -53,8 +53,8 @@ const commentsResolvers = {
           // Save the updated post back to DB
           await post.save();
           return post;
-        } else throw new AuthenticationError("Action not allowed");
-      } else throw new UserInputError("Post not found");
+        } else throw new AuthenticationError('Action not allowed');
+      } else throw new UserInputError('Post not found');
     },
   },
 };

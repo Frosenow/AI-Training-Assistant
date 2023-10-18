@@ -1,7 +1,7 @@
-import { AuthenticationError, UserInputError } from "apollo-server";
+import { AuthenticationError, UserInputError } from 'apollo-server';
 
-import Post from "../../models/Post.mjs";
-import { authUser } from "../../util/check-auth.js";
+import Post from '../../models/Post.mjs';
+import { authUser } from '../../util/check-auth.js';
 
 const postsResolvers = {
   Query: {
@@ -19,7 +19,7 @@ const postsResolvers = {
         if (post) {
           return post;
         } else {
-          throw new Error("Post not found");
+          throw new Error('Post not found');
         }
       } catch (err) {
         throw new Error(err);
@@ -31,8 +31,8 @@ const postsResolvers = {
       // Authenticate user
       const user = authUser(context);
 
-      if (body.trim() === "") {
-        throw new Error("Post body must not be empty");
+      if (body.trim() === '') {
+        throw new Error('Post body must not be empty');
       }
 
       // Create post from passed data
@@ -57,9 +57,9 @@ const postsResolvers = {
         // Check if the user is the owner of the post
         if (user.username === post.username) {
           await post.deleteOne();
-          return "Post deleted successfully";
+          return 'Post deleted successfully';
         } else {
-          throw new AuthenticationError("Action not allowed");
+          throw new AuthenticationError('Action not allowed');
         }
       } catch (err) {
         throw new Error(err);
@@ -85,7 +85,7 @@ const postsResolvers = {
 
         await post.save();
         return post;
-      } else throw new UserInputError("Post not found");
+      } else throw new UserInputError('Post not found');
     },
   },
 };

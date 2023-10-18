@@ -1,11 +1,11 @@
-import { AuthenticationError, UserInputError } from "apollo-server";
-import WorkoutPlan from "../../models/WorkoutPlan.mjs";
-import { authUser } from "../../util/check-auth.js";
+import { AuthenticationError, UserInputError } from 'apollo-server';
+import WorkoutPlan from '../../models/WorkoutPlan.mjs';
+import { authUser } from '../../util/check-auth.js';
 import {
   validateExercise,
   validateProgression,
   validateTrainingDay,
-} from "../../util/validators.js";
+} from '../../util/validators.js';
 
 const workoutResolvers = {
   Query: {
@@ -23,7 +23,7 @@ const workoutResolvers = {
         if (workoutPlan) {
           return workoutPlan;
         } else {
-          throw new Error("Workout Plan not found");
+          throw new Error('Workout Plan not found');
         }
       } catch (err) {
         throw new Error(err);
@@ -35,10 +35,10 @@ const workoutResolvers = {
       const { username } = authUser(context);
 
       // If someone try to create list without name
-      if (name.trim() === "") {
-        throw new UserInputError("Empty name", {
+      if (name.trim() === '') {
+        throw new UserInputError('Empty name', {
           errors: {
-            body: "Workout Plan name must not be empty",
+            body: 'Workout Plan name must not be empty',
           },
         });
       }
@@ -62,9 +62,9 @@ const workoutResolvers = {
         // Check if the user is the owner of the workout plan
         if (workoutPlan.owner === username) {
           await workoutPlan.deleteOne();
-          return `Workout Plan: "${workoutPlan.name}" delted successfully`;
+          return `Workout Plan: "${workoutPlan.name}" deleted successfully`;
         } else {
-          throw new AuthenticationError("Action not allowed");
+          throw new AuthenticationError('Action not allowed');
         }
       } catch (err) {
         throw new Error(err);
@@ -77,7 +77,7 @@ const workoutResolvers = {
       const { valid, errors } = validateExercise(exercise);
 
       if (!valid) {
-        throw new UserInputError("Errors", { errors });
+        throw new UserInputError('Errors', { errors });
       }
 
       // Find the Workout Plan in DB
@@ -100,8 +100,8 @@ const workoutResolvers = {
 
           await workoutPlan.save();
           return workoutPlan;
-        } else throw new AuthenticationError("Action not allowed");
-      } else throw new UserInputError("Workout plan not found");
+        } else throw new AuthenticationError('Action not allowed');
+      } else throw new UserInputError('Workout plan not found');
     },
     async deleteFromWorkoutSplit(
       _,
@@ -121,8 +121,8 @@ const workoutResolvers = {
           workoutPlan.workoutSplit[exerciseDay] = workoutPlanUpdated;
           await workoutPlan.save();
           return workoutPlan;
-        } else throw new AuthenticationError("Action not allowed");
-      } else throw new UserInputError("Workout plan not found");
+        } else throw new AuthenticationError('Action not allowed');
+      } else throw new UserInputError('Workout plan not found');
     },
     async addProgression(
       _,
@@ -135,7 +135,7 @@ const workoutResolvers = {
       const { valid, errors } = validateProgression(progression);
 
       if (!valid) {
-        throw new UserInputError("Errors", { errors });
+        throw new UserInputError('Errors', { errors });
       }
 
       const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
@@ -150,7 +150,7 @@ const workoutResolvers = {
           const { valid, errors } = validateTrainingDay(trainingDayTransformed);
 
           if (!valid) {
-            throw new UserInputError("Errors", { errors });
+            throw new UserInputError('Errors', { errors });
           }
 
           // Get all exercises from current training day
@@ -174,8 +174,8 @@ const workoutResolvers = {
 
           await workoutPlan.save();
           return workoutPlan;
-        } else throw new AuthenticationError("Action not allowed");
-      } else throw new Error("Workout Plan not found");
+        } else throw new AuthenticationError('Action not allowed');
+      } else throw new Error('Workout Plan not found');
     },
     async editProgression(
       _,
@@ -188,7 +188,7 @@ const workoutResolvers = {
       const { valid, errors } = validateProgression(progression);
 
       if (!valid) {
-        throw new UserInputError("Errors", { errors });
+        throw new UserInputError('Errors', { errors });
       }
 
       const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
@@ -203,7 +203,7 @@ const workoutResolvers = {
           const { valid, errors } = validateTrainingDay(trainingDayTransformed);
 
           if (!valid) {
-            throw new UserInputError("Errors", { errors });
+            throw new UserInputError('Errors', { errors });
           }
 
           // Get all exercises from current training day
@@ -234,8 +234,8 @@ const workoutResolvers = {
 
           await workoutPlan.save();
           return workoutPlan;
-        } else throw new AuthenticationError("Action not allowed");
-      } else throw new Error("Workout Plan not found");
+        } else throw new AuthenticationError('Action not allowed');
+      } else throw new Error('Workout Plan not found');
     },
     async deleteProgression(
       _,
@@ -254,7 +254,7 @@ const workoutResolvers = {
           const { valid, errors } = validateTrainingDay(trainingDayTransformed);
 
           if (!valid) {
-            throw new UserInputError("Errors", { errors });
+            throw new UserInputError('Errors', { errors });
           }
 
           // Get all exercises from current training day
@@ -279,8 +279,8 @@ const workoutResolvers = {
 
           await workoutPlan.save();
           return workoutPlan;
-        } else throw new AuthenticationError("Action not allowed");
-      } else throw new Error("Workout Plan not found");
+        } else throw new AuthenticationError('Action not allowed');
+      } else throw new Error('Workout Plan not found');
     },
   },
 };

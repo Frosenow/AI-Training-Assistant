@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema } from 'mongoose';
 
 const ExerciseSchema = new Schema({
   exerciseName: String,
@@ -32,4 +32,4 @@ const WorkoutSchema = new Schema({
   },
 });
 
-export default model("WorkoutPlan", WorkoutSchema);
+export default model('WorkoutPlan', WorkoutSchema);
