@@ -58,9 +58,7 @@ const usersResolvers = {
     },
     async register(
       _,
-      { registerInput: { username, email, password, confirmPassword } },
-      context,
-      info
+      { registerInput: { username, email, password, confirmPassword } }
     ) {
       // Validate user data
       const { valid, errors } = validateRegisterInput(
@@ -72,7 +70,7 @@ const usersResolvers = {
       if (!valid) {
         throw new UserInputError('Errors', { errors });
       }
-      // Make sure user doesnt already exits
+      // Make sure user does not already exits
       const user = await User.findOne({ username });
       if (user) {
         throw new UserInputError('Username is taken', {

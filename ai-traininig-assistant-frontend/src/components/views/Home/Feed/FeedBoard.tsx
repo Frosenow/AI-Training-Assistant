@@ -1,4 +1,4 @@
-import { Feed, Button, Image } from 'semantic-ui-react';
+import { Feed, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Post } from '../types';

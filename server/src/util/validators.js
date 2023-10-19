@@ -12,7 +12,7 @@ export function validateRegisterInput(
 
   // if email is empty
   if (email.trim() === '') {
-    email.username = 'Email cannot be empty';
+    errors.email = 'Email cannot be empty';
   } else {
     const emailValidation = new RegExp(
       /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/
