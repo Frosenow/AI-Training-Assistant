@@ -12,19 +12,17 @@ import Register from './components/views/Register/Register';
 function App() {
   return (
     <HashRouter>
-      <Grid padded columns={2} stackable container>
-        <Grid.Row>
-          <Grid.Column width={4}>
-            <MenuBar />
-          </Grid.Column>
-          <Grid.Column stretched>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-            </Routes>
-          </Grid.Column>
-        </Grid.Row>
+      <Grid padded columns={2} stackable stretched>
+        <Grid.Column width={3} style={{ padding: '9rem' }}>
+          <MenuBar />
+        </Grid.Column>
+        <Grid.Column width={12}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Routes>
+        </Grid.Column>
       </Grid>
     </HashRouter>
   );

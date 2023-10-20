@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Menu } from 'semantic-ui-react';
+import { useState } from 'react';
+import { Menu, Container } from 'semantic-ui-react';
 import { Link, useLocation } from 'react-router-dom';
 import type { MenuItemProps } from 'semantic-ui-react/dist/commonjs/collections/Menu/MenuItem';
 
@@ -15,7 +15,15 @@ function MenuBar() {
   ) => setActiveItem(name);
 
   return (
-    <Menu pointing secondary vertical size="large">
+    <Menu
+      pointing
+      secondary
+      vertical
+      size="large"
+      fixed="left"
+      color="teal"
+      style={{ fontSize: '1.5rem' }}
+    >
       <Menu.Item
         name="home"
         active={activeItem === 'home'}
