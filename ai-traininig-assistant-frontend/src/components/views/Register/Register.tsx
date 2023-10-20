@@ -3,13 +3,14 @@ import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form } from 'semantic-ui-react';
+import { Error } from './types';
 
 import { REGISTER_USER_MUTATION } from './Mutations/registerMutations';
 import { useForm } from '../utils/hooks';
 
 function Register() {
   const navigate = useNavigate();
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Error>({});
   const [values, setValues] = useState({
     username: '',
     email: '',
@@ -17,7 +18,7 @@ function Register() {
     confirmPassword: '',
   });
 
-  const onChange = (event) => {
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
 
@@ -30,12 +31,14 @@ function Register() {
       navigate(0);
     },
     async onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.errors);
+      if (err.graphQLErrors[0].extensions.errors) {
+        setErrors(err.graphQLErrors[0].extensions.errors);
+      }
     },
     variables: values,
   });
 
-  const onSubmit = (event) => {
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrors({});
     addUser();

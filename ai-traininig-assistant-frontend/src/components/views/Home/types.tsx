@@ -1,4 +1,4 @@
-export interface Post {
+export type Post = {
   id: string;
   createdAt: string;
   body: string;
@@ -7,7 +7,7 @@ export interface Post {
   commentsCount: number;
   likes: Likes;
   likesCount: number;
-}
+};
 
 interface Comments {
   id: string;

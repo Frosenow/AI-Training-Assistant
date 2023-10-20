@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, Container } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 import { Link, useLocation } from 'react-router-dom';
 import type { MenuItemProps } from 'semantic-ui-react/dist/commonjs/collections/Menu/MenuItem';
 
