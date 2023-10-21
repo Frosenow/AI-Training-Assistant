@@ -3,27 +3,26 @@ import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form } from 'semantic-ui-react';
-import { Error } from './types';
+import { AuthError } from '../../../types/types';
 
 import { REGISTER_USER_MUTATION } from './Mutations/registerMutations';
 import { useForm } from '../utils/hooks';
 
 function Register() {
   const navigate = useNavigate();
-  const [errors, setErrors] = useState<Error>({});
-  const [values, setValues] = useState({
+  const [errors, setErrors] = useState<AuthError>({});
+
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  const { onChange, onSubmit, values } = useForm(registerUser, {
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
-  };
-
   const [addUser, { loading }] = useMutation(REGISTER_USER_MUTATION, {
     update(_, result) {
+      setErrors({});
       navigate('/', {
         replace: true,
       });
@@ -38,11 +37,10 @@ function Register() {
     variables: values,
   });
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setErrors({});
+  // Declared function to call addUser to force hoisting
+  function registerUser() {
     addUser();
-  };
+  }
 
   return (
     <div className="form-container">

@@ -3,7 +3,7 @@ import { Grid, Loader, Container } from 'semantic-ui-react';
 
 import { FETCH_POSTS_QUERY } from './Queries/homeQueries';
 import FeedBoard from './Feed/FeedBoard';
-import { Post } from './types';
+import { Post } from '../../../types/types';
 
 function Home() {
   const { loading, error, data } = useQuery(FETCH_POSTS_QUERY);
