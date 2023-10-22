@@ -1,14 +1,16 @@
 import { useMutation } from '@apollo/client';
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form } from 'semantic-ui-react';
 import { AuthError } from '../../../types/types';
 
 import { LOGIN_USER_MUTATION } from './Mutations/loginMutations';
 import { useForm } from '../utils/hooks';
+import { AuthContext } from '../../../context/auth';
 
 function Login() {
+  const context = useContext(AuthContext);
   const navigate = useNavigate();
   const [errors, setErrors] = useState<AuthError>({});
 
@@ -19,13 +21,12 @@ function Login() {
   });
 
   const [loginUser, { loading }] = useMutation(LOGIN_USER_MUTATION, {
-    update(_, result) {
+    update(_, { data: { login: userData } }) {
       setErrors({});
+      context.login(userData);
       navigate('/', {
         replace: true,
       });
-      // To refresh the page and get pathname for MenuBar
-      navigate(0);
     },
     async onError(err) {
       if (err.graphQLErrors[0].extensions.errors) {
