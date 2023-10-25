@@ -13,4 +13,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test/setupTests.ts',
   },
+  optimizeDeps: {
+    include: ['@emotion/styled'],
+  },
 });

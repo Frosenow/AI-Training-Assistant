@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
-import { Grid, Loader, Container } from 'semantic-ui-react';
 
+import { Grid, Skeleton, Container } from '@mui/material';
 import { FETCH_POSTS_QUERY } from './Queries/homeQueries';
-import FeedBoard from './Feed/FeedBoard';
+import FeedCard from '../../FeedCard/FeedCard';
 import { Post } from '../../../types/types';
 
 function Home() {
@@ -22,25 +22,18 @@ function Home() {
   const { getPosts: posts } = data;
 
   return (
-    <Container>
-      <Grid columns={1}>
-        <Grid.Row>
-          <h1>Your Feed</h1>
-        </Grid.Row>
-        <Grid.Row>
-          {loading ? (
-            <Loader size="massive">Loading</Loader>
-          ) : (
-            posts &&
-            posts.map((post: Post) => (
-              <Grid.Column key={post.id}>
-                <FeedBoard events={post} />
-              </Grid.Column>
-            ))
-          )}
-        </Grid.Row>
-      </Grid>
-    </Container>
+    <Grid sx={{ marginTop: '4rem' }}>
+      {loading ? (
+        <Skeleton variant="rectangular" width={210} height={60} />
+      ) : (
+        posts &&
+        posts.map((post: Post) => (
+          <Grid item key={post.id} xs={12}>
+            <FeedCard events={post} />
+          </Grid>
+        ))
+      )}
+    </Grid>
   );
 }
 
