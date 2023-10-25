@@ -5,20 +5,17 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
-
+import { useTheme } from '@mui/material';
 import { mainListItems } from './consts/listItems';
-import { navbarStyles } from './styles';
 
 const drawerWidth = 240;
 
@@ -35,27 +32,23 @@ export default function ResponsiveNavBar(props: Props) {
     setMobileOpen(!mobileOpen);
   };
 
+  const theme = useTheme();
   const navigate = useNavigate();
 
   const drawer = (
     <div>
-      <Toolbar />
-      <Divider
-        sx={{
-          backgroundColor: '#FFFFFF',
-        }}
-      />
       <List>
-        {mainListItems.map((item, index) => (
+        {mainListItems.map((item) => (
           <ListItem
             key={item.id}
             disablePadding
             onClick={() => navigate(item.route)}
+            color="primary"
           >
             <ListItemButton>
               <ListItemIcon
                 sx={{
-                  color: '#FFFFFF',
+                  color: '#fff',
                 }}
               >
                 {item.icon}
@@ -64,12 +57,13 @@ export default function ResponsiveNavBar(props: Props) {
             </ListItemButton>
           </ListItem>
         ))}
+        <Divider
+          sx={{
+            backgroundColor: '#fff',
+          }}
+        />
       </List>
-      <Divider
-        sx={{
-          backgroundColor: '#FFFFFF',
-        }}
-      />
+      <Divider />
     </div>
   );
 
@@ -80,25 +74,33 @@ export default function ResponsiveNavBar(props: Props) {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar
+        color="primary"
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          backgroundColor: '#0D0C1B',
         }}
       >
         <Toolbar>
           <IconButton
-            color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' }, color: '#FFFFFF' }}
+            sx={{
+              mr: 2,
+              display: { sm: 'none' },
+              color: theme.palette.primary.contrastText,
+            }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ margin: '0 auto', fontSize: '1.5rem' }}
+          >
+            LiftLogic.AI
           </Typography>
         </Toolbar>
       </AppBar>
@@ -116,27 +118,25 @@ export default function ResponsiveNavBar(props: Props) {
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
           }}
+          color="primary"
           sx={{
             display: { xs: 'block', sm: 'none' },
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
-              backgroundColor: '#0D0C1B',
-              color: '#FFFFFF',
             },
           }}
         >
           {drawer}
         </Drawer>
         <Drawer
+          color="primary"
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
-              backgroundColor: '#0D0C1B',
-              color: '#FFFFFF',
             },
           }}
           open
