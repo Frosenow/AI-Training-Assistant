@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Skeleton } from '@mui/material';
+import { Alert, CircularProgress, Skeleton } from '@mui/material';
 
 import { AuthError } from '../../../types/types';
 import { LOGIN_USER_MUTATION } from './Mutations/loginMutations';
@@ -54,7 +54,7 @@ export default function SignIn() {
       setErrors({});
       context.login(userData);
       navigate('/', {
-        replace: true,
+        replace: false,
       });
     },
     async onError(err) {
@@ -87,67 +87,69 @@ export default function SignIn() {
         <Typography component="h1" variant="h5" color="text.secondary">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
-          {loading ? (
-            <Box>
-              <Skeleton />
-              <Skeleton />
-            </Box>
-          ) : (
-            <>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoFocus
-                helperText={errors.username}
-                onChange={onChange}
-                inputProps={{ style: { color: '#000' } }}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="password"
-                name="password"
-                label="Password"
-                type="password"
-                helperText={errors.password}
-                onChange={onChange}
-                inputProps={{ style: { color: '#000' } }}
-              />
-            </>
-          )}
 
+        <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoFocus
+            // eslint-disable-next-line no-unneeded-ternary
+            error={errors.username ? true : false}
+            onChange={onChange}
+            inputProps={{ style: { color: '#000' } }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            // eslint-disable-next-line no-unneeded-ternary
+            error={errors.username ? true : false}
+            onChange={onChange}
+            inputProps={{ style: { color: '#000' } }}
+          />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            {loading ? (
+              <CircularProgress
+                size={24}
+                sx={{
+                  color: '#fff',
+                }}
+              />
+            ) : (
+              'Login'
+            )}
           </Button>
           <Grid container>
             <Grid item>
               <Link href="/register#/register" variant="body2">
-                "Don't have an account? Sign Up"
+                Don&apos;t have an account? Sign Up
               </Link>
             </Grid>
           </Grid>
+          {Object.keys(errors).length > 0 && (
+            <Box sx={{ mt: 1 }}>
+              {Object.values(errors).map((value) => (
+                <Alert severity="error" key={value} sx={{ margin: '.5rem' }}>
+                  {value}
+                </Alert>
+              ))}
+            </Box>
+          )}
         </Box>
       </Box>
-      {Object.keys(errors).length > 0 && (
-        <div className="ui error message">
-          <ul className="list">
-            {Object.values(errors).map((value) => (
-              <li key={value}>{value}</li>
-            ))}
-          </ul>
-        </div>
-      )}
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
