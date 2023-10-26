@@ -59,6 +59,7 @@ export const defaultTheme = createTheme({
       light: '#4caf50',
       dark: '#1b5e20',
     },
+    divider: '#fff',
   },
   typography: {
     fontFamily: [

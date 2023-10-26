@@ -80,13 +80,7 @@ export default function ResponsiveNavBar(props: Props) {
             </ListItemButton>
           </ListItem>
         ))}
-        <Divider
-          sx={{
-            backgroundColor: '#fff',
-          }}
-        />
       </List>
-      <Divider />
     </div>
   );
 
@@ -111,7 +105,7 @@ export default function ResponsiveNavBar(props: Props) {
             onClick={handleDrawerToggle}
             sx={{
               mr: 2,
-              display: { sm: 'none' },
+              display: { xs: 'none' },
               color: theme.palette.primary.contrastText,
             }}
           >
