@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-curly-brace-presence */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from '@apollo/client';
 
@@ -18,7 +17,7 @@ import Container from '@mui/material/Container';
 import { Alert, CircularProgress } from '@mui/material';
 
 import { AuthError } from '../../../types/types';
-import { LOGIN_USER_MUTATION } from './Mutations/loginMutations';
+import { REGISTER_USER_MUTATION } from './Mutations/registerMutations';
 import { useForm } from '../utils/hooks';
 import { AuthContext } from '../../../context/auth';
 
@@ -40,23 +39,26 @@ function Copyright(props: any) {
   );
 }
 
-export default function SignIn() {
+export default function SignUp() {
   const context = useContext(AuthContext);
   const navigate = useNavigate();
   const [errors, setErrors] = useState<AuthError>({});
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  const { onChange, onSubmit, values } = useForm(loginUserCallback, {
+  const { onChange, onSubmit, values } = useForm(registerUserCallback, {
     username: '',
+    email: '',
     password: '',
+    confirmPassword: '',
   });
 
-  const [loginUser, { loading }] = useMutation(LOGIN_USER_MUTATION, {
-    update(_, { data: { login: userData } }) {
+  const [addUser, { loading }] = useMutation(REGISTER_USER_MUTATION, {
+    update(_, { data: { register: userData } }) {
       setErrors({});
+      // Using login, because registering is like login users
       context.login(userData);
       navigate('/', {
-        replace: false,
+        replace: true,
       });
     },
     async onError(err) {
@@ -68,8 +70,8 @@ export default function SignIn() {
   });
 
   // Declared function to call addUser to force hoisting
-  function loginUserCallback() {
-    loginUser();
+  function registerUserCallback() {
+    addUser();
   }
 
   return (
@@ -98,9 +100,23 @@ export default function SignIn() {
             id="username"
             label="Username"
             name="username"
-            autoFocus
+            type="text"
             // eslint-disable-next-line no-unneeded-ternary
             error={errors.username ? true : false}
+            onChange={onChange}
+            inputProps={{ style: { color: '#000' } }}
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email"
+            name="email"
+            type="email"
+            // eslint-disable-next-line no-unneeded-ternary
+            error={errors.email ? true : false}
             onChange={onChange}
             inputProps={{ style: { color: '#000' } }}
           />
@@ -113,7 +129,20 @@ export default function SignIn() {
             label="Password"
             type="password"
             // eslint-disable-next-line no-unneeded-ternary
-            error={errors.username ? true : false}
+            error={errors.password ? true : false}
+            onChange={onChange}
+            inputProps={{ style: { color: '#000' } }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="confirmPassword"
+            name="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            // eslint-disable-next-line no-unneeded-ternary
+            error={errors.confirmPassword ? true : false}
             onChange={onChange}
             inputProps={{ style: { color: '#000' } }}
           />
@@ -131,13 +160,13 @@ export default function SignIn() {
                 }}
               />
             ) : (
-              'Login'
+              'Register'
             )}
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="/register#/register" variant="body2">
-                Don&apos;t have an account? Sign Up
+              <Link href="/login#/login" variant="body2">
+                Already have an account? Sign In!
               </Link>
             </Grid>
           </Grid>

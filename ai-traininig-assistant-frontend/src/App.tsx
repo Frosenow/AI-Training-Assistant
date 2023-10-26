@@ -9,9 +9,8 @@ import { defaultTheme } from './themes/default/defaultTheme';
 import { AuthProvider } from './context/auth';
 import NavBar from './components/Navigation/NavBar/NavBar';
 import Home from './components/views/Home/Home';
-import Login from './components/views/Login/Login';
-import Register from './components/views/Register/Register';
 import SignIn from './components/views/Login/SignIn';
+import SignUp from './components/views/Register/SingUp';
 
 function App() {
   return (
@@ -23,7 +22,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="login" element={<SignIn />} />
-              <Route path="register" element={<Register />} />
+              <Route path="register" element={<SignUp />} />
             </Routes>
           </Grid>
         </HashRouter>
