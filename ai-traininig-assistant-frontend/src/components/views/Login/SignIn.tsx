@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from '@apollo/client';
 
 import { useState, useContext } from 'react';
@@ -13,7 +14,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Alert, CircularProgress, Skeleton } from '@mui/material';
+import { Alert, CircularProgress } from '@mui/material';
 
 import { AuthError } from '../../../types/types';
 import { LOGIN_USER_MUTATION } from './Mutations/loginMutations';
@@ -26,14 +27,14 @@ function Copyright(props: any) {
       variant="body2"
       color="text.secondary"
       align="center"
-      {...props}
+      {...(props as any)}
     >
       {'Copyright © '}
-      <Link color="inherit" href="#">
+      <Link color="inherit" href="/home">
         LiftLogic.AI
       </Link>{' '}
       {new Date().getFullYear()}
-      {'.'}
+      &apos;.&apos;
     </Typography>
   );
 }
