@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-curly-brace-presence */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from '@apollo/client';
 
@@ -75,7 +76,7 @@ export default function SignUp() {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" sx={{ marginTop: '1rem' }}>
       <CssBaseline />
       <Box
         sx={{

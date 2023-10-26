@@ -1,7 +1,8 @@
 import { Feed, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { Post } from '../types';
+
+import { Post } from '../../../../types/types';
 
 function FeedBoard({
   events: { id, username, createdAt, commentsCount, likesCount, body },

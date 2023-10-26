@@ -7,6 +7,7 @@ import { ThemeProvider, Grid } from '@mui/material';
 import { defaultTheme } from './themes/default/defaultTheme';
 
 import { AuthProvider } from './context/auth';
+import AuthRoute from './components/AuthRoute/AuthRoute';
 import NavBar from './components/Navigation/NavBar/NavBar';
 import Home from './components/views/Home/Home';
 import SignIn from './components/views/Login/SignIn';
@@ -21,8 +22,22 @@ function App() {
             <NavBar />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="login" element={<SignIn />} />
-              <Route path="register" element={<SignUp />} />
+              <Route
+                path="login"
+                element={
+                  <AuthRoute>
+                    <SignIn />
+                  </AuthRoute>
+                }
+              />
+              <Route
+                path="register"
+                element={
+                  <AuthRoute>
+                    <SignUp />
+                  </AuthRoute>
+                }
+              />
             </Routes>
           </Grid>
         </HashRouter>

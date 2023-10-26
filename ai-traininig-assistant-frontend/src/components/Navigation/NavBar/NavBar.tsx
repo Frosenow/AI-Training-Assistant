@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useContext, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,6 +17,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material';
 import { mainListItems } from './consts/listItems';
 
+import { AuthContext } from '../../../context/auth';
+
 const drawerWidth = 240;
 
 interface Props {
@@ -26,7 +28,9 @@ interface Props {
 
 export default function ResponsiveNavBar(props: Props) {
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const context = useContext(AuthContext);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
