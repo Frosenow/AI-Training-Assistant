@@ -15,7 +15,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material';
-import { mainListItems } from './consts/listItems';
+import { mainListItems, loggedUserItems } from './consts/listItems';
 
 import { AuthContext } from '../../../context/auth';
 
@@ -26,27 +26,46 @@ interface Props {
   window?: () => Window;
 }
 
+interface ItemList {
+  id: number;
+  icon: React.ReactElement;
+  label: string;
+  route: string;
+}
+
 export default function ResponsiveNavBar(props: Props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
+  const theme = useTheme();
+  const navigate = useNavigate();
 
-  const context = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
+
+  let listItemsBasic = mainListItems;
+
+  if (user) {
+    listItemsBasic = loggedUserItems;
+  }
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const theme = useTheme();
-  const navigate = useNavigate();
+  const handleUserAction = (item: ItemList) => {
+    if (item.label === 'Logout') {
+      logout();
+    }
+    navigate(item.route);
+  };
 
   const drawer = (
     <div>
       <List>
-        {mainListItems.map((item) => (
+        {listItemsBasic.map((item) => (
           <ListItem
             key={item.id}
             disablePadding
-            onClick={() => navigate(item.route)}
+            onClick={() => handleUserAction(item)}
             color="primary"
           >
             <ListItemButton>
