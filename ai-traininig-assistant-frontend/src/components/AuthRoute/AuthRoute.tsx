@@ -2,7 +2,11 @@ import { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../context/auth';
 
-function AuthRoute({ children }) {
+interface Props {
+  children: React.ReactNode;
+}
+
+function AuthRoute({ children }: Props) {
   const { user } = useContext(AuthContext);
 
   if (user) {
