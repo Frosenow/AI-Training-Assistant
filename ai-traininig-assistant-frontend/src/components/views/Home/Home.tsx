@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 
-import { Grid, Skeleton } from '@mui/material';
+import { Grid } from '@mui/material';
 import { FETCH_POSTS_QUERY } from './Queries/homeQueries';
 import FeedCard from '../../FeedCard/FeedCard';
 import PostField from '../../PostField/PostField';
@@ -37,16 +37,18 @@ function Home() {
       <Grid item>
         <PostField />
       </Grid>
-      {posts &&
-        posts.map((post: Post) => (
-          <Grid
-            item
-            key={post.id}
-            sx={{ margin: '0 auto', minWidth: { xs: 250, sm: 400 } }}
-          >
-            <FeedCard events={post} />
-          </Grid>
-        ))}
+      <Grid container spacing={3}>
+        {posts &&
+          posts.map((post: Post) => (
+            <Grid
+              item
+              key={post.id}
+              sx={{ margin: '0 auto', minWidth: { xs: 250, sm: 300 } }}
+            >
+              <FeedCard events={post} />
+            </Grid>
+          ))}
+      </Grid>
     </Grid>
   );
 }

@@ -9,56 +9,48 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import {
-  Alert,
-  CircularProgress,
-  Card,
-  CardHeader,
-  Stack,
-} from '@mui/material';
+import { CircularProgress, Card, CardHeader } from '@mui/material';
 
 import { CardContent } from 'semantic-ui-react';
-import { AuthError } from '../../types/types';
-import { LOGIN_USER_MUTATION } from '../views/Login/Mutations/loginMutations';
+import { AuthError, Post } from '../../types/types';
+import { CREATE_POST_MUTATION } from './Mutations/createPostMutation';
+import { FETCH_POSTS_QUERY } from '../views/Home/Queries/homeQueries';
 import { useForm } from '../views/utils/hooks';
 import { AuthContext } from '../../context/auth';
+
+interface AllPostsResult {
+  getPosts: Post[];
+}
 
 export default function PostField() {
   const context = useContext(AuthContext);
   const navigate = useNavigate();
-  const [errors, setErrors] = useState<AuthError>({});
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  const { onChange, onSubmit, values } = useForm(loginUserCallback, {
-    username: '',
-    password: '',
+  const { onChange, onSubmit, values } = useForm(createPostCallback, {
+    body: '',
   });
 
-  const [loginUser, { loading }] = useMutation(LOGIN_USER_MUTATION, {
-    update(_, { data: { login: userData } }) {
-      setErrors({});
-      context.login(userData);
-      navigate('/', {
-        replace: false,
+  const [createPost, { error, loading }] = useMutation(CREATE_POST_MUTATION, {
+    update(cache, { data }) {
+      const { getPosts } = cache.readQuery<AllPostsResult>({
+        query: FETCH_POSTS_QUERY,
+      }) || { getPosts: [] };
+
+      cache.writeQuery({
+        query: FETCH_POSTS_QUERY,
+        data: {
+          getPosts: [data.createPost, ...getPosts],
+        },
       });
-    },
-    async onError(err) {
-      if (err.graphQLErrors[0].extensions.errors) {
-        setErrors(err.graphQLErrors[0].extensions.errors);
-      }
+      values.body = '';
     },
     variables: values,
   });
 
   // Declared function to call addUser to force hoisting
-  function loginUserCallback() {
-    loginUser();
+  function createPostCallback() {
+    createPost();
   }
 
   return (
@@ -68,8 +60,8 @@ export default function PostField() {
       noValidate
       sx={{
         mt: '2rem',
+        mb: '3rem',
         padding: '2rem',
-        // maxWidth: 'xs',
       }}
     >
       <CardHeader
@@ -86,12 +78,13 @@ export default function PostField() {
             margin="none"
             required
             fullWidth
-            id="post"
+            id="body"
             label="What's on your mind?"
-            name="post"
+            name="body"
+            value={values.body}
             autoFocus
             // eslint-disable-next-line no-unneeded-ternary
-            error={errors.username ? true : false}
+            error={error ? true : false}
             onChange={onChange}
             inputProps={{ style: { color: '#000', height: 50 } }}
           />
