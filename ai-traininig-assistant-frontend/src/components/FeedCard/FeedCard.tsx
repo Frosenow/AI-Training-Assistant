@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -6,20 +8,25 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import { Link } from '@mui/material';
+import { Link, IconButton } from '@mui/material';
 import { red } from '@mui/material/colors';
+import { LikeButton } from '../Buttons/LikeButton/LikeButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
+import ClearIcon from '@mui/icons-material/Clear';
 
 import moment from 'moment';
+import { AuthContext } from '../../context/auth';
 
 import { Post } from '../../types/types';
 
 export default function FeedCard({
-  events: { id, username, createdAt, commentsCount, likesCount, body },
+  events: { id, username, createdAt, commentsCount, likesCount, body, likes },
 }: {
   events: Post;
 }) {
+  const { user } = useContext(AuthContext);
+
   return (
     <Card sx={{ maxWidth: 345, margin: '1rem' }}>
       <CardHeader
@@ -36,6 +43,17 @@ export default function FeedCard({
             <Link href={`/posts/${id}`}>{moment(createdAt).fromNow()}</Link>
           </>
         }
+        action={
+          user &&
+          user.username === username && (
+            <IconButton
+              aria-label="settings"
+              onClick={() => console.log('tried to delete post')}
+            >
+              <ClearIcon />
+            </IconButton>
+          )
+        }
         sx={{
           color: 'black',
         }}
@@ -47,12 +65,7 @@ export default function FeedCard({
       </CardContent>
       <CardActions disableSpacing>
         <Stack direction="row" spacing={1}>
-          <Chip
-            icon={<FavoriteIcon />}
-            label={likesCount}
-            aria-label="likes"
-            color="primary"
-          />
+          <LikeButton user={user} post={{ id, likesCount, likes }} />
           <Chip
             icon={<CommentIcon />}
             label={commentsCount}

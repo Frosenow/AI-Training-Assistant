@@ -1,6 +1,16 @@
 /* eslint-disable import/prefer-default-export */
 import { createTheme } from '@mui/material';
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    custom: Palette['primary'];
+  }
+
+  interface PaletteOptions {
+    custom?: PaletteOptions['primary'];
+  }
+}
+
 export const defaultTheme = createTheme({
   components: {
     // Name of the component

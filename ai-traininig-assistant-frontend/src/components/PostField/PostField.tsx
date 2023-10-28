@@ -2,17 +2,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from '@apollo/client';
 
-import { useState, useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import { CircularProgress, Card, CardHeader } from '@mui/material';
+import { CircularProgress, Card, CardHeader, Alert } from '@mui/material';
 
-import { CardContent } from 'semantic-ui-react';
-import { AuthError, Post } from '../../types/types';
+import { Post } from '../../types/types';
 import { CREATE_POST_MUTATION } from './Mutations/createPostMutation';
 import { FETCH_POSTS_QUERY } from '../views/Home/Queries/homeQueries';
 import { useForm } from '../views/utils/hooks';
@@ -54,51 +53,49 @@ export default function PostField() {
   }
 
   return (
-    <Card
-      component="form"
-      onSubmit={onSubmit}
-      noValidate
-      sx={{
-        mt: '2rem',
-        mb: '3rem',
-        padding: '2rem',
-      }}
-    >
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
-            {context.user && context.user.username[0].toUpperCase()}
-          </Avatar>
-        }
+    <>
+      {error && (
+        <Alert severity="error" sx={{ mt: '2rem', mb: '3rem' }}>
+          {error.graphQLErrors[0].message}
+        </Alert>
+      )}
+      <Card
+        component="form"
+        onSubmit={onSubmit}
+        noValidate
         sx={{
-          color: 'black',
-        }}
-        title={
-          <TextField
-            margin="none"
-            required
-            fullWidth
-            id="body"
-            label="What's on your mind?"
-            name="body"
-            value={values.body}
-            autoFocus
-            // eslint-disable-next-line no-unneeded-ternary
-            error={error ? true : false}
-            onChange={onChange}
-            inputProps={{ style: { color: '#000', height: 50 } }}
-          />
-        }
-      />
-      <CssBaseline />
-      <CardContent
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          mt: '2rem',
+          mb: '3rem',
+          padding: '2rem',
         }}
       >
+        <CardHeader
+          avatar={
+            <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
+              {context.user && context.user.username[0].toUpperCase()}
+            </Avatar>
+          }
+          sx={{
+            color: 'black',
+          }}
+          title={
+            <TextField
+              margin="none"
+              required
+              fullWidth
+              id="body"
+              label="What's on your mind?"
+              name="body"
+              value={values.body}
+              autoFocus
+              // eslint-disable-next-line no-unneeded-ternary
+              error={error ? true : false}
+              onChange={onChange}
+              inputProps={{ style: { color: '#000', height: 50 } }}
+            />
+          }
+        />
+        <CssBaseline />
         <Button
           type="submit"
           fullWidth
@@ -116,7 +113,7 @@ export default function PostField() {
             'post'
           )}
         </Button>
-      </CardContent>
-    </Card>
+      </Card>
+    </>
   );
 }
