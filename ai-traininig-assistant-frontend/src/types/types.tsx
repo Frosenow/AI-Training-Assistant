@@ -7,21 +7,28 @@ export interface AuthError {
 
 export interface Post {
   id: string;
-  createdAt: string;
-  body: string;
+  createdAt?: string;
+  body?: string;
+  username?: string;
+  comments?: Comments;
+  commentsCount?: number;
+  likes?: User[];
+  likesCount?: number;
+}
+
+export interface Like {
   username: string;
-  comments: Comments;
-  commentsCount: number;
-  likes: Likes;
-  likesCount: number;
+}
+
+export interface User {
+  id: string;
+  username: string;
+  password: string;
+  createdAt: string;
 }
 
 interface Comments {
   id: string;
   body: string;
-  username: string;
-}
-
-interface Likes {
   username: string;
 }

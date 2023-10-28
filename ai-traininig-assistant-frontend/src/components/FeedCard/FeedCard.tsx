@@ -10,15 +10,14 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import { Link, IconButton } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { LikeButton } from '../Buttons/LikeButton/LikeButton';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
 import ClearIcon from '@mui/icons-material/Clear';
 
 import moment from 'moment';
+import { LikeButton } from '../Buttons/LikeButton/LikeButton';
 import { AuthContext } from '../../context/auth';
 
-import { Post } from '../../types/types';
+import { Post, User } from '../../types/types';
 
 export default function FeedCard({
   events: { id, username, createdAt, commentsCount, likesCount, body, likes },
@@ -46,10 +45,7 @@ export default function FeedCard({
         action={
           user &&
           user.username === username && (
-            <IconButton
-              aria-label="settings"
-              onClick={() => console.log('tried to delete post')}
-            >
+            <IconButton aria-label="settings">
               <ClearIcon />
             </IconButton>
           )
