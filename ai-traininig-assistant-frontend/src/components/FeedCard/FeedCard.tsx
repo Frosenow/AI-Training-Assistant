@@ -8,11 +8,11 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import { Link } from '@mui/material';
 import { red } from '@mui/material/colors';
 import CommentIcon from '@mui/icons-material/Comment';
 
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import { LikeButton } from '../Buttons/LikeButton/LikeButton';
 import { AuthContext } from '../../context/auth';
 import { DeleteButton } from '../Buttons/DeleteButton/DeleteButton';
@@ -39,7 +39,9 @@ export default function FeedCard({
             <Typography variant="body2" color="text.secondary">
               {username}
             </Typography>
-            <Link href={`/posts/${id}`}>{moment(createdAt).fromNow()}</Link>
+            <Typography variant="subtitle1">
+              <Link to={`/posts/${id}`}> {moment(createdAt).fromNow()}</Link>
+            </Typography>
           </>
         }
         action={

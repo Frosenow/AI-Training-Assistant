@@ -39,14 +39,7 @@ function App() {
                   </AuthRoute>
                 }
               />
-              <Route
-                path="post/:postId"
-                element={
-                  <AuthRoute>
-                    <SinglePost />
-                  </AuthRoute>
-                }
-              />
+              <Route path="posts/:postId" element={<SinglePost />} />
             </Routes>
           </Grid>
         </HashRouter>

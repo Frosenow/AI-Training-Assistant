@@ -1,20 +1,17 @@
 import { useQuery } from '@apollo/client';
 
+import { useParams } from 'react-router-dom';
 import { FETCH_POST_QUERY } from './Queries/getPostQuery';
 
-export default function SinglePost(props) {
-  const { postId } = props.match.params;
-  console.log(postId);
+export default function SinglePost() {
+  const { postId } = useParams();
 
-  const {
-    data: { getPost },
-  } = useQuery(FETCH_POST_QUERY, {
+  const { data } = useQuery(FETCH_POST_QUERY, {
     variables: {
       postId,
     },
   });
 
-  console.log(getPost);
-
+  console.log(data);
   return <>test</>;
 }
