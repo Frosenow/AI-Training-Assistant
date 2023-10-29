@@ -11,18 +11,37 @@ import {
   DialogActions,
   Button,
   IconButton,
-  Modal,
 } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ClearIcon from '@mui/icons-material/Clear';
 
 import { DELETE_POST_MUTATION } from './Mutations/deletePostMutation';
+import { FETCH_POSTS_QUERY } from '../../views/Home/Queries/homeQueries';
+import { AllPostsResult } from '../../../types/types';
 
-export const DeleteButton = ({ postId }) => {
+interface DeleteButtonProps {
+  postId: string;
+}
+
+export const DeleteButton: React.FC<DeleteButtonProps> = ({ postId }) => {
   const [open, setOpen] = useState(false);
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
-    update() {
+    update(cache) {
+      const { getPosts } = cache.readQuery<AllPostsResult>({
+        query: FETCH_POSTS_QUERY,
+      }) || { getPosts: [] };
+
+      // Get all posts, except the one that was deleted
+      const filteredPosts = getPosts.filter((post) => post.id !== postId);
+
+      cache.writeQuery({
+        query: FETCH_POSTS_QUERY,
+        data: {
+          getPosts: [...filteredPosts],
+        },
+      });
       setOpen(false);
+      // TODO: Add a callback to redirect after deleting a post in own post page
     },
     variables: {
       postId,

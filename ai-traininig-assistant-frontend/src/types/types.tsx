@@ -27,6 +27,10 @@ export interface User {
   createdAt: string;
 }
 
+export interface AllPostsResult {
+  getPosts: Post[];
+}
+
 interface Comments {
   id: string;
   body: string;

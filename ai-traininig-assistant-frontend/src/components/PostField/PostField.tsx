@@ -11,15 +11,11 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import { CircularProgress, Card, CardHeader, Alert } from '@mui/material';
 
-import { Post } from '../../types/types';
+import { AllPostsResult } from '../../types/types';
 import { CREATE_POST_MUTATION } from './Mutations/createPostMutation';
 import { FETCH_POSTS_QUERY } from '../views/Home/Queries/homeQueries';
 import { useForm } from '../views/utils/hooks';
 import { AuthContext } from '../../context/auth';
-
-interface AllPostsResult {
-  getPosts: Post[];
-}
 
 export default function PostField() {
   const context = useContext(AuthContext);
