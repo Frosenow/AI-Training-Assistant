@@ -1,13 +1,46 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer, ReactNode } from 'react';
 import jwtDecode from 'jwt-decode';
 
-const initialState = {
+import { User } from '../types/types';
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+interface DecodedToken {
+  username?: string;
+  email?: string;
+  exp: number;
+  iat: number;
+  id?: string;
+}
+
+interface InitialState {
+  user: DecodedToken | null;
+}
+
+const initialState: InitialState = {
   user: null,
 };
 
-if (localStorage.getItem('jwtToken')) {
-  const decodedToken = jwtDecode(localStorage.getItem('jwtToken'));
+interface AuthState<T> {
+  user: T;
+}
 
+type AuthAction<T> =
+  | { type: 'LOGIN'; payload?: T }
+  | { type: 'LOGOUT'; payload?: T };
+
+type AuthContextValue = {
+  user: User | null;
+  login: (userData: User) => void;
+  logout: () => void;
+};
+
+if (localStorage.getItem('jwtToken')) {
+  const decodedToken = jwtDecode<DecodedToken>(
+    localStorage.getItem('jwtToken') || '{}'
+  );
   // Check if jwt Token is expired
   if (decodedToken.exp * 1000 < Date.now()) {
     localStorage.removeItem('jwtToken');
@@ -16,13 +49,14 @@ if (localStorage.getItem('jwtToken')) {
   }
 }
 
-const AuthContext = createContext({
+const AuthContext = createContext<AuthContextValue>({
   user: null,
-  login: (userData) => {},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  login: (userData: User) => {},
   logout: () => {},
 });
 
-function authReducer(state, action) {
+function authReducer<T>(state: AuthState<T>, action: AuthAction<T>) {
   switch (action.type) {
     case 'LOGIN':
       return {
@@ -39,10 +73,10 @@ function authReducer(state, action) {
   }
 }
 
-function AuthProvider(props) {
+function AuthProvider(props: AuthProviderProps) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  function login(userData) {
+  function login(userData: User) {
     localStorage.setItem('jwtToken', userData.token);
     dispatch({
       type: 'LOGIN',
@@ -55,9 +89,16 @@ function AuthProvider(props) {
     dispatch({ type: 'LOGOUT' });
   }
 
+  // eslint-disable-next-line react/jsx-no-constructed-context-values
+  const contextValue: AuthContextValue = {
+    user: state.user as User | null,
+    login,
+    logout,
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user: state.user, login, logout }}
+      value={contextValue}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     />

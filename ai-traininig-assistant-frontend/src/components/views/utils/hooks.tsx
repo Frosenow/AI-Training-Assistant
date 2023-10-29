@@ -1,8 +1,15 @@
 /* eslint-disable import/prefer-default-export */
 import { useState } from 'react';
 
-export const useForm = (callback, initialState = {}) => {
-  const [values, setValues] = useState(initialState);
+interface FormState {
+  [key: string]: unknown;
+}
+
+export const useForm = <T extends FormState>(
+  callback: () => void,
+  initialState: T
+) => {
+  const [values, setValues] = useState<T>(initialState);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });

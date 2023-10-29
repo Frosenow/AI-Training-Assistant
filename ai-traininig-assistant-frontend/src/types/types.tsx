@@ -25,6 +25,8 @@ export interface User {
   username: string;
   password: string;
   createdAt: string;
+  email: string;
+  token: string;
 }
 
 export interface AllPostsResult {

@@ -3,7 +3,6 @@
 import { useMutation } from '@apollo/client';
 
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -18,8 +17,7 @@ import { useForm } from '../views/utils/hooks';
 import { AuthContext } from '../../context/auth';
 
 export default function PostField() {
-  const context = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const { onChange, onSubmit, values } = useForm(createPostCallback, {
@@ -68,7 +66,7 @@ export default function PostField() {
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
-              {context.user && context.user.username[0].toUpperCase()}
+              {user && user.username[0].toUpperCase()}
             </Avatar>
           }
           sx={{
