@@ -8,16 +8,16 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import { Link, IconButton } from '@mui/material';
+import { Link } from '@mui/material';
 import { red } from '@mui/material/colors';
 import CommentIcon from '@mui/icons-material/Comment';
-import ClearIcon from '@mui/icons-material/Clear';
 
 import moment from 'moment';
 import { LikeButton } from '../Buttons/LikeButton/LikeButton';
 import { AuthContext } from '../../context/auth';
+import { DeleteButton } from '../Buttons/DeleteButton/DeleteButton';
 
-import { Post, User } from '../../types/types';
+import { Post } from '../../types/types';
 
 export default function FeedCard({
   events: { id, username, createdAt, commentsCount, likesCount, body, likes },
@@ -31,7 +31,7 @@ export default function FeedCard({
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {username[0].toUpperCase()}
+            {username && username[0].toUpperCase()}
           </Avatar>
         }
         title={
@@ -43,12 +43,7 @@ export default function FeedCard({
           </>
         }
         action={
-          user &&
-          user.username === username && (
-            <IconButton aria-label="settings">
-              <ClearIcon />
-            </IconButton>
-          )
+          user && user.username === username && <DeleteButton postId={id} />
         }
         sx={{
           color: 'black',

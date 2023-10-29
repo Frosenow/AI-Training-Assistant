@@ -12,6 +12,7 @@ import NavBar from './components/Navigation/NavBar/NavBar';
 import Home from './components/views/Home/Home';
 import SignIn from './components/views/Login/SignIn';
 import SignUp from './components/views/Register/SingUp';
+import SinglePost from './components/views/SinglePost/SinglePost';
 
 function App() {
   return (
@@ -35,6 +36,14 @@ function App() {
                 element={
                   <AuthRoute>
                     <SignUp />
+                  </AuthRoute>
+                }
+              />
+              <Route
+                path="post/:postId"
+                element={
+                  <AuthRoute>
+                    <SinglePost />
                   </AuthRoute>
                 }
               />
