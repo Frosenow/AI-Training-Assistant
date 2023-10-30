@@ -11,7 +11,7 @@ import moment from 'moment';
 // eslint-disable-next-line react/function-component-definition
 export const CommentCard = ({ comment: { username, createdAt, body } }) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: 'secondary.light' }} aria-label="recipe">

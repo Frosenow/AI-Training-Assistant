@@ -60,14 +60,12 @@ export default function SinglePost() {
     <Grid
       container
       spacing={2}
-      direction="row"
-      flexWrap="nowrap"
       sx={{
         mt: '4rem',
         maxWidth: { sm: '60%', xs: '90%' },
       }}
     >
-      <Grid item xs={comments.length > 0 ? 8 : 12}>
+      <Grid item xs={12} md={comments.length > 0 ? 8 : 12}>
         <Card>
           <CardContent>
             <CardHeader
@@ -120,7 +118,7 @@ export default function SinglePost() {
         </Card>
       </Grid>
       {comments.length > 0 && (
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <Card>
             <CardHeader
               title={

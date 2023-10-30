@@ -2,7 +2,6 @@ import { useContext, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -105,7 +104,7 @@ export default function ResponsiveNavBar(props: Props) {
             onClick={handleDrawerToggle}
             sx={{
               mr: 2,
-              display: { xs: 'none' },
+              display: { xs: 'block', sm: 'none' },
               color: theme.palette.primary.contrastText,
             }}
           >
