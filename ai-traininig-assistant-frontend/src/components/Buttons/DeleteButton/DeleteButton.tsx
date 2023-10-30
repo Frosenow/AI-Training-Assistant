@@ -21,9 +21,13 @@ import { AllPostsResult } from '../../../types/types';
 
 interface DeleteButtonProps {
   postId: string;
+  redirect?: (() => void | undefined) | undefined;
 }
 
-export const DeleteButton: React.FC<DeleteButtonProps> = ({ postId }) => {
+export const DeleteButton: React.FC<DeleteButtonProps> = ({
+  postId,
+  redirect,
+}) => {
   const [open, setOpen] = useState(false);
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
     update(cache) {
@@ -41,7 +45,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({ postId }) => {
         },
       });
       setOpen(false);
-      // TODO: Add a callback to redirect after deleting a post in own post page
+      if (redirect) redirect();
     },
     variables: {
       postId,

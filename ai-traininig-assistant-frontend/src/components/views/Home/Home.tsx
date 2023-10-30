@@ -17,6 +17,7 @@ function Home() {
           mt: 'calc(4rem + 239px)',
           display: 'flex',
           justifyContent: 'center',
+          opacity: '50',
         }}
       >
         <CircularProgress

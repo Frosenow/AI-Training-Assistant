@@ -65,7 +65,7 @@ export default function PostField() {
       >
         <CardHeader
           avatar={
-            <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
+            <Avatar sx={{ bgcolor: 'secondary.dark' }} aria-label="recipe">
               {user && user.username[0].toUpperCase()}
             </Avatar>
           }

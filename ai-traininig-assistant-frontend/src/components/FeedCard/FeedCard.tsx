@@ -8,6 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import { Divider } from '@mui/material';
 import { red } from '@mui/material/colors';
 import CommentIcon from '@mui/icons-material/Comment';
 
@@ -29,8 +30,9 @@ export default function FeedCard({
   return (
     <Card sx={{ maxWidth: 345, margin: '1rem' }}>
       <CardHeader
+        component="div"
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          <Avatar sx={{ bgcolor: 'secondary.dark' }} aria-label="recipe">
             {username && username[0].toUpperCase()}
           </Avatar>
         }
