@@ -1,22 +1,32 @@
 import { useQuery } from '@apollo/client';
 
-import { Grid } from '@mui/material';
+import { Grid, CircularProgress, Container } from '@mui/material';
 import { FETCH_POSTS_QUERY } from './Queries/homeQueries';
 import FeedCard from '../../FeedCard/FeedCard';
 import PostField from '../../PostField/PostField';
+import SnackBarError from '../../SnackBarError/SnackBarError';
 import { Post } from '../../../types/types';
 
 function Home() {
   const { loading, error, data } = useQuery(FETCH_POSTS_QUERY);
 
-  // TODO: Handle Loading State
   if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  // TODO: Handle Errors
-  if (error) {
-    return <div>{error.message}</div>;
+    return (
+      <Container
+        sx={{
+          mt: 'calc(4rem + 239px)',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress
+          variant="indeterminate"
+          color="primary"
+          size={500}
+          thickness={1}
+        />
+      </Container>
+    );
   }
 
   // Get Posts data if no errors
@@ -34,6 +44,7 @@ function Home() {
         maxWidth: { sm: '60%', xs: '90%' },
       }}
     >
+      {error && <SnackBarError error={error} />}
       <Grid item>
         <PostField />
       </Grid>
