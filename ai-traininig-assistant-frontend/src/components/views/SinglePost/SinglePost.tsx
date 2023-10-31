@@ -10,7 +10,6 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import { red } from '@mui/material/colors';
 import CommentIcon from '@mui/icons-material/Comment';
 import { Grid, Divider } from '@mui/material';
 

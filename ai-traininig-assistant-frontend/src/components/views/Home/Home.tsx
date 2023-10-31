@@ -1,14 +1,25 @@
+import { useContext, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-
+import { useNavigate } from 'react-router-dom';
 import { Grid, CircularProgress, Container } from '@mui/material';
 import { FETCH_POSTS_QUERY } from './Queries/homeQueries';
 import FeedCard from '../../FeedCard/FeedCard';
 import PostField from '../../PostField/PostField';
 import SnackBarError from '../../SnackBarError/SnackBarError';
 import { Post } from '../../../types/types';
+import { AuthContext } from '../../../context/auth';
 
 function Home() {
   const { loading, error, data } = useQuery(FETCH_POSTS_QUERY);
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!user) {
+      navigate('login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loading) {
     return (
