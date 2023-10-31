@@ -10,6 +10,7 @@ import moment from 'moment';
 import { DeleteCommentButton } from '../Buttons/DeleteButton/DeleteCommentButton/DeleteCommentButton';
 import { AuthContext } from '../../context/auth';
 import { CommentCardProps } from '../../types/types';
+import stringToColor from '../views/utils/stringToColor';
 
 // eslint-disable-next-line react/function-component-definition
 export const CommentCard = ({ comment, postId }: CommentCardProps) => {
@@ -19,7 +20,12 @@ export const CommentCard = ({ comment, postId }: CommentCardProps) => {
     <Card>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: 'secondary.light' }} aria-label="recipe">
+          <Avatar
+            sx={{
+              bgcolor: user ? stringToColor(username) : 'secondary.light',
+            }}
+            aria-label="recipe"
+          >
             {username && username[0].toUpperCase()}
           </Avatar>
         }

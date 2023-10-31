@@ -18,6 +18,7 @@ import { ExpandableComment } from '../ExpandableComment/ExpandableComment';
 import { StyledBadge } from '../../styles/Badge/StyledBadge';
 
 import { Post, Comments } from '../../types/types';
+import stringToColor from '../views/utils/stringToColor';
 
 export default function FeedCard({
   events: {
@@ -46,7 +47,12 @@ export default function FeedCard({
       <CardHeader
         component="div"
         avatar={
-          <Avatar sx={{ bgcolor: 'secondary.dark' }} aria-label="recipe">
+          <Avatar
+            sx={{
+              bgcolor: username ? stringToColor(username) : 'secondary.light',
+            }}
+            aria-label="recipe"
+          >
             {username && username[0].toUpperCase()}
           </Avatar>
         }

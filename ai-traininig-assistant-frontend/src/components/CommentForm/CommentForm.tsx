@@ -44,6 +44,7 @@ export const CommentForm = ({ postId }) => {
             margin="dense"
             id="comment"
             name="comment"
+            placeholder="Post a comment..."
             value={value}
             onChange={(event) => setValue(event.target.value)}
             // TODO: Change it later
@@ -60,7 +61,6 @@ export const CommentForm = ({ postId }) => {
                       : 'secondary.light',
                     width: 24,
                     height: 24,
-                    margin: '5',
                   }}
                   aria-label="recipe"
                 >

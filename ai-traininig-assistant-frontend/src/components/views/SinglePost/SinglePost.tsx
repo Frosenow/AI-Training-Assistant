@@ -87,8 +87,8 @@ export default function SinglePost() {
               avatar={
                 <Avatar
                   sx={{
-                    bgcolor: user
-                      ? stringToColor(user.username)
+                    bgcolor: username
+                      ? stringToColor(username)
                       : 'secondary.light',
                   }}
                   aria-label="recipe"

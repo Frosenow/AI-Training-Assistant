@@ -15,6 +15,7 @@ import { CREATE_POST_MUTATION } from './Mutations/createPostMutation';
 import { FETCH_POSTS_QUERY } from '../views/Home/Queries/homeQueries';
 import { useForm } from '../views/utils/hooks';
 import { AuthContext } from '../../context/auth';
+import stringToColor from '../views/utils/stringToColor';
 
 export default function PostField() {
   const { user } = useContext(AuthContext);
@@ -65,7 +66,14 @@ export default function PostField() {
       >
         <CardHeader
           avatar={
-            <Avatar sx={{ bgcolor: 'secondary.dark' }} aria-label="recipe">
+            <Avatar
+              sx={{
+                bgcolor: user
+                  ? stringToColor(user.username)
+                  : 'secondary.light',
+              }}
+              aria-label="recipe"
+            >
               {user && user.username[0].toUpperCase()}
             </Avatar>
           }
