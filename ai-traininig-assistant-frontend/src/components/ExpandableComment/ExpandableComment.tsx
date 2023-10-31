@@ -6,6 +6,7 @@ import { Typography, Chip, Divider } from '@mui/material';
 import { CommentCard } from '../CommentCard/CommentCard';
 import { ExpandMore } from '../../styles/ExpandableMore/ExpandableMore';
 import { Comments } from '../../types/types';
+import { CommentForm } from '../CommentForm/CommentForm';
 
 export const ExpandableComment = ({
   comments,
@@ -40,6 +41,7 @@ export const ExpandableComment = ({
               onClick={() => handleExpandClick(expanded)}
             />
           </Divider>
+          <CommentForm postId={postId} />
           {comments.length > 0 &&
             comments.map((comment: Comments) => (
               <CardContent key={comment.id}>

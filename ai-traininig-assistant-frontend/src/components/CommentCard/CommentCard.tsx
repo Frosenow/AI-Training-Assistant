@@ -11,6 +11,7 @@ import { DeleteCommentButton } from '../Buttons/DeleteButton/DeleteCommentButton
 import { AuthContext } from '../../context/auth';
 import { CommentCardProps } from '../../types/types';
 import stringToColor from '../views/utils/stringToColor';
+import { CommentForm } from '../CommentForm/CommentForm';
 
 // eslint-disable-next-line react/function-component-definition
 export const CommentCard = ({ comment, postId }: CommentCardProps) => {
