@@ -36,6 +36,11 @@ export default function SinglePost() {
     },
   });
 
+  if (!user) {
+    // Backslash prevent from concatenation of urls
+    navigate('/login');
+  }
+
   if (loading) {
     return (
       <Container
