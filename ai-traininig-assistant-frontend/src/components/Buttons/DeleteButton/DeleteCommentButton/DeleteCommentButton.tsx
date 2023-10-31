@@ -15,40 +15,27 @@ import {
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ClearIcon from '@mui/icons-material/Clear';
 
-import { DELETE_POST_MUTATION } from './Mutations/deletePostMutation';
-import { FETCH_POSTS_QUERY } from '../../views/Home/Queries/homeQueries';
-import { AllPostsResult } from '../../../types/types';
+import { DELETE_COMMENT_MUTATION } from './Mutations/DeleteCommentMutation';
 
-interface DeleteButtonProps {
+interface DeleteCommentButtonProps {
   postId: string;
+  commentId: string;
   redirect?: (() => void | undefined) | undefined;
 }
 
-export const DeleteButton: React.FC<DeleteButtonProps> = ({
+export const DeleteCommentButton: React.FC<DeleteCommentButtonProps> = ({
   postId,
+  commentId,
   redirect,
 }) => {
   const [open, setOpen] = useState(false);
-  const [deletePost] = useMutation(DELETE_POST_MUTATION, {
-    update(cache) {
-      const { getPosts } = cache.readQuery<AllPostsResult>({
-        query: FETCH_POSTS_QUERY,
-      }) || { getPosts: [] };
-
-      // Get all posts, except the one that was deleted
-      const filteredPosts = getPosts.filter((post) => post.id !== postId);
-
-      cache.writeQuery({
-        query: FETCH_POSTS_QUERY,
-        data: {
-          getPosts: [...filteredPosts],
-        },
-      });
-      setOpen(false);
+  const [deleteComment] = useMutation(DELETE_COMMENT_MUTATION, {
+    update() {
       if (redirect) redirect();
     },
     variables: {
       postId,
+      commentId,
     },
   });
 
@@ -74,19 +61,19 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title" color="primary">
-          Are you sure you want to delete the post?
+          Are you sure you want to delete the comment?
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Deleting a post is a permanent operation. A deleted post will not be
-            able to be restored.
+            Deleting a comment is a permanent operation. A deleted comment will
+            not be able to be restored.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} autoFocus>
             CANCEL
           </Button>
-          <Button onClick={() => deletePost()}>DELETE</Button>
+          <Button onClick={() => deleteComment()}>DELETE</Button>
         </DialogActions>
       </Dialog>
     </>

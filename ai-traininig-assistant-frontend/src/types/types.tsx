@@ -10,7 +10,7 @@ export interface Post {
   createdAt?: string;
   body?: string;
   username?: string;
-  comments?: Comments;
+  comments?: Comments[];
   commentsCount?: number;
   likes?: User[];
   likesCount?: number;
@@ -31,6 +31,10 @@ export interface User {
 
 export interface AllPostsResult {
   getPosts: Post[];
+}
+
+export interface GetPostResult {
+  getPost: Post;
 }
 
 export interface Comments {

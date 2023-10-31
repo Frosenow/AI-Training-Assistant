@@ -4,9 +4,9 @@ import { useMutation } from '@apollo/client';
 import { Chip } from '@mui/material';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-
 import { Post, User } from '../../../types/types';
 import { LIKE_POST_MUTATION } from './Mutatations/LikePostMutation';
+import { StyledBadge } from '../../../styles/Badge/StyledBadge';
 
 interface LikeButtonProps {
   user: User | null;
@@ -36,8 +36,11 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ user, post }) => {
 
   return (
     <Chip
-      icon={<FavoriteIcon sx={{ fill: liked ? red.A400 : 'primary' }} />}
-      label={likesCount}
+      icon={
+        <StyledBadge badgeContent={likesCount} color="secondary">
+          <FavoriteIcon sx={{ fill: liked ? red.A400 : 'primary' }} />
+        </StyledBadge>
+      }
       aria-label="likes"
       color="primary"
       onClick={() => likePost()}

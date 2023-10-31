@@ -16,9 +16,10 @@ import { Grid, Divider, Container, CircularProgress } from '@mui/material';
 import moment from 'moment';
 import { FETCH_POST_QUERY } from './Queries/getPostQuery';
 import { LikeButton } from '../../Buttons/LikeButton/LikeButton';
-import { DeleteButton } from '../../Buttons/DeleteButton/DeleteButton';
+import { DeletePostButton } from '../../Buttons/DeleteButton/DeletePostButton/DeletePostButton';
 import { CommentCard } from '../../CommentCard/CommentCard';
 import SnackBarError from '../../SnackBarError/SnackBarError';
+import { StyledBadge } from '../../../styles/Badge/StyledBadge';
 import { Comments } from '../../../types/types';
 
 import { AuthContext } from '../../../context/auth';
@@ -99,7 +100,10 @@ export default function SinglePost() {
               action={
                 user &&
                 user.username === username && (
-                  <DeleteButton postId={id} redirect={() => navigate('/')} />
+                  <DeletePostButton
+                    postId={id}
+                    redirect={() => navigate('/')}
+                  />
                 )
               }
               sx={{
@@ -120,8 +124,11 @@ export default function SinglePost() {
               <Stack direction="row" spacing={1}>
                 <LikeButton user={user} post={{ id, likesCount, likes }} />
                 <Chip
-                  icon={<CommentIcon />}
-                  label={commentsCount}
+                  icon={
+                    <StyledBadge badgeContent={commentsCount} color="secondary">
+                      <CommentIcon />
+                    </StyledBadge>
+                  }
                   aria-label="comments"
                   color="primary"
                 />
@@ -149,7 +156,7 @@ export default function SinglePost() {
             {comments.map((comment: Comments) => (
               <CardContent key={comment.id}>
                 <Typography color="text.secondary" component="span">
-                  <CommentCard comment={comment} />
+                  <CommentCard comment={comment} postId={id} />
                 </Typography>
               </CardContent>
             ))}
