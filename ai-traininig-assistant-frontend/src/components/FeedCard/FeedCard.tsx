@@ -8,10 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import { Divider } from '@mui/material';
-import { red } from '@mui/material/colors';
 import CommentIcon from '@mui/icons-material/Comment';
-
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { LikeButton } from '../Buttons/LikeButton/LikeButton';

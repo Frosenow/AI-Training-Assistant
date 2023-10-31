@@ -33,8 +33,9 @@ export interface AllPostsResult {
   getPosts: Post[];
 }
 
-interface Comments {
+export interface Comments {
   id: string;
   body: string;
   username: string;
+  createdAt: string;
 }

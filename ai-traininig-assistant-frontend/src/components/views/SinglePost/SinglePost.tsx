@@ -11,13 +11,15 @@ import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import CommentIcon from '@mui/icons-material/Comment';
-import { Grid, Divider } from '@mui/material';
+import { Grid, Divider, Container, CircularProgress } from '@mui/material';
 
 import moment from 'moment';
 import { FETCH_POST_QUERY } from './Queries/getPostQuery';
 import { LikeButton } from '../../Buttons/LikeButton/LikeButton';
 import { DeleteButton } from '../../Buttons/DeleteButton/DeleteButton';
 import { CommentCard } from '../../CommentCard/CommentCard';
+import SnackBarError from '../../SnackBarError/SnackBarError';
+import { Comments } from '../../../types/types';
 
 import { AuthContext } from '../../../context/auth';
 
@@ -31,14 +33,24 @@ export default function SinglePost() {
     },
   });
 
-  // TODO: Handle Loading State
   if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  // TODO: Handle Errors
-  if (error) {
-    return <div>{error.message}</div>;
+    return (
+      <Container
+        sx={{
+          mt: 'calc(4rem + 239px)',
+          display: 'flex',
+          justifyContent: 'center',
+          opacity: '50',
+        }}
+      >
+        <CircularProgress
+          variant="indeterminate"
+          color="primary"
+          size={500}
+          thickness={1}
+        />
+      </Container>
+    );
   }
 
   // Get Post data if no errors
@@ -64,6 +76,7 @@ export default function SinglePost() {
         maxWidth: { sm: '60%', xs: '90%' },
       }}
     >
+      {error && <SnackBarError error={error} />}
       <Grid item xs={12} md={comments.length > 0 ? 8 : 12}>
         <Card>
           <CardContent>
@@ -98,6 +111,7 @@ export default function SinglePost() {
                 variant="body1"
                 fontSize="1.5rem"
                 color="text.secondary"
+                component="span"
               >
                 {body}
               </Typography>
@@ -132,9 +146,9 @@ export default function SinglePost() {
                 </Divider>
               }
             />
-            {comments.map((comment) => (
+            {comments.map((comment: Comments) => (
               <CardContent key={comment.id}>
-                <Typography color="text.secondary">
+                <Typography color="text.secondary" component="span">
                   <CommentCard comment={comment} />
                 </Typography>
               </CardContent>
