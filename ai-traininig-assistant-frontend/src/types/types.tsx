@@ -43,3 +43,8 @@ export interface Comments {
   username: string;
   createdAt: string;
 }
+
+export interface CommentCardProps {
+  comment: Comments;
+  postId: string;
+}

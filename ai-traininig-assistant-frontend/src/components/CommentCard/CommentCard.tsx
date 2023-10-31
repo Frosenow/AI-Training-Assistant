@@ -6,18 +6,15 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import moment from 'moment';
 import { DeleteCommentButton } from '../Buttons/DeleteButton/DeleteCommentButton/DeleteCommentButton';
 import { AuthContext } from '../../context/auth';
-
-import moment from 'moment';
+import { CommentCardProps } from '../../types/types';
 
 // eslint-disable-next-line react/function-component-definition
-export const CommentCard = ({
-  comment: { username, createdAt, body, id },
-  postId,
-}) => {
+export const CommentCard = ({ comment, postId }: CommentCardProps) => {
   const { user } = useContext(AuthContext);
-
+  const { username, createdAt, body, id } = comment;
   return (
     <Card>
       <CardHeader
