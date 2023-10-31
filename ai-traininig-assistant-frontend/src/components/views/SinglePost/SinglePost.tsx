@@ -21,8 +21,10 @@ import { CommentCard } from '../../CommentCard/CommentCard';
 import SnackBarError from '../../SnackBarError/SnackBarError';
 import { StyledBadge } from '../../../styles/Badge/StyledBadge';
 import { Comments } from '../../../types/types';
+import { CommentForm } from '../../CommentForm/CommentForm';
 
 import { AuthContext } from '../../../context/auth';
+import stringToColor from '../utils/stringToColor';
 
 export default function SinglePost() {
   const { postId } = useParams();
@@ -83,7 +85,14 @@ export default function SinglePost() {
           <CardContent>
             <CardHeader
               avatar={
-                <Avatar sx={{ bgcolor: 'secondary.light' }} aria-label="recipe">
+                <Avatar
+                  sx={{
+                    bgcolor: user
+                      ? stringToColor(user.username)
+                      : 'secondary.light',
+                  }}
+                  aria-label="recipe"
+                >
                   {username && username[0].toUpperCase()}
                 </Avatar>
               }
@@ -134,6 +143,7 @@ export default function SinglePost() {
                 />
               </Stack>
             </CardActions>
+            <CommentForm postId={postId} />
           </CardContent>
         </Card>
       </Grid>

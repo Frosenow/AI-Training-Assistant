@@ -15,7 +15,7 @@ import {
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ClearIcon from '@mui/icons-material/Clear';
 
-import { DELETE_COMMENT_MUTATION } from './Mutations/DeleteCommentMutation';
+import { DELETE_COMMENT_MUTATION } from './Mutations/deleteCommentMutation';
 
 interface DeleteCommentButtonProps {
   postId: string;
