@@ -14,6 +14,7 @@ import SignIn from './components/views/Login/SignIn';
 import SignUp from './components/views/Register/SingUp';
 import SinglePost from './components/views/SinglePost/SinglePost';
 import Workouts from './components/views/Workouts/Workouts';
+import SingleWorkout from './components/views/SingleWorkout/SingleWorkout';
 
 function App() {
   return (
@@ -42,7 +43,10 @@ function App() {
               />
               <Route path="posts/:postId" element={<SinglePost />} />
               <Route path="workouts" element={<Workouts />} />
-              <Route path="workouts/:postId" element={<Workouts />} />
+              <Route
+                path="workouts/:workoutPlanId"
+                element={<SingleWorkout />}
+              />
             </Routes>
           </Grid>
         </HashRouter>

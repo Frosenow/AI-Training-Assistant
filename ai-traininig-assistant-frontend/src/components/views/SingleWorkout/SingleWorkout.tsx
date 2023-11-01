@@ -1,19 +1,15 @@
 import { useContext, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Container, CircularProgress } from '@mui/material';
 
-import WorkoutCard from '../../WorkoutCard/WorkoutCard';
-import SnackBarError from '../../SnackBarError/SnackBarError';
-import { CreateWorkoutForm } from '../../CreateWorkoutForm/CreateWorkoutForm';
-import { FETCH_USER_WORKOUTS_QUERY } from './Queries/getUserWorkoutsQuery';
 import { AuthContext } from '../../../context/auth';
-import { Workout } from '../../../types/types';
+import { FETCH_SINGLE_WORKOUT_QUERY } from './Queries/getSingleWorkout';
 
-export default function Workouts() {
+export default function SingleWorkout() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  const { workoutPlanId } = useParams();
   useEffect(() => {
     if (!user) {
       navigate('/login');
@@ -21,9 +17,9 @@ export default function Workouts() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { loading, error, data } = useQuery(FETCH_USER_WORKOUTS_QUERY, {
+  const { loading, error, data } = useQuery(FETCH_SINGLE_WORKOUT_QUERY, {
     variables: {
-      owner: user ? user.username : undefined,
+      workoutPlanId,
     },
   });
 
@@ -47,19 +43,7 @@ export default function Workouts() {
     );
   }
 
-  const { getUserWorkouts } = data;
+  console.log(data);
 
-  if (!getUserWorkouts) {
-    <CreateWorkoutForm />;
-  }
-
-  return (
-    <>
-      {error && <SnackBarError error={error} />}
-      {getUserWorkouts.map((workout: Workout) => (
-        <WorkoutCard workout={workout} key={workout.id} />
-      ))}
-      ;
-    </>
-  );
+  return <div>SingleWorkout</div>;
 }
