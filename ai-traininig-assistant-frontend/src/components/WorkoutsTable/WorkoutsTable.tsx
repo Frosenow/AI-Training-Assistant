@@ -87,7 +87,10 @@ export default function WorkoutsTable() {
       sx={{
         width: '80%',
         overflow: 'hidden',
-        margin: '6rem 1rem 1rem calc(1rem + 239px)',
+        margin: {
+          xs: '6rem 1rem',
+          sm: '6rem 1rem 1rem calc(1rem + 239px)',
+        },
       }}
     >
       <Typography

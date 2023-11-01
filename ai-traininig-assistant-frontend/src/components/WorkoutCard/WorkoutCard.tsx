@@ -14,9 +14,11 @@ import moment from 'moment';
 
 import { Workout } from '../../types/types';
 
-const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))({
+export const CustomWidthTooltip = styled(
+  ({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  )
+)({
   [`& .${tooltipClasses.arrow}`]: {
     color: '#000',
   },
@@ -47,7 +49,10 @@ export default function WorkoutCard({ workout }: WorkoutProps) {
         sx={{
           width: '80%',
           overflow: 'hidden',
-          margin: '6rem 1rem 1rem calc(1rem + 239px)',
+          margin: {
+            xs: '6rem 1rem',
+            sm: '6rem 1rem 1rem calc(1rem + 239px)',
+          },
         }}
       >
         <CardHeader

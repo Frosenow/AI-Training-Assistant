@@ -9,6 +9,7 @@ import { CreateWorkoutForm } from '../../CreateWorkoutForm/CreateWorkoutForm';
 import { FETCH_USER_WORKOUTS_QUERY } from './Queries/getUserWorkoutsQuery';
 import { AuthContext } from '../../../context/auth';
 import { Workout } from '../../../types/types';
+import { CreateWorkoutFormLite } from '../../CreateWorkoutForm/CreateWorkoutFormLite';
 
 export default function Workouts() {
   const { user } = useContext(AuthContext);
@@ -59,7 +60,7 @@ export default function Workouts() {
       {getUserWorkouts.map((workout: Workout) => (
         <WorkoutCard workout={workout} key={workout.id} />
       ))}
-      ;
+      <CreateWorkoutFormLite />
     </>
   );
 }
