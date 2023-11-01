@@ -31,14 +31,14 @@ export const loggedUserItems = [
   },
   {
     id: 1,
-    icon: <Logout />,
-    label: 'Logout',
-    route: '/login',
-  },
-  {
-    id: 2,
     icon: <FitnessCenter />,
     label: 'Workouts',
     route: '/workouts',
+  },
+  {
+    id: 2,
+    icon: <Logout />,
+    label: 'Logout',
+    route: '/login',
   },
 ];

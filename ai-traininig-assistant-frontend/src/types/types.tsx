@@ -29,8 +29,52 @@ export interface User {
   token: string;
 }
 
+export interface WorkoutProgression {
+  volume: number;
+  reps: number[];
+  sets: number;
+  weight: number;
+}
+
+export interface ProgressTracker {
+  id: string;
+  trainingDay: string;
+  progression: WorkoutProgression;
+}
+
+export interface WorkoutDay {
+  id: string;
+  exerciseName: string;
+  muscleGroup: string;
+  reps: number[];
+  sets: number;
+  progressTracker?: ProgressTracker[];
+}
+
+export interface WorkoutSplit {
+  monday: WorkoutDay[];
+  tuesday: WorkoutDay[];
+  wednesday: WorkoutDay[];
+  thursday: WorkoutDay[];
+  friday: WorkoutDay[];
+  saturday: WorkoutDay[];
+  sunday: WorkoutDay[];
+}
+
+export interface Workout {
+  owner: string;
+  createdAt: string;
+  id: string;
+  name: string;
+  workoutSplit?: WorkoutSplit;
+}
+
 export interface AllPostsResult {
   getPosts: Post[];
+}
+
+export interface WorkoutsResult {
+  getUserWorkouts: Workout[] | [];
 }
 
 export interface GetPostResult {

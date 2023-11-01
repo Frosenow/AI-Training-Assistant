@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { Container, CircularProgress } from '@mui/material';
 
-import WorkoutsTable from '../../WorkoutsTable/WorkoutsTable';
+import WorkoutCard from '../../WorkoutCard/WorkoutCard';
 import { CreateWorkoutForm } from '../../CreateWorkoutForm/CreateWorkoutForm';
 import { FETCH_USER_WORKOUTS_QUERY } from './Queries/getUserWorkoutsQuery';
 import { AuthContext } from '../../../context/auth';
@@ -47,5 +47,11 @@ export default function Workouts() {
 
   const { getUserWorkouts } = data;
 
-  return getUserWorkouts.length ? <WorkoutsTable /> : <CreateWorkoutForm />;
+  if (!getUserWorkouts) {
+    <CreateWorkoutForm />;
+  }
+
+  return getUserWorkouts.map((workout) => (
+    <WorkoutCard workout={workout} key={workout.id} />
+  ));
 }

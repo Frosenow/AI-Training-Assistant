@@ -41,8 +41,8 @@ function App() {
                 }
               />
               <Route path="posts/:postId" element={<SinglePost />} />
-              <Route path="workouts/:postId" element={<Workouts />} />
               <Route path="workouts" element={<Workouts />} />
+              <Route path="workouts/:postId" element={<Workouts />} />
             </Routes>
           </Grid>
         </HashRouter>

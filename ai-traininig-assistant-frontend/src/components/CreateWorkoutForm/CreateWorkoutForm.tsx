@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -13,17 +13,40 @@ import {
 } from '@mui/material';
 import CreateIcon from '@mui/icons-material/Create';
 import { CREATE_WORKOUT_PLAN_MUTATION } from './Mutations/createWorkoutPlanMutation';
+import { FETCH_USER_WORKOUTS_QUERY } from '../views/Workouts/Queries/getUserWorkoutsQuery';
+import { AuthContext } from '../../context/auth';
+import { WorkoutsResult } from '../../types/types';
 
 export function CreateWorkoutForm() {
   const [value, setValue] = useState('');
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   const [createWorkoutPlan] = useMutation(CREATE_WORKOUT_PLAN_MUTATION, {
+    update(cache, { data }) {
+      const result = cache.readQuery<WorkoutsResult>({
+        query: FETCH_USER_WORKOUTS_QUERY,
+        variables: {
+          owner: user?.username,
+        },
+      });
+
+      const getUserWorkouts = result?.getUserWorkouts || [];
+
+      cache.writeQuery({
+        query: FETCH_USER_WORKOUTS_QUERY,
+        variables: {
+          owner: user?.username,
+        },
+        data: {
+          getUserWorkouts: [data.createWorkoutPlan, ...getUserWorkouts],
+        },
+      });
+    },
     variables: {
       name: value,
     },
     onCompleted(data) {
       setValue('');
-      console.log(data);
       navigate(`/workouts/${data.createWorkoutPlan.id}`);
     },
   });

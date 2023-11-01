@@ -14,33 +14,28 @@ export const FETCH_USER_WORKOUTS_QUERY = gql`
           muscleGroup
           reps
           sets
-          progressTracker {
-            trainingDate
-            progression {
-              volume
-              reps
-              sets
-              weight
-            }
-          }
+          id
         }
         tuesday {
           exerciseName
           muscleGroup
           reps
           sets
+          id
         }
         wednesday {
           exerciseName
           muscleGroup
           reps
           sets
+          id
         }
         thursday {
           exerciseName
           muscleGroup
           reps
           sets
+          id
         }
         friday {
           exerciseName
@@ -48,28 +43,20 @@ export const FETCH_USER_WORKOUTS_QUERY = gql`
           reps
           sets
           id
-          progressTracker {
-            trainingDate
-            id
-            progression {
-              volume
-              reps
-              sets
-              weight
-            }
-          }
         }
         saturday {
           exerciseName
           muscleGroup
           reps
           sets
+          id
         }
         sunday {
           exerciseName
           muscleGroup
           reps
           sets
+          id
         }
       }
     }
