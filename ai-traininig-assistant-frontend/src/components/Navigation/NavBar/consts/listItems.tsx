@@ -6,13 +6,13 @@ export const mainListItems = [
     id: 0,
     icon: <Login />,
     label: 'Login',
-    route: 'login',
+    route: '/login',
   },
   {
     id: 1,
     icon: <HowToReg />,
     label: 'Register',
-    route: 'register',
+    route: '/register',
   },
 ];
 
@@ -27,6 +27,6 @@ export const loggedUserItems = [
     id: 1,
     icon: <Logout />,
     label: 'Logout',
-    route: 'login',
+    route: '/login',
   },
 ];

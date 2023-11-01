@@ -7,7 +7,7 @@ const postsResolvers = {
   Query: {
     async getPosts() {
       try {
-        const posts = await Post.find();
+        const posts = await Post.find().sort({ createdAt: -1 });
         return posts;
       } catch (err) {
         throw new Error(err);
@@ -32,7 +32,7 @@ const postsResolvers = {
       const user = authUser(context);
 
       if (body.trim() === '') {
-        throw new Error('Post body must not be empty');
+        throw new Error('Post cannot be empty');
       }
 
       // Create post from passed data

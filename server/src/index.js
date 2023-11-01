@@ -6,6 +6,8 @@ config();
 import { resolvers } from './graphql/resolvers/index.js';
 import { typeDefs } from './graphql/TypeDefs.js';
 
+const PORT = process.env.PORT || 5000;
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -20,7 +22,7 @@ try {
 } catch (error) {
   console.log(error);
 } finally {
-  server.listen({ port: 5000 }).then((res) => {
+  server.listen({ port: PORT }).then((res) => {
     console.log(`Server is running on: ${res.url}`);
   });
 }
