@@ -13,6 +13,7 @@ import Home from './components/views/Home/Home';
 import SignIn from './components/views/Login/SignIn';
 import SignUp from './components/views/Register/SingUp';
 import SinglePost from './components/views/SinglePost/SinglePost';
+import Workouts from './components/views/Workouts/Workouts';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
                 }
               />
               <Route path="posts/:postId" element={<SinglePost />} />
+              <Route path="workouts" element={<Workouts />} />
             </Routes>
           </Grid>
         </HashRouter>

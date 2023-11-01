@@ -43,7 +43,7 @@ function Home() {
 
   // Get Posts data if no errors
   const { getPosts: posts } = data;
-  console.log(posts);
+
   return (
     <Grid
       container

@@ -75,7 +75,12 @@ export default function ResponsiveNavBar(props: Props) {
               >
                 {item.icon}
               </ListItemIcon>
-              <ListItemText primary={item.label} />
+              <ListItemText
+                primary={item.label}
+                sx={{
+                  color: '#fff',
+                }}
+              />
             </ListItemButton>
           </ListItem>
         ))}

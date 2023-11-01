@@ -1,4 +1,10 @@
-import { Home, Login, HowToReg, Logout } from '@mui/icons-material';
+import {
+  Home,
+  Login,
+  HowToReg,
+  Logout,
+  FitnessCenter,
+} from '@mui/icons-material';
 
 // eslint-disable-next-line import/prefer-default-export
 export const mainListItems = [
@@ -28,5 +34,11 @@ export const loggedUserItems = [
     icon: <Logout />,
     label: 'Logout',
     route: '/login',
+  },
+  {
+    id: 2,
+    icon: <FitnessCenter />,
+    label: 'Workouts',
+    route: '/workouts',
   },
 ];
