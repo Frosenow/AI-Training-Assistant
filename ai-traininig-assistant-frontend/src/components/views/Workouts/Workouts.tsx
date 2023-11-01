@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { Container, CircularProgress } from '@mui/material';
+import { Container, CircularProgress, Stack } from '@mui/material';
 
 import WorkoutCard from '../../WorkoutCard/WorkoutCard';
 import SnackBarError from '../../SnackBarError/SnackBarError';
@@ -55,12 +55,23 @@ export default function Workouts() {
   }
 
   return (
-    <>
+    <Stack
+      sx={{
+        mt: '6rem',
+        width: { xs: '90%', sm: '80%' },
+        margin: {
+          xs: '6rem 1rem',
+          sm: '6rem 1rem 1rem calc(1rem + 239px)',
+        },
+      }}
+      spacing={2}
+      alignItems="stretch"
+    >
       {error && <SnackBarError error={error} />}
       {getUserWorkouts.map((workout: Workout) => (
         <WorkoutCard workout={workout} key={workout.id} />
       ))}
       <CreateWorkoutFormLite />
-    </>
+    </Stack>
   );
 }

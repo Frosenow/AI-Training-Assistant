@@ -54,7 +54,7 @@ export function CreateWorkoutFormLite() {
   });
 
   return (
-    <Card>
+    <Card sx={{ width: { xs: '100%', lg: '30%' } }}>
       <CardContent>
         <Box
           component="form"
@@ -84,6 +84,7 @@ export function CreateWorkoutFormLite() {
             onChange={(event) => setValue(event.target.value)}
             sx={{
               color: 'secondary.contrastText',
+              width: { xs: '80%', md: '80%' },
             }}
             startAdornment={
               <InputAdornment position="start">

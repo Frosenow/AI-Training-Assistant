@@ -47,12 +47,8 @@ export default function WorkoutCard({ workout }: WorkoutProps) {
     >
       <Card
         sx={{
-          width: '80%',
+          width: '100%',
           overflow: 'hidden',
-          margin: {
-            xs: '6rem 1rem',
-            sm: '6rem 1rem 1rem calc(1rem + 239px)',
-          },
         }}
       >
         <CardHeader
@@ -70,9 +66,6 @@ export default function WorkoutCard({ workout }: WorkoutProps) {
               color="primary"
               edge="end"
               size="large"
-              sx={{
-                margin: '1rem',
-              }}
               onClick={() => navigate(`/workouts/${workout.id}`)}
             >
               <ReadMoreIcon />
