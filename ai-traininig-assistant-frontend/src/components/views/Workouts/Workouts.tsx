@@ -1,17 +1,51 @@
+import { useContext, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import WorkoutsTable from '../../WorkoutsTable/WorkoutsTable';
+import { useNavigate } from 'react-router-dom';
+import { Container, CircularProgress } from '@mui/material';
 
-import { FETCH_WORKOUTS_QUERY } from './Queries/getWorkoutsQuery';
+import WorkoutsTable from '../../WorkoutsTable/WorkoutsTable';
+import { CreateWorkoutForm } from '../../CreateWorkoutForm/CreateWorkoutForm';
+import { FETCH_USER_WORKOUTS_QUERY } from './Queries/getUserWorkoutsQuery';
+import { AuthContext } from '../../../context/auth';
 
 export default function Workouts() {
-  const { loading, error, data } = useQuery(FETCH_WORKOUTS_QUERY);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const { loading, error, data } = useQuery(FETCH_USER_WORKOUTS_QUERY, {
+    variables: {
+      owner: user ? user.username : undefined,
+    },
+  });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Container
+        sx={{
+          mt: 'calc(4rem + 239px)',
+          display: 'flex',
+          justifyContent: 'center',
+          opacity: '50',
+        }}
+      >
+        <CircularProgress
+          variant="indeterminate"
+          color="primary"
+          size={500}
+          thickness={1}
+        />
+      </Container>
+    );
   }
 
-  if (data) {
-    console.log(data);
-  }
-  return <WorkoutsTable />;
+  const { getUserWorkouts } = data;
+
+  return getUserWorkouts.length ? <WorkoutsTable /> : <CreateWorkoutForm />;
 }

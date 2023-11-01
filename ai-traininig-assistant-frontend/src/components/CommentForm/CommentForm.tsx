@@ -2,17 +2,9 @@
 /* eslint-disable import/prefer-default-export */
 import { useState, useContext } from 'react';
 import { useMutation } from '@apollo/client';
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Box,
-  Avatar,
-} from '@mui/material';
+import { Card, CardContent, Button, Box, Avatar } from '@mui/material';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 
 import { CREATE_COMMENT_MUTATION } from './Mutations/createCommentMutation';
 import { AuthContext } from '../../context/auth';
@@ -47,7 +39,6 @@ export const CommentForm = ({ postId }) => {
             placeholder="Post a comment..."
             value={value}
             onChange={(event) => setValue(event.target.value)}
-            // TODO: Change it later
             sx={{
               color: 'secondary.contrastText',
               width: '100%',

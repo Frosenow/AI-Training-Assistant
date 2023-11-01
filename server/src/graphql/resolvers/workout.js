@@ -9,9 +9,9 @@ import {
 
 const workoutResolvers = {
   Query: {
-    async getWorkouts() {
+    async getUserWorkouts(_, { owner }) {
       try {
-        const workouts = await WorkoutPlan.find();
+        const workouts = await WorkoutPlan.find({ owner });
         return workouts;
       } catch (err) {
         throw new Error(err);

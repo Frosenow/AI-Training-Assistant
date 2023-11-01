@@ -92,7 +92,7 @@ const typeDefs = gql`
   type Query {
     getPosts: [Post]
     getPost(postId: ID!): Post
-    getWorkouts: [WorkoutPlan]
+    getUserWorkouts(owner: String!): [WorkoutPlan]
     getWorkout(workoutPlanId: ID!): WorkoutPlan!
   }
   type Mutation {
