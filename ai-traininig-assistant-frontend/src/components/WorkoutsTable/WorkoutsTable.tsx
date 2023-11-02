@@ -7,10 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Typography } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import { DeleteExerciseButton } from '../Buttons/DeleteButton/DeleteExerciseButton/DeleteExerciseButton';
+import { Typography, IconButton } from '@mui/material';
 
 interface Column {
-  id: 'day' | 'exercise' | 'reps' | 'sets';
+  id: 'day' | 'exerciseName' | 'reps' | 'sets';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -18,58 +20,57 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: 'day', label: 'Day', minWidth: 70 },
-  { id: 'exercise', label: 'Exercise', minWidth: 100 },
-  {
-    id: 'reps',
-    label: 'Reps',
-    minWidth: 70,
-  },
+  { id: 'exerciseName', label: 'Exercise', minWidth: 100 },
   {
     id: 'sets',
     label: 'Sets',
     minWidth: 70,
   },
+  {
+    id: 'reps',
+    label: 'Reps',
+    minWidth: 70,
+  },
 ];
 
 interface Data {
-  day: string;
-  exercise: string;
-  reps: number;
+  exerciseName: string;
+  reps: number[];
   sets: number;
+  id: string;
 }
 
+// Function to modify the data representation
 function createData(
-  day: string,
-  exercise: string,
-  reps: number,
-  sets: number
+  exerciseName: string,
+  reps: number[],
+  sets: number,
+  id: string
 ): Data {
-  // const density = population / size;
-  return { day, exercise, reps, sets };
+  // eslint-disable-next-line no-param-reassign
+  const formattedReps = `[${reps.join(', ')}]`;
+  return { exerciseName, reps: formattedReps, sets, id };
 }
 
-const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-  createData('United States', 'US', 327167434, 9833520),
-  createData('Canada', 'CA', 37602103, 9984670),
-  createData('Australia', 'AU', 25475400, 7692024),
-  createData('Germany', 'DE', 83019200, 357578),
-  createData('Ireland', 'IE', 4857000, 70273),
-  createData('Mexico', 'MX', 126577691, 1972550),
-  createData('Japan', 'JP', 126317000, 377973),
-  createData('France', 'FR', 67022000, 640679),
-  createData('United Kingdom', 'GB', 67545757, 242495),
-  createData('Russia', 'RU', 146793744, 17098246),
-  createData('Nigeria', 'NG', 200962417, 923768),
-  createData('Brazil', 'BR', 210147125, 8515767),
-];
-
-export default function WorkoutsTable() {
+export default function WorkoutsTable({
+  workoutSplit,
+  trainingDay,
+  workoutPlanId,
+}) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const rows = [];
+
+  workoutSplit.forEach((exercise: Data) => {
+    rows.push(
+      createData(
+        exercise.exerciseName,
+        exercise.reps,
+        exercise.sets,
+        exercise.id
+      )
+    );
+  });
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -102,12 +103,14 @@ export default function WorkoutsTable() {
           pr: { xs: 1, sm: 1 },
           backgroundColor: 'primary.main',
           color: 'primary.contrastText',
+          textTransform: 'uppercase',
+          paddingLeft: 2,
         }}
         variant="h6"
         id="tableTitle"
         component="div"
       >
-        Monday
+        {trainingDay}
       </Typography>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -142,6 +145,13 @@ export default function WorkoutsTable() {
                         </TableCell>
                       );
                     })}
+                    <TableCell>
+                      <DeleteExerciseButton
+                        workoutPlanId={workoutPlanId}
+                        exerciseId={row.id}
+                        exerciseDay={trainingDay}
+                      />
+                    </TableCell>
                   </TableRow>
                 );
               })}

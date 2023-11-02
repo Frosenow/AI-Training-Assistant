@@ -5,6 +5,7 @@ import { Container, CircularProgress } from '@mui/material';
 
 import { AuthContext } from '../../../context/auth';
 import { FETCH_SINGLE_WORKOUT_QUERY } from './Queries/getSingleWorkout';
+import WorkoutsTable from '../../WorkoutsTable/WorkoutsTable';
 
 export default function SingleWorkout() {
   const { user } = useContext(AuthContext);
@@ -43,7 +44,22 @@ export default function SingleWorkout() {
     );
   }
 
-  console.log(data);
+  const {
+    getWorkout: { workoutSplit },
+  } = data;
 
-  return <div>SingleWorkout</div>;
+  return Object.keys(workoutSplit)
+    .filter(
+      (trainingDay) =>
+        Array.isArray(workoutSplit[trainingDay]) &&
+        workoutSplit[trainingDay].length > 0
+    )
+    .map((trainingDay) => (
+      <WorkoutsTable
+        key={trainingDay}
+        trainingDay={trainingDay}
+        workoutSplit={workoutSplit[trainingDay]}
+        workoutPlanId={workoutPlanId}
+      />
+    ));
 }
