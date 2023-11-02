@@ -22,12 +22,16 @@ export default function CollapsibleTableForm({ exerciseDay, workoutPlanId }) {
     exerciseDay,
     exerciseName: '',
     muscleGroup: '',
-    sets: 0,
+    sets: 1,
     reps: [],
   };
   const [values, setValues] = useState(initialState);
 
-  const [addExercise, { loading }] = useMutation(ADD_EXERCISE_MUTATION, {
+  const [addExercise, { error }] = useMutation(ADD_EXERCISE_MUTATION, {
+    onCompleted() {
+      setOpen(!open);
+      setValues(initialState);
+    },
     variables: {
       workoutPlanId,
       exercise: {
@@ -35,6 +39,13 @@ export default function CollapsibleTableForm({ exerciseDay, workoutPlanId }) {
       },
     },
   });
+
+  const minSetsAmount = 0;
+  const maxSetsAmount = 10;
+
+  if (error) {
+    console.log(error);
+  }
 
   return (
     <>
@@ -86,11 +97,16 @@ export default function CollapsibleTableForm({ exerciseDay, workoutPlanId }) {
                   });
                 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Exercise Name" />
+                  <TextField
+                    {...params}
+                    label="Exercise Name"
+                    error={error ? true : false}
+                  />
                 )}
               />
               <TextField
                 id="sets-number"
+                error={error ? true : false}
                 label="Sets"
                 type="number"
                 placeholder="0"
@@ -98,11 +114,22 @@ export default function CollapsibleTableForm({ exerciseDay, workoutPlanId }) {
                   shrink: true,
                 }}
                 variant="outlined"
-                InputProps={{ inputProps: { min: 1, max: 10 } }}
+                InputProps={{
+                  inputProps: {
+                    type: 'number',
+                    min: minSetsAmount,
+                    max: maxSetsAmount,
+                  },
+                }}
                 onChange={(event) => {
+                  let value = parseInt(event.target.value, 10);
+
+                  if (value > maxSetsAmount) value = maxSetsAmount;
+                  if (value < minSetsAmount) value = minSetsAmount;
+
                   setValues({
                     ...values,
-                    sets: Number(event.target.value),
+                    sets: value,
                   });
                 }}
               />
@@ -113,6 +140,7 @@ export default function CollapsibleTableForm({ exerciseDay, workoutPlanId }) {
                     <TextField
                       // eslint-disable-next-line react/no-array-index-key
                       key={idx}
+                      error={error ? true : false}
                       type="number"
                       label="Repetition amount"
                       placeholder="0"
@@ -137,7 +165,7 @@ export default function CollapsibleTableForm({ exerciseDay, workoutPlanId }) {
                 variant="contained"
                 size="small"
                 aria-label="expand row"
-                onClick={addExercise}
+                onClick={() => addExercise()}
               >
                 <AddIcon />
               </Button>
