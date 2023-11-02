@@ -10,7 +10,6 @@ import {
   DialogContentText,
   DialogActions,
   Button,
-  IconButton,
 } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -57,9 +56,15 @@ export const DeleteExerciseButton: React.FC<DeleteExerciseButtonProps> = ({
 
   return (
     <>
-      <IconButton aria-label="settings" onClick={handleClickOpen}>
+      <Button
+        aria-label="settings"
+        onClick={handleClickOpen}
+        variant="contained"
+        color="error"
+        size="small"
+      >
         <ClearIcon />
-      </IconButton>
+      </Button>
       <Dialog
         fullScreen={fullScreen}
         open={open}

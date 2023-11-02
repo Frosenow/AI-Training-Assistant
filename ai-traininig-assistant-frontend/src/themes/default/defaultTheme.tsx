@@ -30,37 +30,6 @@ export const defaultTheme = createTheme({
         },
       },
     },
-    MuiTableCell: {
-      styleOverrides: {
-        root: {
-          // Add global styles for TableCell
-          // padding: '10px', // Adjust the padding as needed
-          // Add other global styles here
-        },
-      },
-    },
-    MuiTableHead: {
-      styleOverrides: {
-        root: {
-          // Add global styles for TableHead
-          // backgroundColor: 'lightblue',
-          // fontWeight: 'bold',
-          // Add other global styles here
-        },
-      },
-    },
-    MuiTableRow: {
-      styleOverrides: {
-        root: {
-          // Add global styles for TableRow
-          // '&:hover': {
-          //   backgroundColor: 'lightgray',
-          // },
-          // Add other global styles here
-        },
-      },
-    },
-    // Add other table components and styles as needed
   },
   palette: {
     primary: {

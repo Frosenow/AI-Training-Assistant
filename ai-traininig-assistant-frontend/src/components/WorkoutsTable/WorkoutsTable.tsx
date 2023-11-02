@@ -1,15 +1,15 @@
-import { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import ClearIcon from '@mui/icons-material/Clear';
+import AddIcon from '@mui/icons-material/Add';
+import { Typography, TableFooter, Button, Box } from '@mui/material';
+
 import { DeleteExerciseButton } from '../Buttons/DeleteButton/DeleteExerciseButton/DeleteExerciseButton';
-import { Typography, IconButton } from '@mui/material';
+import { WorkoutsTableProps, WorkoutDay } from '../../types/types';
 
 interface Column {
   id: 'day' | 'exerciseName' | 'reps' | 'sets';
@@ -56,10 +56,8 @@ export default function WorkoutsTable({
   workoutSplit,
   trainingDay,
   workoutPlanId,
-}) {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const rows = [];
+}: WorkoutsTableProps) {
+  const rows: Data[] = [];
 
   workoutSplit.forEach((exercise: Data) => {
     rows.push(
@@ -71,17 +69,6 @@ export default function WorkoutsTable({
       )
     );
   });
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
 
   return (
     <Paper
@@ -130,43 +117,41 @@ export default function WorkoutsTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                    <TableCell>
-                      <DeleteExerciseButton
-                        workoutPlanId={workoutPlanId}
-                        exerciseId={row.id}
-                        exerciseDay={trainingDay}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+            {rows.map((row) => {
+              return (
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                  {columns.map((column) => {
+                    const value = row[column.id];
+                    return (
+                      <TableCell key={column.id} align={column.align}>
+                        {column.format && typeof value === 'number'
+                          ? column.format(value)
+                          : value}
+                      </TableCell>
+                    );
+                  })}
+                  <TableCell>
+                    <DeleteExerciseButton
+                      workoutPlanId={workoutPlanId}
+                      exerciseId={row.id}
+                      exerciseDay={trainingDay}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell>
+                <Button color="success" variant="contained" size="small">
+                  <AddIcon />
+                </Button>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
     </Paper>
   );
 }

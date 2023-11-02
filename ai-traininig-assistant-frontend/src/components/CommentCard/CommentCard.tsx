@@ -17,6 +17,7 @@ import { CommentForm } from '../CommentForm/CommentForm';
 export const CommentCard = ({ comment, postId }: CommentCardProps) => {
   const { user } = useContext(AuthContext);
   const { username, createdAt, body, id } = comment;
+
   return (
     <Card>
       <CardHeader

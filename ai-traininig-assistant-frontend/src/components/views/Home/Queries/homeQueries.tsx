@@ -12,6 +12,7 @@ export const FETCH_POSTS_QUERY = gql`
         id
         body
         username
+        createdAt
       }
       commentsCount
       likes {

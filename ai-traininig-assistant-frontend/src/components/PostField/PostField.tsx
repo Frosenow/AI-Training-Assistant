@@ -83,7 +83,6 @@ export default function PostField() {
           title={
             <TextField
               margin="none"
-              required
               fullWidth
               id="body"
               label="What's on your mind?"

@@ -69,6 +69,12 @@ export interface Workout {
   workoutSplit?: WorkoutSplit;
 }
 
+export interface WorkoutsTableProps {
+  workoutSplit: WorkoutSplit;
+  trainingDay: string;
+  workoutPlanId: string;
+}
+
 export interface AllPostsResult {
   getPosts: Post[];
 }
