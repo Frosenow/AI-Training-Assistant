@@ -6,10 +6,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import AddIcon from '@mui/icons-material/Add';
-import { Typography, TableFooter, Button, Box } from '@mui/material';
+import { Typography, TableFooter, Button } from '@mui/material';
 
 import { DeleteExerciseButton } from '../Buttons/DeleteButton/DeleteExerciseButton/DeleteExerciseButton';
-import { WorkoutsTableProps, WorkoutDay } from '../../types/types';
+import { WorkoutsTableProps } from '../../types/types';
+import CollapsibleTableForm from './CollapsibleTableForm';
 
 interface Column {
   id: 'day' | 'exerciseName' | 'reps' | 'sets';
@@ -141,15 +142,12 @@ export default function WorkoutsTable({
               );
             })}
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell>
-                <Button color="success" variant="contained" size="small">
-                  <AddIcon />
-                </Button>
-              </TableCell>
-            </TableRow>
-          </TableFooter>
+          <caption>
+            <CollapsibleTableForm
+              exerciseDay={trainingDay}
+              workoutPlanId={workoutPlanId}
+            />
+          </caption>
         </Table>
       </TableContainer>
     </Paper>
