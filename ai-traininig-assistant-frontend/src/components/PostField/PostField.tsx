@@ -103,6 +103,7 @@ export default function PostField() {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          disabled={values.body.trim() === ''}
         >
           {loading ? (
             <CircularProgress

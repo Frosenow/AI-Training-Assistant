@@ -1,11 +1,8 @@
 import { useState, useContext } from 'react';
 import { useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
 import {
   Card,
-  Tooltip,
   CardContent,
-  Typography,
   Box,
   IconButton,
   Input,
@@ -21,7 +18,6 @@ import { CustomWidthTooltip } from '../WorkoutCard/WorkoutCard';
 
 export function CreateWorkoutFormLite() {
   const [value, setValue] = useState('');
-  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
   const [createWorkoutPlan] = useMutation(CREATE_WORKOUT_PLAN_MUTATION, {

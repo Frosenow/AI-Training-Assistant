@@ -5,6 +5,7 @@ import {
   Typography,
   IconButton,
   Tooltip,
+  Stack,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
@@ -12,6 +13,7 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import moment from 'moment';
 
+import { DeleteWorkoutPlanButton } from '../Buttons/DeleteButton/DeleteWorkoutPlanButton/DeleteWorkoutPlanButton';
 import { Workout } from '../../types/types';
 
 export const CustomWidthTooltip = styled(
@@ -39,11 +41,14 @@ export default function WorkoutCard({ workout }: WorkoutProps) {
   return (
     <CustomWidthTooltip
       title={
-        <Typography>Click icon on the right to get more details</Typography>
+        <Typography>
+          Using icons on the right you can see more details or delete workout
+          plan
+        </Typography>
       }
       placement="bottom"
       arrow
-      leaveDelay={200}
+      leaveDelay={100}
     >
       <Card
         sx={{
@@ -61,15 +66,18 @@ export default function WorkoutCard({ workout }: WorkoutProps) {
             </Typography>
           }
           action={
-            <IconButton
-              aria-label="settings"
-              color="primary"
-              edge="end"
-              size="large"
-              onClick={() => navigate(`/workouts/${workout.id}`)}
-            >
-              <ReadMoreIcon />
-            </IconButton>
+            <Stack spacing={2}>
+              <IconButton
+                aria-label="settings"
+                color="primary"
+                edge="end"
+                size="large"
+                onClick={() => navigate(`/workouts/${workout.id}`)}
+              >
+                <ReadMoreIcon />
+              </IconButton>
+              <DeleteWorkoutPlanButton workoutPlanId={workout.id} />
+            </Stack>
           }
         />
       </Card>
