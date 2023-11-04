@@ -11,11 +11,18 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import { DeleteExerciseButton } from '../Buttons/DeleteButton/DeleteExerciseButton/DeleteExerciseButton';
-import { WorkoutsTableProps } from '../../types/types';
+import { WorkoutsTableProps, ProgressTracker } from '../../types/types';
 import CollapsibleTableForm from './CollapsibleTableForm';
 
 interface Column {
-  id: 'day' | 'exerciseName' | 'reps' | 'sets' | 'volume' | 'date';
+  id:
+    | 'day'
+    | 'exerciseName'
+    | 'reps'
+    | 'sets'
+    | 'volume'
+    | 'trainingDate'
+    | 'weight';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -37,7 +44,7 @@ const columns: readonly Column[] = [
 ];
 
 const columnsHistory: readonly Column[] = [
-  { id: 'date', label: 'Date', minWidth: 100 },
+  { id: 'trainingDate', label: 'Date', minWidth: 100 },
   {
     id: 'sets',
     label: 'Sets',
@@ -46,6 +53,11 @@ const columnsHistory: readonly Column[] = [
   {
     id: 'reps',
     label: 'Reps',
+    minWidth: 70,
+  },
+  {
+    id: 'weight',
+    label: 'Weight',
     minWidth: 70,
   },
   {
@@ -60,7 +72,7 @@ interface Data {
   reps: number[];
   sets: number;
   id: string;
-  volume: number;
+  progressTracker?: ProgressTracker[];
 }
 
 // Function to modify the data representation
@@ -68,15 +80,44 @@ function createData(
   exerciseName: string,
   reps: number[],
   sets: number,
-  id: string
+  id: string,
+  progressTracker: ProgressTracker[]
 ): Data {
   // eslint-disable-next-line no-param-reassign
   const formattedReps = `[${reps.join(', ')}]`;
-  return { exerciseName, reps: formattedReps, sets, id };
+  return { exerciseName, reps: formattedReps, sets, id, progressTracker };
 }
 
-function Row({ row, workoutPlanId, trainingDay, exerciseName, workoutSplit }) {
+function ProgressRow({ progress }) {
+  const rowProgress = {
+    id: progress.id,
+    trainingDate: progress.trainingDate,
+    sets: progress.progression.sets,
+    reps: `[${progress.progression.reps.join(', ')}]`,
+    volume: progress.progression.volume,
+    weight: progress.progression.weight,
+  };
+
+  return (
+    <TableRow>
+      {columnsHistory.map((column) => {
+        const value = rowProgress[column.id];
+        return (
+          <TableCell key={column.id}>
+            {column.format && typeof value === 'number'
+              ? column.format(value)
+              : value}
+          </TableCell>
+        );
+      })}
+    </TableRow>
+  );
+}
+
+function Row({ row, workoutPlanId, trainingDay }) {
   const [open, setOpen] = useState(false);
+
+  const isAnyProgressSaved = row.progressTracker.length > 0;
 
   return (
     <>
@@ -113,7 +154,7 @@ function Row({ row, workoutPlanId, trainingDay, exerciseName, workoutSplit }) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
-                {exerciseName} Progression History
+                {row.exerciseName} Progression History
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
@@ -131,7 +172,11 @@ function Row({ row, workoutPlanId, trainingDay, exerciseName, workoutSplit }) {
                     ))}
                   </TableRow>
                 </TableHead>
-                <TableBody></TableBody>
+                <TableBody>
+                  {row.progressTracker.map((progress) => (
+                    <ProgressRow key={progress.id} progress={progress} />
+                  ))}
+                </TableBody>
               </Table>
             </Box>
           </Collapse>
@@ -154,7 +199,8 @@ export default function WorkoutsTable({
         exercise.exerciseName,
         exercise.reps,
         exercise.sets,
-        exercise.id
+        exercise.id,
+        exercise.progressTracker
       )
     );
   });
@@ -212,8 +258,6 @@ export default function WorkoutsTable({
                 row={row}
                 workoutPlanId={workoutPlanId}
                 trainingDay={trainingDay}
-                exerciseName={row.exerciseName}
-                workoutSplit={workoutSplit}
               />
             ))}
           </TableBody>
