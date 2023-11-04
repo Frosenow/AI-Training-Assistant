@@ -1,12 +1,21 @@
 import { useContext, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container, CircularProgress } from '@mui/material';
+import {
+  Container,
+  CircularProgress,
+  Paper,
+  Alert,
+  AlertTitle,
+  Typography,
+  Box,
+} from '@mui/material';
 
 import { AuthContext } from '../../../context/auth';
 import { FETCH_SINGLE_WORKOUT_QUERY } from './Queries/getSingleWorkout';
 import WorkoutsTable from '../../WorkoutsTable/WorkoutsTable';
 import SnackBarError from '../../SnackBarError/SnackBarError';
+import CollapsibleTableForm from '../../WorkoutsTable/CollapsibleTableForm';
 
 export default function SingleWorkout() {
   const { user } = useContext(AuthContext);
@@ -48,6 +57,51 @@ export default function SingleWorkout() {
   const {
     getWorkout: { workoutSplit },
   } = data;
+
+  const isWorkoutPlanEmpty = Object.keys(workoutSplit)
+    .filter((day) => day !== '__typename') // Exclude the __typename property
+    .map((day) => workoutSplit[day])
+    .every((workoutPlanArr) => workoutPlanArr.length === 0);
+
+  if (isWorkoutPlanEmpty) {
+    return (
+      <Paper
+        sx={{
+          width: '80%',
+          overflow: 'hidden',
+          margin: {
+            xs: '6rem 1rem',
+            sm: '6rem 1rem 1rem calc(1rem + 239px)',
+          },
+        }}
+      >
+        <Alert severity="info" sx={{ margin: 2 }}>
+          <AlertTitle>
+            <Typography
+              sx={{
+                fontWeight: 'bold',
+              }}
+              variant="h4"
+              id="workoutPlanInfo"
+              component="div"
+            >
+              You don&apos;t have any exercises in workout plan
+            </Typography>
+          </AlertTitle>
+          <Typography variant="subtitle1" id="workoutPlanInfo" component="div">
+            Add first exercise, to start creating your workout routine
+          </Typography>
+        </Alert>
+        <Box sx={{ margin: 2 }}>
+          <CollapsibleTableForm
+            workoutPlanId={workoutPlanId}
+            isWorkoutPlanEmpty={isWorkoutPlanEmpty}
+            exerciseDay=""
+          />
+        </Box>
+      </Paper>
+    );
+  }
 
   return (
     <>

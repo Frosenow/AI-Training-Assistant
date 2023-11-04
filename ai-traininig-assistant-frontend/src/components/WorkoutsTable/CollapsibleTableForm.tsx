@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import {
@@ -14,9 +15,14 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 
 import { exercisesList } from '../../assets/exercises';
+import { daysList } from '../../assets/days';
 import { ADD_EXERCISE_MUTATION } from './Mutations/addExercsieMutation';
 
-export default function CollapsibleTableForm({ exerciseDay, workoutPlanId }) {
+export default function CollapsibleTableForm({
+  exerciseDay,
+  workoutPlanId,
+  isWorkoutPlanEmpty = false,
+}) {
   const [open, setOpen] = useState(false);
   const initialState = {
     exerciseDay,
@@ -43,10 +49,6 @@ export default function CollapsibleTableForm({ exerciseDay, workoutPlanId }) {
   const minSetsAmount = 0;
   const maxSetsAmount = 10;
 
-  if (error) {
-    console.log(error);
-  }
-
   return (
     <>
       <Button
@@ -59,7 +61,7 @@ export default function CollapsibleTableForm({ exerciseDay, workoutPlanId }) {
           setValues(initialState);
         }}
       >
-        <AddIcon />
+        {isWorkoutPlanEmpty ? 'ADD EXERCISE' : <AddIcon />}
       </Button>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <Card sx={{ width: '100%' }}>
@@ -101,12 +103,38 @@ export default function CollapsibleTableForm({ exerciseDay, workoutPlanId }) {
                     {...params}
                     label="Exercise Name"
                     error={error ? true : false}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                )}
+              />
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={daysList}
+                defaultValue={daysList.find(
+                  (day) => day.name.toUpperCase() === exerciseDay.toUpperCase()
+                )}
+                getOptionLabel={(day) => day.name}
+                sx={{ width: 300 }}
+                onChange={(event, day) => {
+                  setValues({
+                    ...values,
+                    exerciseDay: day?.name,
+                  });
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Exercise Day"
+                    error={error ? true : false}
+                    onWheel={(e) => e.target.blur()}
                   />
                 )}
               />
               <TextField
                 id="sets-number"
                 error={error ? true : false}
+                onWheel={(e) => e.target.blur()}
                 label="Sets"
                 type="number"
                 placeholder="0"
@@ -141,6 +169,7 @@ export default function CollapsibleTableForm({ exerciseDay, workoutPlanId }) {
                       // eslint-disable-next-line react/no-array-index-key
                       key={idx}
                       error={error ? true : false}
+                      onWheel={(e) => e.target.blur()}
                       type="number"
                       label="Repetition amount"
                       placeholder="0"

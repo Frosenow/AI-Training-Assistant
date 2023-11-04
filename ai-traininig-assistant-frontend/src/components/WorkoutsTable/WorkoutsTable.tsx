@@ -5,8 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import AddIcon from '@mui/icons-material/Add';
-import { Typography, TableFooter, Button } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import { DeleteExerciseButton } from '../Buttons/DeleteButton/DeleteExerciseButton/DeleteExerciseButton';
 import { WorkoutsTableProps } from '../../types/types';
