@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 /* eslint-disable no-unneeded-ternary */
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
@@ -16,15 +17,29 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { exercisesList } from '../../assets/exercises';
 import { daysList } from '../../assets/days';
-import { ADD_EXERCISE_MUTATION } from './Mutations/addExercsieMutation';
+import { ADD_EXERCISE_MUTATION } from './Mutations/addExerciseMutation';
+
+type CollapsibleTableFormProps = {
+  exerciseDay: string;
+  workoutPlanId: string;
+  isWorkoutPlanEmpty?: boolean;
+};
+
+type InitialStateType = {
+  exerciseDay: string;
+  exerciseName: string;
+  muscleGroup: string;
+  sets: number;
+  reps: number[];
+};
 
 export default function CollapsibleTableForm({
   exerciseDay,
   workoutPlanId,
   isWorkoutPlanEmpty = false,
-}) {
+}: CollapsibleTableFormProps) {
   const [open, setOpen] = useState(false);
-  const initialState = {
+  const initialState: InitialStateType = {
     exerciseDay,
     exerciseName: '',
     muscleGroup: '',
@@ -91,11 +106,11 @@ export default function CollapsibleTableForm({
                 options={exercisesList}
                 getOptionLabel={(exercise) => exercise.name}
                 sx={{ width: 300 }}
-                onChange={(event, exercise) => {
+                onChange={(_, exercise) => {
                   setValues({
                     ...values,
-                    exerciseName: exercise?.name,
-                    muscleGroup: exercise?.primaryMuscles[0] || undefined,
+                    exerciseName: exercise?.name || '',
+                    muscleGroup: exercise?.primaryMuscles[0] || '',
                   });
                 }}
                 renderInput={(params) => (
@@ -116,10 +131,10 @@ export default function CollapsibleTableForm({
                 )}
                 getOptionLabel={(day) => day.name}
                 sx={{ width: 300 }}
-                onChange={(event, day) => {
+                onChange={(_, day) => {
                   setValues({
                     ...values,
-                    exerciseDay: day?.name,
+                    exerciseDay: day?.name || '',
                   });
                 }}
                 renderInput={(params) => (
