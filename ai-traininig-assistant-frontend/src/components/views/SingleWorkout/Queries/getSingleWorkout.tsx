@@ -15,6 +15,16 @@ export const FETCH_SINGLE_WORKOUT_QUERY = gql`
           reps
           sets
           id
+          progressTracker {
+            trainingDate
+            id
+            progression {
+              volume
+              reps
+              sets
+              weight
+            }
+          }
         }
         tuesday {
           exerciseName
@@ -22,6 +32,16 @@ export const FETCH_SINGLE_WORKOUT_QUERY = gql`
           reps
           sets
           id
+          progressTracker {
+            trainingDate
+            id
+            progression {
+              volume
+              reps
+              sets
+              weight
+            }
+          }
         }
         wednesday {
           exerciseName
@@ -29,6 +49,16 @@ export const FETCH_SINGLE_WORKOUT_QUERY = gql`
           reps
           sets
           id
+          progressTracker {
+            trainingDate
+            id
+            progression {
+              volume
+              reps
+              sets
+              weight
+            }
+          }
         }
         thursday {
           exerciseName
@@ -36,6 +66,16 @@ export const FETCH_SINGLE_WORKOUT_QUERY = gql`
           reps
           sets
           id
+          progressTracker {
+            trainingDate
+            id
+            progression {
+              volume
+              reps
+              sets
+              weight
+            }
+          }
         }
         friday {
           exerciseName
@@ -43,6 +83,16 @@ export const FETCH_SINGLE_WORKOUT_QUERY = gql`
           reps
           sets
           id
+          progressTracker {
+            trainingDate
+            id
+            progression {
+              volume
+              reps
+              sets
+              weight
+            }
+          }
         }
         saturday {
           exerciseName
@@ -50,6 +100,16 @@ export const FETCH_SINGLE_WORKOUT_QUERY = gql`
           reps
           sets
           id
+          progressTracker {
+            trainingDate
+            id
+            progression {
+              volume
+              reps
+              sets
+              weight
+            }
+          }
         }
         sunday {
           exerciseName
@@ -57,6 +117,16 @@ export const FETCH_SINGLE_WORKOUT_QUERY = gql`
           reps
           sets
           id
+          progressTracker {
+            trainingDate
+            id
+            progression {
+              volume
+              reps
+              sets
+              weight
+            }
+          }
         }
       }
     }
