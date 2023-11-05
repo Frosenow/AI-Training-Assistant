@@ -1,4 +1,6 @@
+/* eslint-disable no-unneeded-ternary */
 import { useState } from 'react';
+import { useMutation } from '@apollo/client';
 import {
   TableCell,
   TextField,
@@ -6,20 +8,44 @@ import {
   CardHeader,
   CardContent,
   Typography,
+  Button,
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import moment from 'moment';
+import { ADD_PROGRESSION_MUTATION } from '../../Buttons/AddButton/AddProgressionButton/Mutations/addProgressionMutation';
 
-export const ProgressionField = () => {
+type ProgressionFieldProps = {
+  workoutPlanId: string;
+  exerciseId: string;
+  trainingDay: string;
+};
+
+export const ProgressionField = ({
+  workoutPlanId,
+  exerciseId,
+  trainingDay,
+}: ProgressionFieldProps) => {
   const initialState = {
-    date: moment(Date.now()).format('YYYY-MM-DD'),
+    trainingDate: moment(Date.now()).format('DD/MM/YYYY'),
     sets: 1,
     reps: [],
     weight: 0,
+    trainingDay,
   };
   const [values, setValues] = useState(initialState);
   const minSetsAmount = 1;
   const maxSetsAmount = 10;
-  console.log(values);
+
+  const [addProgression, { error }] = useMutation(ADD_PROGRESSION_MUTATION, {
+    variables: {
+      workoutPlanId,
+      exerciseId,
+      progression: {
+        ...values,
+      },
+    },
+  });
+
   return (
     <Card sx={{ width: '100%' }}>
       <CardHeader
@@ -29,14 +55,14 @@ export const ProgressionField = () => {
           </Typography>
         }
       />
-      <CardContent>
+      <CardContent sx={{ display: 'flex', alignItems: 'flex-end' }}>
         <TableCell color="secondary" sx={{ minWidth: 30 }}>
           <TextField
             id="progression-date"
             onWheel={(e) => e.target.blur()}
             label="Date"
             type="date"
-            defaultValue={moment(Date.now()).format('YYYY-MM-DD')}
+            error={error ? true : false}
             InputLabelProps={{
               shrink: true,
             }}
@@ -44,7 +70,7 @@ export const ProgressionField = () => {
             onChange={(event) =>
               setValues({
                 ...values,
-                date: moment(event.target.value).format('DD/MM/YYYY'),
+                trainingDate: moment(event.target.value).format('DD/MM/YYYY'),
               })
             }
           />
@@ -57,6 +83,7 @@ export const ProgressionField = () => {
             onWheel={(e) => e.target.blur()}
             label="Sets"
             type="number"
+            error={error ? true : false}
             placeholder="1"
             InputLabelProps={{
               shrink: true,
@@ -96,6 +123,7 @@ export const ProgressionField = () => {
                   // error={error ? true : false}
                   onWheel={(e) => e.target.blur()}
                   type="number"
+                  error={error ? true : false}
                   label="Reps/Set"
                   placeholder="0"
                   InputLabelProps={{
@@ -126,6 +154,7 @@ export const ProgressionField = () => {
             onWheel={(e) => e.target.blur()}
             label="Weight"
             type="number"
+            error={error ? true : false}
             InputLabelProps={{
               shrink: true,
             }}
@@ -152,6 +181,17 @@ export const ProgressionField = () => {
             }
             sx={{ maxWidth: 50, mr: 1 }}
           />
+        </TableCell>
+        <TableCell>
+          <Button
+            aria-label="settings"
+            onClick={() => addProgression()}
+            variant="contained"
+            color="success"
+            size="small"
+          >
+            <AddIcon />
+          </Button>
         </TableCell>
       </CardContent>
     </Card>

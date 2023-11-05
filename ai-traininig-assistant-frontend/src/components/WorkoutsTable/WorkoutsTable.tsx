@@ -13,6 +13,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { DeleteExerciseButton } from '../Buttons/DeleteButton/DeleteExerciseButton/DeleteExerciseButton';
 import CollapsibleTableForm from './CollapsibleTableForm';
 import { ProgressionField } from '../Progression/CreateProgressionForm/ProgressionField';
+import { DeleteProgressionButton } from '../Buttons/DeleteButton/DeleteProgressionButton/DeleteProgressionButton';
 import { createData } from './utils/createData';
 import {
   Column,
@@ -72,6 +73,9 @@ type RowProps = {
 
 function ProgressRow({
   progress: { id, trainingDate, progression },
+  exerciseId,
+  workoutPlanId,
+  trainingDay,
 }: ProgressRowProps) {
   const rowProgress: ProgressionData = {
     id,
@@ -96,11 +100,19 @@ function ProgressRow({
           </TableCell>
         );
       })}
+      <TableCell>
+        <DeleteProgressionButton
+          workoutPlanId={workoutPlanId}
+          exerciseId={exerciseId}
+          progressionId={id}
+          trainingDay={trainingDay}
+        />
+      </TableCell>
     </TableRow>
   );
 }
 
-function Row({ row, workoutPlanId, trainingDay }: RowProps) {
+function Row({ row, workoutPlanId, trainingDay, exerciseId }: RowProps) {
   const [open, setOpen] = useState(false);
 
   const isAnyProgressSaved =
@@ -166,11 +178,21 @@ function Row({ row, workoutPlanId, trainingDay }: RowProps) {
                 <TableBody>
                   {row.progressTracker &&
                     row.progressTracker.map((progress: ProgressTracker) => (
-                      <ProgressRow key={progress.id} progress={progress} />
+                      <ProgressRow
+                        key={progress.id}
+                        progress={progress}
+                        workoutPlanId={workoutPlanId}
+                        trainingDay={trainingDay}
+                        exerciseId={exerciseId}
+                      />
                     ))}
                 </TableBody>
                 <caption>
-                  <ProgressionField />
+                  <ProgressionField
+                    workoutPlanId={workoutPlanId}
+                    exerciseId={exerciseId}
+                    trainingDay={trainingDay}
+                  />
                 </caption>
               </Table>
             </Box>
@@ -253,6 +275,7 @@ export default function WorkoutsTable({
                 row={row}
                 workoutPlanId={workoutPlanId}
                 trainingDay={trainingDay}
+                exerciseId={row.id}
               />
             ))}
           </TableBody>
