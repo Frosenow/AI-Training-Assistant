@@ -12,10 +12,16 @@ import {
   TableRow,
   TableBody,
   Table,
+  Badge,
+  styled,
+  BadgeProps,
 } from '@mui/material';
+import ScaleIcon from '@mui/icons-material/Scale';
 import AddIcon from '@mui/icons-material/Add';
 import moment from 'moment';
+
 import { ADD_PROGRESSION_MUTATION } from '../../Buttons/AddButton/AddProgressionButton/Mutations/addProgressionMutation';
+import { CustomWidthTooltip } from '../../WorkoutCard/WorkoutCard';
 
 type ProgressionFieldProps = {
   workoutPlanId: string;
@@ -48,6 +54,13 @@ export const ProgressionField = ({
       },
     },
   });
+
+  const StyledBadge = styled(Badge)<BadgeProps>(() => ({
+    '& .MuiBadge-badge': {
+      right: 10,
+      top: -10,
+    },
+  }));
 
   return (
     <Card sx={{ width: '100%' }}>
@@ -179,22 +192,19 @@ export const ProgressionField = ({
                 />
               </TableCell>
               <TableCell sx={{ minWidth: 100 }}>
-                <TextField
-                  id="progression-date"
-                  disabled
-                  onWheel={(e) => e.target.blur()}
-                  label="Volume"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="standard"
-                  value={
-                    values.reps.reduce((acc, prev) => acc + prev, 0) *
-                    values.weight
-                  }
-                  sx={{ maxWidth: 50, mr: 1 }}
-                />
+                <CustomWidthTooltip title="Volume" arrow>
+                  <StyledBadge
+                    badgeContent={
+                      values.reps.reduce((acc, prev) => acc + prev, 0) *
+                      values.weight
+                    }
+                    color="secondary"
+                    max={9999999}
+                    sx={{ mt: 2 }}
+                  >
+                    <ScaleIcon />
+                  </StyledBadge>
+                </CustomWidthTooltip>
               </TableCell>
               <TableCell>
                 <Button
