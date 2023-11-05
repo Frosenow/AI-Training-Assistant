@@ -61,7 +61,7 @@ export default function CollapsibleTableForm({
     },
   });
 
-  const minSetsAmount = 0;
+  const minSetsAmount = 1;
   const maxSetsAmount = 10;
 
   return (
@@ -152,7 +152,7 @@ export default function CollapsibleTableForm({
                 onWheel={(e) => e.target.blur()}
                 label="Sets"
                 type="number"
-                placeholder="0"
+                placeholder="1"
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -173,6 +173,10 @@ export default function CollapsibleTableForm({
                   setValues({
                     ...values,
                     sets: value,
+                    reps:
+                      value < values.sets
+                        ? values.reps.slice(value)
+                        : values.reps,
                   });
                 }}
               />
@@ -186,7 +190,7 @@ export default function CollapsibleTableForm({
                       error={error ? true : false}
                       onWheel={(e) => e.target.blur()}
                       type="number"
-                      label="Repetition amount"
+                      label="Reps/Set"
                       placeholder="0"
                       InputLabelProps={{
                         shrink: true,

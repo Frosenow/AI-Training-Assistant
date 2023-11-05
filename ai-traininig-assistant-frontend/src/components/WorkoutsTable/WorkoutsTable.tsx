@@ -12,6 +12,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import { DeleteExerciseButton } from '../Buttons/DeleteButton/DeleteExerciseButton/DeleteExerciseButton';
 import CollapsibleTableForm from './CollapsibleTableForm';
+import { ProgressionField } from '../Progression/CreateProgressionForm/ProgressionField';
 import { createData } from './utils/createData';
 import {
   Column,
@@ -40,22 +41,22 @@ const columnsHistory: readonly ColumnProgression[] = [
   {
     id: 'sets',
     label: 'Sets',
-    minWidth: 70,
+    minWidth: 50,
   },
   {
     id: 'reps',
     label: 'Reps',
-    minWidth: 70,
+    minWidth: 30,
   },
   {
     id: 'weight',
     label: 'Weight',
-    minWidth: 70,
+    minWidth: 30,
   },
   {
     id: 'volume',
     label: 'Volume',
-    minWidth: 70,
+    minWidth: 30,
   },
 ];
 
@@ -88,7 +89,7 @@ function ProgressRow({
       {columnsHistory.map((column) => {
         const value = rowProgress[column.id];
         return (
-          <TableCell key={column.id}>
+          <TableCell key={column.id} sx={{ minWidth: column.minWidth }}>
             {column.format && typeof value === 'number'
               ? column.format(value)
               : value}
@@ -111,7 +112,11 @@ function Row({ row, workoutPlanId, trainingDay }: RowProps) {
         {columns.map((column) => {
           const value = row[column.id];
           return (
-            <TableCell key={column.id} align={column.align}>
+            <TableCell
+              key={column.id}
+              align={column.align}
+              sx={{ minWidth: column.minWidth }}
+            >
               {column.id === 'exerciseName' && (
                 <IconButton
                   aria-label="expand row"
@@ -164,6 +169,9 @@ function Row({ row, workoutPlanId, trainingDay }: RowProps) {
                       <ProgressRow key={progress.id} progress={progress} />
                     ))}
                 </TableBody>
+                <caption>
+                  <ProgressionField />
+                </caption>
               </Table>
             </Box>
           </Collapse>
@@ -222,7 +230,7 @@ export default function WorkoutsTable({
         {trainingDay}
       </Typography>
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table" size="medium">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
