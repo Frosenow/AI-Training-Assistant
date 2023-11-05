@@ -10,6 +10,7 @@ import { Box, Collapse, IconButton, Typography } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
+import moment from 'moment';
 import { DeleteExerciseButton } from '../Buttons/DeleteButton/DeleteExerciseButton/DeleteExerciseButton';
 import CollapsibleTableForm from './CollapsibleTableForm';
 import { ProgressionField } from '../Progression/CreateProgressionForm/ProgressionField';
@@ -72,6 +73,7 @@ type RowProps = {
   row: Data;
   workoutPlanId: string;
   trainingDay: string;
+  exerciseId: string;
 };
 
 function ProgressRow({
@@ -177,15 +179,22 @@ function Row({ row, workoutPlanId, trainingDay, exerciseId }: RowProps) {
                 </TableHead>
                 <TableBody>
                   {row.progressTracker &&
-                    row.progressTracker.map((progress: ProgressTracker) => (
-                      <ProgressRow
-                        key={progress.id}
-                        progress={progress}
-                        workoutPlanId={workoutPlanId}
-                        trainingDay={trainingDay}
-                        exerciseId={exerciseId}
-                      />
-                    ))}
+                    row.progressTracker
+                      .slice() // Create a shallow copy to avoid modifying the original array
+                      .sort((a, b) => {
+                        const dateA = moment(a.trainingDate, 'DD/MM/YYYY');
+                        const dateB = moment(b.trainingDate, 'DD/MM/YYYY');
+                        return dateA.isBefore(dateB) ? -1 : 1;
+                      })
+                      .map((progress: ProgressTracker) => (
+                        <ProgressRow
+                          key={progress.id}
+                          progress={progress}
+                          workoutPlanId={workoutPlanId}
+                          trainingDay={trainingDay}
+                          exerciseId={exerciseId}
+                        />
+                      ))}
                 </TableBody>
                 <caption>
                   <ProgressionField
