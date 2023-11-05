@@ -11,23 +11,15 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import { DeleteExerciseButton } from '../Buttons/DeleteButton/DeleteExerciseButton/DeleteExerciseButton';
-import { WorkoutsTableProps, ProgressTracker } from '../../types/types';
 import CollapsibleTableForm from './CollapsibleTableForm';
-
-interface Column {
-  id:
-    | 'day'
-    | 'exerciseName'
-    | 'reps'
-    | 'sets'
-    | 'volume'
-    | 'trainingDate'
-    | 'weight';
-  label: string;
-  minWidth?: number;
-  align?: 'left';
-  format?: (value: number) => string;
-}
+import { createData } from './utils/createData';
+import {
+  Column,
+  ColumnProgression,
+  Data,
+  ProgressionData,
+} from './types/types';
+import { WorkoutsTableProps, ProgressTracker } from '../../types/types';
 
 const columns: readonly Column[] = [
   { id: 'exerciseName', label: 'Exercise', minWidth: 100 },
@@ -43,7 +35,7 @@ const columns: readonly Column[] = [
   },
 ];
 
-const columnsHistory: readonly Column[] = [
+const columnsHistory: readonly ColumnProgression[] = [
   { id: 'trainingDate', label: 'Date', minWidth: 100 },
   {
     id: 'sets',
@@ -67,35 +59,28 @@ const columnsHistory: readonly Column[] = [
   },
 ];
 
-interface Data {
-  exerciseName: string;
-  reps: number[];
-  sets: number;
-  id: string;
-  progressTracker?: ProgressTracker[];
-}
+type ProgressRowProps = {
+  progress: ProgressTracker;
+};
 
-// Function to modify the data representation
-function createData(
-  exerciseName: string,
-  reps: number[],
-  sets: number,
-  id: string,
-  progressTracker: ProgressTracker[]
-): Data {
-  // eslint-disable-next-line no-param-reassign
-  const formattedReps = `[${reps.join(', ')}]`;
-  return { exerciseName, reps: formattedReps, sets, id, progressTracker };
-}
+type RowProps = {
+  row: Data;
+  workoutPlanId: string;
+  trainingDay: string;
+};
 
-function ProgressRow({ progress }) {
-  const rowProgress = {
-    id: progress.id,
-    trainingDate: progress.trainingDate,
-    sets: progress.progression.sets,
-    reps: `[${progress.progression.reps.join(', ')}]`,
-    volume: progress.progression.volume,
-    weight: progress.progression.weight,
+function ProgressRow({
+  progress: { id, trainingDate, progression },
+}: ProgressRowProps) {
+  const rowProgress: ProgressionData = {
+    id,
+    trainingDate,
+    sets: progression.sets,
+    reps: Array.isArray(progression.reps)
+      ? `[${progression.reps.join(', ')}]`
+      : '',
+    volume: progression.volume,
+    weight: progression.weight,
   };
 
   return (
@@ -114,10 +99,11 @@ function ProgressRow({ progress }) {
   );
 }
 
-function Row({ row, workoutPlanId, trainingDay }) {
+function Row({ row, workoutPlanId, trainingDay }: RowProps) {
   const [open, setOpen] = useState(false);
 
-  const isAnyProgressSaved = row.progressTracker.length > 0;
+  const isAnyProgressSaved =
+    row.progressTracker && row.progressTracker.length > 0;
 
   return (
     <>
@@ -173,9 +159,10 @@ function Row({ row, workoutPlanId, trainingDay }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.progressTracker.map((progress) => (
-                    <ProgressRow key={progress.id} progress={progress} />
-                  ))}
+                  {row.progressTracker &&
+                    row.progressTracker.map((progress: ProgressTracker) => (
+                      <ProgressRow key={progress.id} progress={progress} />
+                    ))}
                 </TableBody>
               </Table>
             </Box>
@@ -197,10 +184,10 @@ export default function WorkoutsTable({
     rows.push(
       createData(
         exercise.exerciseName,
-        exercise.reps,
+        exercise.reps as number[],
         exercise.sets,
         exercise.id,
-        exercise.progressTracker
+        exercise.progressTracker || []
       )
     );
   });

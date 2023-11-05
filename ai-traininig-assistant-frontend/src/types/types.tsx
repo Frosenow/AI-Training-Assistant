@@ -38,20 +38,25 @@ export interface WorkoutProgression {
 
 export interface ProgressTracker {
   id: string;
-  trainingDay: string;
+  trainingDate: string;
   progression: WorkoutProgression;
 }
 
 export interface WorkoutDay {
   id: string;
   exerciseName: string;
-  muscleGroup: string;
+  muscleGroup?: string;
   reps: number[];
   sets: number;
   progressTracker?: ProgressTracker[];
 }
 
 export interface WorkoutSplit {
+  forEach(
+    arg0: (
+      exercise: import('../components/WorkoutsTable/types/types').Data
+    ) => void
+  ): unknown;
   monday: WorkoutDay[];
   tuesday: WorkoutDay[];
   wednesday: WorkoutDay[];
