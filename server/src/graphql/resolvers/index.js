@@ -10,7 +10,7 @@ const resolvers = {
   },
   ExerciseProgres: {
     volume: (parent) =>
-      parent.weight * parent.reps.reduce((acc, prev) => acc + prev),
+      parent.weight * parent.reps.reduce((acc, prev) => acc + prev, 0),
   },
   Query: {
     ...postsResolvers.Query,

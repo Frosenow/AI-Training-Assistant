@@ -63,6 +63,9 @@ const columnsHistory: readonly ColumnProgression[] = [
 
 type ProgressRowProps = {
   progress: ProgressTracker;
+  exerciseId: string;
+  workoutPlanId: string;
+  trainingDay: string;
 };
 
 type RowProps = {
@@ -114,9 +117,6 @@ function ProgressRow({
 
 function Row({ row, workoutPlanId, trainingDay, exerciseId }: RowProps) {
   const [open, setOpen] = useState(false);
-
-  const isAnyProgressSaved =
-    row.progressTracker && row.progressTracker.length > 0;
 
   return (
     <>
