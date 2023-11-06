@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Card,
   CardHeader,
@@ -37,6 +37,7 @@ type WorkoutProps = {
 
 export default function WorkoutCard({ workout }: WorkoutProps) {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   return (
     <CustomWidthTooltip
@@ -72,7 +73,7 @@ export default function WorkoutCard({ workout }: WorkoutProps) {
                 color="primary"
                 edge="end"
                 size="large"
-                onClick={() => navigate(`/workouts/${workout.id}`)}
+                onClick={() => navigate(`${pathname}/${workout.id}`)}
               >
                 <ReadMoreIcon />
               </IconButton>

@@ -15,6 +15,8 @@ import SignUp from './components/views/Register/SingUp';
 import SinglePost from './components/views/SinglePost/SinglePost';
 import Workouts from './components/views/Workouts/Workouts';
 import SingleWorkout from './components/views/SingleWorkout/SingleWorkout';
+import WorkoutsList from './components/views/WorkoutsList/WorkoutsList';
+import WorkoutAnalyze from './components/views/WorkoutAnalyze/WorkoutAnalyze';
 
 function App() {
   return (
@@ -46,6 +48,11 @@ function App() {
               <Route
                 path="workouts/:workoutPlanId"
                 element={<SingleWorkout />}
+              />
+              <Route path="analysis" element={<WorkoutsList />} />
+              <Route
+                path="analysis/:workoutPlanId"
+                element={<WorkoutAnalyze />}
               />
             </Routes>
           </Grid>

@@ -1,17 +1,25 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useContext, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { Container, CircularProgress, Stack } from '@mui/material';
+import {
+  Container,
+  CircularProgress,
+  Stack,
+  Alert,
+  AlertTitle,
+  Typography,
+  Paper,
+  Link,
+} from '@mui/material';
 
 import WorkoutCard from '../../WorkoutCard/WorkoutCard';
 import SnackBarError from '../../SnackBarError/SnackBarError';
-import { CreateWorkoutForm } from '../../CreateWorkoutForm/CreateWorkoutForm';
-import { FETCH_USER_WORKOUTS_QUERY } from './Queries/getUserWorkoutsQuery';
+import { FETCH_USER_WORKOUTS_QUERY } from '../Workouts/Queries/getUserWorkoutsQuery';
 import { AuthContext } from '../../../context/auth';
 import { Workout } from '../../../types/types';
-import { CreateWorkoutFormLite } from '../../CreateWorkoutForm/CreateWorkoutFormLite';
 
-export default function Workouts() {
+export default function WorkoutsList() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -51,7 +59,40 @@ export default function Workouts() {
   const { getUserWorkouts } = data;
 
   if (!getUserWorkouts.length) {
-    return <CreateWorkoutForm />;
+    return (
+      <Paper
+        sx={{
+          width: '80%',
+          overflow: 'hidden',
+          margin: {
+            xs: '6rem 1rem',
+            sm: '6rem 1rem 1rem calc(1rem + 239px)',
+          },
+        }}
+      >
+        <Alert severity="info">
+          <AlertTitle>
+            <Typography
+              sx={{
+                fontWeight: 'bold',
+              }}
+              variant="h4"
+              id="workoutPlanInfo"
+              component="div"
+            >
+              You don&apos;t have any workout plans to analyze
+            </Typography>
+          </AlertTitle>
+          <Typography variant="subtitle1" id="workoutPlanInfo" component="div">
+            Get back to{' '}
+            <Link component="button" onClick={() => navigate('/workouts')}>
+              workouts tab
+            </Link>{' '}
+            to create workout plan!
+          </Typography>
+        </Alert>
+      </Paper>
+    );
   }
 
   return (
@@ -71,7 +112,6 @@ export default function Workouts() {
       {getUserWorkouts.map((workout: Workout) => (
         <WorkoutCard workout={workout} key={workout.id} />
       ))}
-      <CreateWorkoutFormLite />
     </Stack>
   );
 }
