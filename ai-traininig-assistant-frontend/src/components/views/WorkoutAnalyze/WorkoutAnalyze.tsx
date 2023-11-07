@@ -5,9 +5,7 @@ import { Container, CircularProgress, Paper } from '@mui/material';
 
 import { AuthContext } from '../../../context/auth';
 import { FETCH_SINGLE_WORKOUT_QUERY } from '../SingleWorkout/Queries/getSingleWorkout';
-import WorkoutsTable from '../../WorkoutsTable/WorkoutsTable';
-import SnackBarError from '../../SnackBarError/SnackBarError';
-import SpiderChart from '../../DataRepresentation/SpiderChart/SpiderChart';
+import MuscleGroupsChart from '../../DataRepresentation/MuscleGroupsChart';
 
 export default function WorkoutAnalyze() {
   const { user } = useContext(AuthContext);
@@ -51,58 +49,27 @@ export default function WorkoutAnalyze() {
     getWorkout: { workoutSplit },
   } = data;
 
-  const variables = [
-    { key: 'back', label: 'Back' },
-    { key: 'chest', label: 'Chest' },
-    { key: 'legs', label: 'Legs' },
-    { key: 'abdominals', label: 'Abdominals' },
-    { key: 'biceps', label: 'Biceps' },
-    { key: 'lats', label: 'Lats' },
-    { key: 'quadriceps', label: 'Quadriceps' },
-    { key: 'shoulders', label: 'Shoulders' },
-  ];
-  const options = [
-    {
-      key: workoutPlanId,
-      label: data.name,
-      values: {},
-    },
-  ];
-
   const isWorkoutPlanEmpty = Object.keys(workoutSplit)
     .filter((day) => day !== '__typename') // Exclude the __typename property
     .map((day) => workoutSplit[day])
     .every((workoutPlanArr) => workoutPlanArr.length === 0);
 
-  if (!isWorkoutPlanEmpty) {
-    const trainingDays = Object.keys(workoutSplit).filter(
-      (trainingDay) =>
-        Array.isArray(workoutSplit[trainingDay]) &&
-        workoutSplit[trainingDay].length > 0
-    );
-
-    // Count the amount of exercises for muscle group
-    trainingDays.forEach((day) => {
-      workoutSplit[day].forEach((exercise) => {
-        options[0].values[exercise.muscleGroup.toLowerCase()] =
-          (options[0].values[exercise.muscleGroup.toLowerCase()] || 0) + 1;
-      });
-    });
-  }
-
-  console.log(options);
-
   return (
     <Paper
       sx={{
-        width: '50%',
         margin: {
           xs: '6rem 1rem',
           sm: '6rem 1rem 1rem calc(1rem + 239px)',
         },
       }}
     >
-      <SpiderChart options={options} variables={variables} />;
+      {!isWorkoutPlanEmpty && (
+        <MuscleGroupsChart
+          workoutData={data}
+          workoutSplit={workoutSplit}
+          workoutPlanId={workoutPlanId}
+        />
+      )}
     </Paper>
   );
 }
