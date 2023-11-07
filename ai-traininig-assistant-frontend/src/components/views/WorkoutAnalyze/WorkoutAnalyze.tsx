@@ -49,6 +49,8 @@ export default function WorkoutAnalyze() {
     getWorkout: { workoutSplit },
   } = data;
 
+  const { getWorkout } = data;
+
   const isWorkoutPlanEmpty = Object.keys(workoutSplit)
     .filter((day) => day !== '__typename') // Exclude the __typename property
     .map((day) => workoutSplit[day])
@@ -57,6 +59,7 @@ export default function WorkoutAnalyze() {
   return (
     <Paper
       sx={{
+        width: '90%',
         margin: {
           xs: '6rem 1rem',
           sm: '6rem 1rem 1rem calc(1rem + 239px)',
@@ -65,9 +68,8 @@ export default function WorkoutAnalyze() {
     >
       {!isWorkoutPlanEmpty && (
         <MuscleGroupsChart
-          workoutData={data}
+          workoutData={getWorkout}
           workoutSplit={workoutSplit}
-          workoutPlanId={workoutPlanId}
         />
       )}
     </Paper>

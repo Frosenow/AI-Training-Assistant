@@ -8,6 +8,12 @@ import {
   Legend,
 } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
+import { useTheme, Box } from '@mui/material';
+
+import {
+  getTrainingDays,
+  getMuscleGroupTrained,
+} from './utils/workoutSplitTransform';
 
 ChartJS.register(
   RadialLinearScale,
@@ -18,71 +24,49 @@ ChartJS.register(
   Legend
 );
 
-export default function MuscleGroupsChart({
-  workoutData,
-  workoutSplit,
-  workoutPlanId,
-}) {
-  const dataset = {
-    key: workoutPlanId,
-    label: workoutData.name,
-    values: {
-      ABDOMINALS: 0,
-      HAMSTRINGS: 0,
-      ADDUCTORS: 0,
-      QUADRICEPS: 0,
-      BICEPS: 0,
-      SHOULDERS: 0,
-      CHEST: 0,
-      'MIDDLE BACK': 0,
-      CALVES: 0,
-      GLUTES: 0,
-      'LOWER BACK': 0,
-      LATS: 0,
-      TRICEPS: 0,
-      TRAPS: 0,
-      FOREARMS: 0,
-      NECK: 0,
-      ABDUCTORS: 0,
-    },
+export default function MuscleGroupsChart({ workoutData, workoutSplit }) {
+  const { palette } = useTheme();
+
+  const trainingDays = getTrainingDays(workoutSplit);
+  const muscleGroupTrained = getMuscleGroupTrained(trainingDays, workoutSplit);
+
+  const chartData = {
+    labels: Object.keys(muscleGroupTrained),
+    datasets: [
+      {
+        label: `Muscle Groups Trained in ${workoutData.name}`,
+        data: Object.values(muscleGroupTrained),
+        backgroundColor: palette.secondary.light,
+        borderColor: palette.secondary.dark,
+        borderWidth: 1,
+      },
+    ],
   };
 
   const chartOptions = {
+    devicePixelRatio: 4,
     scale: {
       ticks: {
         beginAtZero: true,
-        max: 5,
+        max: Math.max(...Object.values(muscleGroupTrained)),
         min: 1,
         stepSize: 1,
       },
     },
   };
 
-  const trainingDays = Object.keys(workoutSplit).filter(
-    (trainingDay) =>
-      Array.isArray(workoutSplit[trainingDay]) &&
-      workoutSplit[trainingDay].length > 0
+  return (
+    <Box
+      sx={{
+        maxBlockSize: 400,
+      }}
+    >
+      <Radar
+        data={chartData}
+        updateMode="resize"
+        options={chartOptions}
+        style={{ padding: '10px' }}
+      />
+    </Box>
   );
-
-  // Count the amount of exercises for muscle group
-  trainingDays.forEach((day) => {
-    workoutSplit[day].forEach((exercise) => {
-      dataset.values[exercise.muscleGroup.toUpperCase()] += 1;
-    });
-  });
-
-  const chartData = {
-    labels: Object.keys(dataset.values),
-    datasets: [
-      {
-        label: 'Muscles Groups in',
-        data: Object.values(dataset.values),
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  return <Radar data={chartData} updateMode="resize" options={chartOptions} />;
 }
