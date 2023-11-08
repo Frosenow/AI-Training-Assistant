@@ -6,6 +6,7 @@ import { Container, CircularProgress, Paper } from '@mui/material';
 import { AuthContext } from '../../../context/auth';
 import { FETCH_SINGLE_WORKOUT_QUERY } from '../SingleWorkout/Queries/getSingleWorkout';
 import MuscleGroupsChart from '../../DataRepresentation/MuscleGroupsChart';
+import SnackBarError from '../../SnackBarError/SnackBarError';
 
 export default function WorkoutAnalyze() {
   const { user } = useContext(AuthContext);
@@ -57,21 +58,24 @@ export default function WorkoutAnalyze() {
     .every((workoutPlanArr) => workoutPlanArr.length === 0);
 
   return (
-    <Paper
-      sx={{
-        width: '90%',
-        margin: {
-          xs: '6rem 1rem',
-          sm: '6rem 1rem 1rem calc(1rem + 239px)',
-        },
-      }}
-    >
-      {!isWorkoutPlanEmpty && (
-        <MuscleGroupsChart
-          workoutData={getWorkout}
-          workoutSplit={workoutSplit}
-        />
-      )}
-    </Paper>
+    <>
+      {error && <SnackBarError error={error} />}
+      <Paper
+        sx={{
+          width: '90%',
+          margin: {
+            xs: '6rem 1rem',
+            sm: '6rem 1rem 1rem calc(1rem + 239px)',
+          },
+        }}
+      >
+        {!isWorkoutPlanEmpty && (
+          <MuscleGroupsChart
+            workoutData={getWorkout}
+            workoutSplit={workoutSplit}
+          />
+        )}
+      </Paper>
+    </>
   );
 }

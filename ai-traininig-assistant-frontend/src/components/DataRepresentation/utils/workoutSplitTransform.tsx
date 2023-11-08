@@ -1,3 +1,5 @@
+import { musclesGroupLabels } from '../consts/consts';
+
 export function getTrainingDays(workoutSplit) {
   return Object.keys(workoutSplit).filter(
     (trainingDay) =>
@@ -7,32 +9,39 @@ export function getTrainingDays(workoutSplit) {
 }
 
 export function getMuscleGroupTrained(trainingDays, workoutSplit) {
-  const values = {
-    ABDOMINALS: 0,
-    HAMSTRINGS: 0,
-    ADDUCTORS: 0,
-    QUADRICEPS: 0,
-    BICEPS: 0,
-    SHOULDERS: 0,
-    CHEST: 0,
-    'MIDDLE BACK': 0,
-    CALVES: 0,
-    GLUTES: 0,
-    'LOWER BACK': 0,
-    LATS: 0,
-    TRICEPS: 0,
-    TRAPS: 0,
-    FOREARMS: 0,
-    NECK: 0,
-    ABDUCTORS: 0,
-  };
+  const musclesTrained = {};
 
   // Count the amount of exercises for muscle group
   trainingDays.forEach((day) => {
     workoutSplit[day].forEach((exercise) => {
-      values[exercise.muscleGroup.toUpperCase()] += 1;
+      if (!musclesTrained[exercise.muscleGroup.toUpperCase()]) {
+        musclesTrained[exercise.muscleGroup.toUpperCase()] = {
+          amount: 1,
+          exercisesInvolved: [exercise.exerciseName],
+          id: exercise.id,
+        };
+      } else {
+        musclesTrained[exercise.muscleGroup.toUpperCase()].amount += 1;
+        musclesTrained[
+          exercise.muscleGroup.toUpperCase()
+        ].exercisesInvolved.push(exercise.exerciseName);
+      }
     });
   });
 
-  return values;
+  return musclesTrained;
+}
+
+export function getDataset(muscleGroupTrained) {
+  const dataset = {};
+
+  musclesGroupLabels.forEach((label) => {
+    if (muscleGroupTrained[label]) {
+      dataset[label] = muscleGroupTrained[label].amount;
+    } else {
+      dataset[label] = 0;
+    }
+  });
+
+  return dataset;
 }

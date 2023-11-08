@@ -8,12 +8,15 @@ import {
   Legend,
 } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
-import { useTheme, Box } from '@mui/material';
+import { useTheme, Box, Container, ListSubheader } from '@mui/material';
 
+import NestedList from '../NestedList/NestedList';
 import {
   getTrainingDays,
   getMuscleGroupTrained,
+  getDataset,
 } from './utils/workoutSplitTransform';
+import { musclesGroupLabels } from './consts/consts';
 
 ChartJS.register(
   RadialLinearScale,
@@ -29,13 +32,14 @@ export default function MuscleGroupsChart({ workoutData, workoutSplit }) {
 
   const trainingDays = getTrainingDays(workoutSplit);
   const muscleGroupTrained = getMuscleGroupTrained(trainingDays, workoutSplit);
+  const datasetValues = getDataset(muscleGroupTrained);
 
   const chartData = {
-    labels: Object.keys(muscleGroupTrained),
+    labels: musclesGroupLabels,
     datasets: [
       {
         label: `Muscle Groups Trained in ${workoutData.name}`,
-        data: Object.values(muscleGroupTrained),
+        data: Object.values(datasetValues),
         backgroundColor: palette.secondary.light,
         borderColor: palette.secondary.dark,
         borderWidth: 1,
@@ -48,7 +52,7 @@ export default function MuscleGroupsChart({ workoutData, workoutSplit }) {
     scale: {
       ticks: {
         beginAtZero: true,
-        max: Math.max(...Object.values(muscleGroupTrained)),
+        max: Math.max(...Object.values(datasetValues)),
         min: 1,
         stepSize: 1,
       },
@@ -58,15 +62,38 @@ export default function MuscleGroupsChart({ workoutData, workoutSplit }) {
   return (
     <Box
       sx={{
-        maxBlockSize: 400,
+        display: 'flex',
+        flexDirection: { xs: 'column', lg: 'row' },
       }}
     >
-      <Radar
-        data={chartData}
-        updateMode="resize"
-        options={chartOptions}
-        style={{ padding: '10px' }}
-      />
+      <Container
+        sx={{
+          maxBlockSize: { xs: '400px', sm: '500px' },
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Radar
+          data={chartData}
+          updateMode="resize"
+          options={chartOptions}
+          style={{ padding: '10px' }}
+        />
+      </Container>
+      <Container
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <NestedList
+          workoutData={workoutData}
+          muscleGroupTrained={muscleGroupTrained}
+        />
+      </Container>
     </Box>
   );
 }
