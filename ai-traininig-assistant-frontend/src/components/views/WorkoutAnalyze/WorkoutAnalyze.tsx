@@ -7,6 +7,7 @@ import { AuthContext } from '../../../context/auth';
 import { FETCH_SINGLE_WORKOUT_QUERY } from '../SingleWorkout/Queries/getSingleWorkout';
 import MuscleGroupsChart from '../../DataRepresentation/MuscleGroupsChart';
 import SnackBarError from '../../SnackBarError/SnackBarError';
+import WorkoutsCompare from '../../ExpandableWorkoutsCompare/WorkoutsCompare';
 
 export default function WorkoutAnalyze() {
   const { user } = useContext(AuthContext);
@@ -75,6 +76,7 @@ export default function WorkoutAnalyze() {
             workoutSplit={workoutSplit}
           />
         )}
+        <WorkoutsCompare workoutData={getWorkout} />
       </Paper>
     </>
   );

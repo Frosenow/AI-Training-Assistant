@@ -8,7 +8,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
-import { useTheme, Box, Container, ListSubheader } from '@mui/material';
+import { useTheme, Box, Container } from '@mui/material';
 
 import NestedList from '../NestedList/NestedList';
 import {
