@@ -1,4 +1,6 @@
+import { useQuery } from '@apollo/client';
 import { musclesGroupLabels } from '../consts/consts';
+import { FETCH_SINGLE_WORKOUT_QUERY } from '../../views/SingleWorkout/Queries/getSingleWorkout';
 
 export function getTrainingDays(workoutSplit) {
   return Object.keys(workoutSplit).filter(

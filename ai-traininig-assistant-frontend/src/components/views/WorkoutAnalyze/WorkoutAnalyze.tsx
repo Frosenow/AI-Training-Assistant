@@ -70,13 +70,7 @@ export default function WorkoutAnalyze() {
           },
         }}
       >
-        {!isWorkoutPlanEmpty && (
-          <MuscleGroupsChart
-            workoutData={getWorkout}
-            workoutSplit={workoutSplit}
-          />
-        )}
-        <WorkoutsCompare workoutData={getWorkout} />
+        {!isWorkoutPlanEmpty && <WorkoutsCompare workoutData={getWorkout} />}
       </Paper>
     </>
   );

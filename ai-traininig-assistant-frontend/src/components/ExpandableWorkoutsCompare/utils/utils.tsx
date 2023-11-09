@@ -3,12 +3,14 @@ export function createWorkoutsList(userWorkouts, currentWorkoutName) {
 
   userWorkouts.forEach((workout) => {
     if (workout.name !== currentWorkoutName) {
-      const workoutObj = {
-        name: workout.name,
-        id: workout.id,
-      };
+      const isWorkoutPlanEmpty = Object.keys(workout.workoutSplit)
+        .filter((day) => day !== '__typename') // Exclude the __typename property
+        .map((day) => workout.workoutSplit[day])
+        .every((workoutPlanArr) => workoutPlanArr.length === 0);
 
-      workoutsList.push(workoutObj);
+      if (!isWorkoutPlanEmpty) {
+        workoutsList.push(workout);
+      }
     }
   });
   return workoutsList;

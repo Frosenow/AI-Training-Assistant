@@ -1,5 +1,5 @@
 /* eslint-disable no-unneeded-ternary */
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { useQuery } from '@apollo/client';
 import {
   Autocomplete,
@@ -13,8 +13,8 @@ import {
 } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { isNonEmptyArray } from '@apollo/client/utilities';
 
+import MuscleGroupsChart from '../DataRepresentation/MuscleGroupsChart';
 import { AuthContext } from '../../context/auth';
 import { FETCH_USER_WORKOUTS_QUERY } from '../views/Workouts/Queries/getUserWorkoutsQuery';
 import { createWorkoutsList } from './utils/utils';
@@ -26,14 +26,6 @@ export default function WorkoutsCompare({ workoutData }) {
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-  useEffect(() => {
-    if (isNonEmptyArray(workouts)) {
-      console.log(workouts);
-    } else {
-      console.log('empty array');
-    }
-  }, [workouts]);
 
   const { loading, error, data } = useQuery(FETCH_USER_WORKOUTS_QUERY, {
     variables: {
@@ -63,61 +55,69 @@ export default function WorkoutsCompare({ workoutData }) {
 
   const { getUserWorkouts } = data;
 
+  // Filter out workouts that don't have any exercises
   const workoutsList = createWorkoutsList(getUserWorkouts, workoutData.name);
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        margin: 1,
-      }}
-    >
-      <Button
-        color="success"
-        variant="contained"
-        size="small"
-        aria-label="expand row"
-        onClick={() => {
-          setOpen(!open);
+    <>
+      <MuscleGroupsChart
+        workoutData={workoutData}
+        workoutSplit={workoutData.workoutSplit}
+        workoutsToCompare={workouts}
+      />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          margin: 1,
         }}
       >
-        Compare Workouts
-      </Button>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <Autocomplete
-          multiple
-          disableCloseOnSelect
-          id="combo-box-demo"
-          options={workoutsList}
-          isOptionEqualToValue={(option, value) => option.name === value.name}
-          getOptionLabel={(workout) => workout.name}
-          sx={{ width: 300, margin: 1 }}
-          onChange={(_, workout) => {
-            setWorkouts(workout);
+        <Button
+          color="success"
+          variant="contained"
+          size="small"
+          aria-label="expand row"
+          onClick={() => {
+            setOpen(!open);
           }}
-          renderOption={(props, workout, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
+        >
+          Compare Workouts
+        </Button>
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <Autocomplete
+            multiple
+            disableCloseOnSelect
+            id="combo-box-demo"
+            options={workoutsList}
+            isOptionEqualToValue={(option, value) => option.name === value.name}
+            getOptionLabel={(workout) => workout.name}
+            sx={{ width: 300, margin: 1 }}
+            onChange={(_, workout) => {
+              setWorkouts(workout);
+            }}
+            renderOption={(props, workout, { selected }) => (
+              <li {...props}>
+                <Checkbox
+                  icon={icon}
+                  checkedIcon={checkedIcon}
+                  style={{ marginRight: 8 }}
+                  checked={selected}
+                />
+                {workout.name}
+              </li>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Workout Plan name"
+                error={error ? true : false}
+                onWheel={(e) => e.target.blur()}
               />
-              {workout.name}
-            </li>
-          )}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Workout Plan name"
-              error={error ? true : false}
-              onWheel={(e) => e.target.blur()}
-            />
-          )}
-        />
-      </Collapse>
-    </Box>
+            )}
+          />
+        </Collapse>
+      </Box>
+    </>
   );
 }

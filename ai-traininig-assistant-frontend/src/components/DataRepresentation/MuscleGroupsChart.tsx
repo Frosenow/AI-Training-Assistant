@@ -27,12 +27,29 @@ ChartJS.register(
   Legend
 );
 
-export default function MuscleGroupsChart({ workoutData, workoutSplit }) {
+export default function MuscleGroupsChart({
+  workoutData,
+  workoutSplit,
+  workoutsToCompare,
+}) {
   const { palette } = useTheme();
+  const workoutsToAnalyze = [workoutData, ...workoutsToCompare];
 
-  const trainingDays = getTrainingDays(workoutSplit);
-  const muscleGroupTrained = getMuscleGroupTrained(trainingDays, workoutSplit);
-  const datasetValues = getDataset(muscleGroupTrained);
+  const workoutsDatasets = workoutsToAnalyze.map((workout) => {
+    const trainingDays = getTrainingDays(workout.workoutSplit);
+    const muscleGroupTrained = getMuscleGroupTrained(
+      trainingDays,
+      workout.workoutSplit
+    );
+    const datasetValues = getDataset(muscleGroupTrained);
+
+    return {
+      workout,
+      trainingDays,
+      muscleGroupTrained,
+      datasetValues,
+    };
+  });
 
   const chartData = {
     labels: musclesGroupLabels,
@@ -52,7 +69,8 @@ export default function MuscleGroupsChart({ workoutData, workoutSplit }) {
     scale: {
       ticks: {
         beginAtZero: true,
-        max: Math.max(...Object.values(datasetValues)),
+        // max: Math.max(...Object.values(datasetValues)),
+        max: 5,
         min: 1,
         stepSize: 1,
       },
@@ -89,10 +107,10 @@ export default function MuscleGroupsChart({ workoutData, workoutSplit }) {
           justifyContent: 'center',
         }}
       >
-        <NestedList
+        {/* <NestedList
           workoutData={workoutData}
           muscleGroupTrained={muscleGroupTrained}
-        />
+        /> */}
       </Container>
     </Box>
   );
