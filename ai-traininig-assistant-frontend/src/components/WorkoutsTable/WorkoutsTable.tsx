@@ -179,22 +179,15 @@ function Row({ row, workoutPlanId, trainingDay, exerciseId }: RowProps) {
                 </TableHead>
                 <TableBody>
                   {row.progressTracker &&
-                    row.progressTracker
-                      .slice() // Create a shallow copy to avoid modifying the original array
-                      .sort((a, b) => {
-                        const dateA = moment(a.trainingDate, 'DD/MM/YYYY');
-                        const dateB = moment(b.trainingDate, 'DD/MM/YYYY');
-                        return dateA.isBefore(dateB) ? -1 : 1;
-                      })
-                      .map((progress: ProgressTracker) => (
-                        <ProgressRow
-                          key={progress.id}
-                          progress={progress}
-                          workoutPlanId={workoutPlanId}
-                          trainingDay={trainingDay}
-                          exerciseId={exerciseId}
-                        />
-                      ))}
+                    row.progressTracker.map((progress: ProgressTracker) => (
+                      <ProgressRow
+                        key={progress.id}
+                        progress={progress}
+                        workoutPlanId={workoutPlanId}
+                        trainingDay={trainingDay}
+                        exerciseId={exerciseId}
+                      />
+                    ))}
                 </TableBody>
                 <caption>
                   <ProgressionField

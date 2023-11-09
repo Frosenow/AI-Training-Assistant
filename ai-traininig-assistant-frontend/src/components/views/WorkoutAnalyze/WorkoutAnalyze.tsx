@@ -1,17 +1,45 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container, CircularProgress, Paper } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import {
+  Container,
+  CircularProgress,
+  Paper,
+  Collapse,
+  CardActions,
+  Card,
+  Typography,
+} from '@mui/material';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { AuthContext } from '../../../context/auth';
 import { FETCH_SINGLE_WORKOUT_QUERY } from '../SingleWorkout/Queries/getSingleWorkout';
 import SnackBarError from '../../SnackBarError/SnackBarError';
 import WorkoutsCompare from '../../ExpandableWorkoutsCompare/WorkoutsCompare';
+import ExerciseProgressLines from '../../DataRepresentation/ExerciseProgressLines';
+
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 export default function WorkoutAnalyze() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const { workoutPlanId } = useParams();
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     if (!user) {
@@ -69,7 +97,31 @@ export default function WorkoutAnalyze() {
           },
         }}
       >
-        {!isWorkoutPlanEmpty && <WorkoutsCompare workoutData={getWorkout} />}
+        <Card>
+          <CardActions disableSpacing>
+            <Typography variant="h5" fontWeight="bold">
+              Muscles Trained - Radar Chart
+            </Typography>
+            <ExpandMore
+              expand={open}
+              onClick={() => setOpen(!open)}
+              aria-expanded={open}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </CardActions>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            {!isWorkoutPlanEmpty && (
+              <WorkoutsCompare workoutData={getWorkout} />
+            )}
+          </Collapse>
+        </Card>
+        <Card sx={{ mt: 1 }}>
+          {!isWorkoutPlanEmpty && (
+            <ExerciseProgressLines workoutData={getWorkout} />
+          )}
+        </Card>
       </Paper>
     </>
   );

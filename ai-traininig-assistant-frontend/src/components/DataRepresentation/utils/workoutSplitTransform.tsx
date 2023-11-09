@@ -47,3 +47,29 @@ export function getDataset(muscleGroupTrained) {
 
   return dataset;
 }
+
+export function getExercisesWithProgress(trainingDays, workoutSplit) {
+  const progressedExercises = [];
+  trainingDays.forEach((day) => {
+    workoutSplit[day].forEach((exercise) => {
+      if (exercise.progressTracker.length > 0) {
+        progressedExercises.push(exercise);
+      }
+    });
+  });
+
+  return progressedExercises;
+}
+
+export function createProgressionData(exercisesWithProgression) {
+  return exercisesWithProgression.map((exercise) => {
+    const datesX = [];
+    const volumeY = [];
+    exercise.progressTracker.forEach((progressionDay) => {
+      datesX.push(progressionDay.trainingDate);
+      volumeY.push(progressionDay.progression.volume);
+    });
+
+    return { datesX, volumeY, exercise };
+  });
+}
