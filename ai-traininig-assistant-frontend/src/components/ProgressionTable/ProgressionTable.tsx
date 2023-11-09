@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { Container } from '@mui/material';
 
 function createData(
   trainingDate: string,
@@ -58,7 +58,7 @@ export function ProgressionTable({ progressionData }) {
   );
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Container} sx={{ mt: 2 }}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>

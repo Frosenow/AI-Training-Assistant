@@ -1,4 +1,4 @@
-import { useTheme } from '@mui/material';
+import { Box, Container, useTheme } from '@mui/material';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -42,7 +42,7 @@ export function LineProgressionGraph({ progressionData }) {
     responsive: true,
     plugins: {
       legend: {
-        position: 'bottom' as const,
+        position: 'top' as const,
       },
       title: {
         display: true,
@@ -51,5 +51,9 @@ export function LineProgressionGraph({ progressionData }) {
     },
   };
 
-  return <Line data={data} options={options} />;
+  return (
+    <Container>
+      <Line data={data} options={options} />
+    </Container>
+  );
 }

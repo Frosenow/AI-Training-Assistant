@@ -39,7 +39,8 @@ export default function WorkoutAnalyze() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const { workoutPlanId } = useParams();
-  const [open, setOpen] = useState(true);
+  const [openCompare, setOpenCompare] = useState(true);
+  const [openProgress, setOpenProgress] = useState(true);
 
   useEffect(() => {
     if (!user) {
@@ -103,24 +104,39 @@ export default function WorkoutAnalyze() {
               Muscles Trained - Radar Chart
             </Typography>
             <ExpandMore
-              expand={open}
-              onClick={() => setOpen(!open)}
-              aria-expanded={open}
+              expand={openCompare}
+              onClick={() => setOpenCompare(!openCompare)}
+              aria-expanded={openCompare}
               aria-label="show more"
             >
               <ExpandMoreIcon />
             </ExpandMore>
           </CardActions>
-          <Collapse in={open} timeout="auto" unmountOnExit>
+          <Collapse in={openCompare} timeout="auto" unmountOnExit>
             {!isWorkoutPlanEmpty && (
               <WorkoutsCompare workoutData={getWorkout} />
             )}
           </Collapse>
         </Card>
-        <Card sx={{ mt: 1 }}>
-          {!isWorkoutPlanEmpty && (
-            <ExerciseProgressLines workoutData={getWorkout} />
-          )}
+        <Card sx={{ mt: 2 }}>
+          <CardActions disableSpacing>
+            <Typography variant="h5" fontWeight="bold">
+              Volume Progression of Exercise - Line Chart
+            </Typography>
+            <ExpandMore
+              expand={openProgress}
+              onClick={() => setOpenProgress(!openProgress)}
+              aria-expanded={openProgress}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </CardActions>
+          <Collapse in={openProgress} timeout="auto" unmountOnExit>
+            {!isWorkoutPlanEmpty && (
+              <ExerciseProgressLines workoutData={getWorkout} />
+            )}
+          </Collapse>
         </Card>
       </Paper>
     </>

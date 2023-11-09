@@ -10,6 +10,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 
 import { LineProgressionGraph } from './LineProgressionGraph';
 import { ProgressionTable } from '../ProgressionTable/ProgressionTable';
+import { Stack } from '@mui/material';
 
 export default function SwipeableGraph({ plottingData }) {
   const theme = useTheme();
