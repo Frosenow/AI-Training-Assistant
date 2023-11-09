@@ -35,7 +35,7 @@ export default function MuscleGroupsChart({
   const { palette } = useTheme();
   const workoutsToAnalyze = [workoutData, ...workoutsToCompare];
 
-  const workoutsDatasets = workoutsToAnalyze.map((workout) => {
+  const workoutsDatasetsTransformed = workoutsToAnalyze.map((workout, key) => {
     const trainingDays = getTrainingDays(workout.workoutSplit);
     const muscleGroupTrained = getMuscleGroupTrained(
       trainingDays,
@@ -44,6 +44,7 @@ export default function MuscleGroupsChart({
     const datasetValues = getDataset(muscleGroupTrained);
 
     return {
+      key,
       workout,
       trainingDays,
       muscleGroupTrained,
@@ -51,17 +52,19 @@ export default function MuscleGroupsChart({
     };
   });
 
+  const chartDatasets = workoutsDatasetsTransformed.map((data) => {
+    return {
+      label: `Muscle Groups Trained in ${data.workout.name}`,
+      data: Object.values(data.datasetValues),
+      backgroundColor: palette.secondary.light,
+      borderColor: palette.secondary.dark,
+      borderWidth: 1,
+    };
+  });
+
   const chartData = {
     labels: musclesGroupLabels,
-    datasets: [
-      {
-        label: `Muscle Groups Trained in ${workoutData.name}`,
-        data: Object.values(datasetValues),
-        backgroundColor: palette.secondary.light,
-        borderColor: palette.secondary.dark,
-        borderWidth: 1,
-      },
-    ],
+    datasets: [...chartDatasets],
   };
 
   const chartOptions = {
@@ -107,10 +110,13 @@ export default function MuscleGroupsChart({
           justifyContent: 'center',
         }}
       >
-        {/* <NestedList
-          workoutData={workoutData}
-          muscleGroupTrained={muscleGroupTrained}
-        /> */}
+        {workoutsDatasetsTransformed.map((data) => (
+          <NestedList
+            key={data.key}
+            workoutData={data.workout}
+            muscleGroupTrained={data.muscleGroupTrained}
+          />
+        ))}
       </Container>
     </Box>
   );
