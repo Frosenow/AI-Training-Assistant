@@ -6,6 +6,7 @@ import {
   validateProgression,
   validateTrainingDay,
 } from '../../util/validators.js';
+import moment from 'moment';
 
 const workoutResolvers = {
   Query: {
@@ -171,6 +172,12 @@ const workoutResolvers = {
           };
 
           exercises[progressedExerciseIdx].progressTracker.push(newProgress);
+
+          exercises[progressedExerciseIdx].progressTracker.sort((a, b) => {
+            const dateA = moment(a.trainingDate, 'DD/MM/YYYY');
+            const dateB = moment(b.trainingDate, 'DD/MM/YYYY');
+            return dateA.isBefore(dateB) ? -1 : 1;
+          });
 
           await workoutPlan.save();
           return workoutPlan;
