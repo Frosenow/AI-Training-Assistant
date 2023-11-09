@@ -5,7 +5,6 @@ import { Container, CircularProgress, Paper } from '@mui/material';
 
 import { AuthContext } from '../../../context/auth';
 import { FETCH_SINGLE_WORKOUT_QUERY } from '../SingleWorkout/Queries/getSingleWorkout';
-import MuscleGroupsChart from '../../DataRepresentation/MuscleGroupsChart';
 import SnackBarError from '../../SnackBarError/SnackBarError';
 import WorkoutsCompare from '../../ExpandableWorkoutsCompare/WorkoutsCompare';
 

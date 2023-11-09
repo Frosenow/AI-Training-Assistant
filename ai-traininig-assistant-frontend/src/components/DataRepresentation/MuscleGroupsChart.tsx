@@ -8,7 +8,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
-import { useTheme, Box, Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 
 import NestedList from '../NestedList/NestedList';
 import {
@@ -17,6 +17,7 @@ import {
   getDataset,
 } from './utils/workoutSplitTransform';
 import { musclesGroupLabels } from './consts/consts';
+import { chartThemes } from './consts/chartThemes';
 
 ChartJS.register(
   RadialLinearScale,
@@ -27,12 +28,7 @@ ChartJS.register(
   Legend
 );
 
-export default function MuscleGroupsChart({
-  workoutData,
-  workoutSplit,
-  workoutsToCompare,
-}) {
-  const { palette } = useTheme();
+export default function MuscleGroupsChart({ workoutData, workoutsToCompare }) {
   const workoutsToAnalyze = [workoutData, ...workoutsToCompare];
 
   const workoutsDatasetsTransformed = workoutsToAnalyze.map((workout, key) => {
@@ -53,12 +49,14 @@ export default function MuscleGroupsChart({
   });
 
   const chartDatasets = workoutsDatasetsTransformed.map((data) => {
+    const colorKey = data.key % chartThemes.length;
+
     return {
       label: `Muscle Groups Trained in ${data.workout.name}`,
       data: Object.values(data.datasetValues),
-      backgroundColor: palette.secondary.light,
-      borderColor: palette.secondary.dark,
-      borderWidth: 1,
+      backgroundColor: chartThemes[colorKey].backgroundColor,
+      borderColor: chartThemes[colorKey].borderColor,
+      borderWidth: 2,
     };
   });
 
@@ -72,8 +70,6 @@ export default function MuscleGroupsChart({
     scale: {
       ticks: {
         beginAtZero: true,
-        // max: Math.max(...Object.values(datasetValues)),
-        max: 5,
         min: 1,
         stepSize: 1,
       },

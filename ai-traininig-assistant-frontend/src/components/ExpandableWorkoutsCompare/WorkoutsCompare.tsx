@@ -62,7 +62,6 @@ export default function WorkoutsCompare({ workoutData }) {
     <>
       <MuscleGroupsChart
         workoutData={workoutData}
-        workoutSplit={workoutData.workoutSplit}
         workoutsToCompare={workouts}
       />
       <Box
