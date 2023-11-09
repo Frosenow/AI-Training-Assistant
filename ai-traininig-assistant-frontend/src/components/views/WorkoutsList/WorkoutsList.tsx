@@ -18,6 +18,7 @@ import SnackBarError from '../../SnackBarError/SnackBarError';
 import { FETCH_USER_WORKOUTS_QUERY } from '../Workouts/Queries/getUserWorkoutsQuery';
 import { AuthContext } from '../../../context/auth';
 import { Workout } from '../../../types/types';
+import { checkIfWorkoutPlanEmpty } from '../../ExpandableWorkoutsCompare/utils/utils';
 
 export default function WorkoutsList() {
   const { user } = useContext(AuthContext);
@@ -109,9 +110,13 @@ export default function WorkoutsList() {
       alignItems="stretch"
     >
       {error && <SnackBarError error={error} />}
-      {getUserWorkouts.map((workout: Workout) => (
-        <WorkoutCard workout={workout} key={workout.id} />
-      ))}
+      {getUserWorkouts.map((workout: Workout) => {
+        return (
+          !checkIfWorkoutPlanEmpty(workout) && (
+            <WorkoutCard workout={workout} key={workout.id} />
+          )
+        );
+      })}
     </Stack>
   );
 }
