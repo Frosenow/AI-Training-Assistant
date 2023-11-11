@@ -19,7 +19,6 @@ import { FETCH_SINGLE_WORKOUT_QUERY } from '../SingleWorkout/Queries/getSingleWo
 import SnackBarError from '../../SnackBarError/SnackBarError';
 import WorkoutsCompare from '../../ExpandableWorkoutsCompare/WorkoutsCompare';
 import ExerciseProgressLines from '../../DataRepresentation/ExerciseProgressLines';
-import { predictData } from '../../../computation/polynomialRegression/polynomialRegression';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -42,8 +41,6 @@ export default function WorkoutAnalyze() {
   const { workoutPlanId } = useParams();
   const [openCompare, setOpenCompare] = useState(true);
   const [openProgress, setOpenProgress] = useState(true);
-
-  predictData();
 
   useEffect(() => {
     if (!user) {

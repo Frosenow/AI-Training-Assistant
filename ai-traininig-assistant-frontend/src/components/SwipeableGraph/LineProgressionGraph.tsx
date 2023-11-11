@@ -11,6 +11,8 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
+import { predictProgressionData } from '../../computation/polynomialRegression/polynomialRegression';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -21,11 +23,11 @@ ChartJS.register(
   Legend
 );
 
-export function LineProgressionGraph({ progressionData }) {
+export function LineProgressionGraph({ progressionData, predictionSpan }) {
   const { datesX, volumeY, exercise } = progressionData;
   const theme = useTheme();
 
-  const data = {
+  let data = {
     labels: datesX,
     datasets: [
       {
@@ -50,6 +52,49 @@ export function LineProgressionGraph({ progressionData }) {
       },
     },
   };
+
+  const progressionDataset = {
+    timestamp: [...datesX],
+    volume: [...volumeY],
+  };
+
+  if (predictionSpan !== 0) {
+    const predictedData = predictProgressionData(
+      progressionDataset,
+      predictionSpan
+    );
+
+    // Clone the original data object and append predicted data
+    data = {
+      ...data,
+      labels: [...data.labels, predictedData.xValue],
+      datasets: [
+        {
+          ...data.datasets[0],
+          data: [...data.datasets[0].data, predictedData.yValue],
+        },
+      ],
+    };
+
+    const optionsPrediction = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top' as const,
+        },
+        title: {
+          display: true,
+          text: `Prediction of volume progression of ${exercise.exerciseName} in time`,
+        },
+      },
+    };
+
+    return (
+      <Container>
+        <Line data={data} options={optionsPrediction} />
+      </Container>
+    );
+  }
 
   return (
     <Container>
