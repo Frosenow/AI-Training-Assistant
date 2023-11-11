@@ -40,8 +40,10 @@ export default function SwipeableGraph({ plottingData }) {
       >
         <Typography>{plottingData[activeStep].exerciseName}</Typography>
       </Paper>
-      <LineProgressionGraph progressionData={plottingData[activeStep]} />
-      <ProgressionTable progressionData={plottingData[activeStep]} />
+      <Stack>
+        <LineProgressionGraph progressionData={plottingData[activeStep]} />
+        <ProgressionTable progressionData={plottingData[activeStep]} />
+      </Stack>
       <MobileStepper
         variant="text"
         steps={maxSteps}

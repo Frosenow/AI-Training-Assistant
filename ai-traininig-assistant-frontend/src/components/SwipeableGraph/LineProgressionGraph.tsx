@@ -1,4 +1,4 @@
-import { Box, Container, useTheme } from '@mui/material';
+import { Container, useTheme } from '@mui/material';
 import {
   Chart as ChartJS,
   CategoryScale,
