@@ -5,11 +5,11 @@ import { styled } from '@mui/material/styles';
 import {
   Container,
   CircularProgress,
-  Paper,
   Collapse,
   CardActions,
   Card,
   Typography,
+  Box,
 } from '@mui/material';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -89,7 +89,7 @@ export default function WorkoutAnalyze() {
   return (
     <>
       {error && <SnackBarError error={error} />}
-      <Paper
+      <Box
         sx={{
           width: '90%',
           margin: {
@@ -138,7 +138,7 @@ export default function WorkoutAnalyze() {
             )}
           </Collapse>
         </Card>
-      </Paper>
+      </Box>
     </>
   );
 }

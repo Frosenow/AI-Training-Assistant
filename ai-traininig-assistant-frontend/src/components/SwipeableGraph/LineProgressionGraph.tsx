@@ -42,6 +42,7 @@ export function LineProgressionGraph({ progressionData, predictionSpan }) {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top' as const,
@@ -78,6 +79,7 @@ export function LineProgressionGraph({ progressionData, predictionSpan }) {
 
     const optionsPrediction = {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           position: 'top' as const,
@@ -90,14 +92,22 @@ export function LineProgressionGraph({ progressionData, predictionSpan }) {
     };
 
     return (
-      <Container>
+      <Container
+        sx={{
+          minHeight: { sm: '300px', lg: '400px' },
+        }}
+      >
         <Line data={data} options={optionsPrediction} />
       </Container>
     );
   }
 
   return (
-    <Container>
+    <Container
+      sx={{
+        minHeight: { sm: '300px', lg: '400px' },
+      }}
+    >
       <Line data={data} options={options} />
     </Container>
   );
