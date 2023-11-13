@@ -16,9 +16,13 @@ import {
   styled,
   BadgeProps,
 } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers';
 import ScaleIcon from '@mui/icons-material/Scale';
 import AddIcon from '@mui/icons-material/Add';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 import { ADD_PROGRESSION_MUTATION } from '../../Buttons/AddButton/AddProgressionButton/Mutations/addProgressionMutation';
 import { CustomWidthTooltip } from '../../WorkoutCard/WorkoutCard';
@@ -75,31 +79,25 @@ export const ProgressionField = ({
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell color="secondary" sx={{ minWidth: 30 }}>
-                <TextField
-                  id="progression-date"
-                  onWheel={(e) => e.target.blur()}
-                  label="Date"
-                  type="date"
-                  error={error ? true : false}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="standard"
-                  onChange={(event) =>
-                    setValues({
-                      ...values,
-                      trainingDate: moment(event.target.value).format(
-                        'DD/MM/YYYY'
-                      ),
-                    })
-                  }
-                />
+              <TableCell color="secondary" sx={{ minWidth: 100 }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Date"
+                    format="DD/MM/YYYY"
+                    onChange={(newValue) => {
+                      const formattedDate =
+                        dayjs(newValue).format('DD/MM/YYYY');
+                      setValues({
+                        ...values,
+                        trainingDate: formattedDate,
+                      });
+                    }}
+                  />
+                </LocalizationProvider>
               </TableCell>
               <TableCell sx={{ minWidth: 100 }}>
                 <TextField
                   id="sets-number"
-                  //   error={error ? true : false}
                   variant="standard"
                   onWheel={(e) => e.target.blur()}
                   label="Sets"

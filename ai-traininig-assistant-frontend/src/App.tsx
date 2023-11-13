@@ -15,6 +15,7 @@ import Workouts from './components/views/Workouts/Workouts';
 import SingleWorkout from './components/views/SingleWorkout/SingleWorkout';
 import WorkoutsList from './components/views/WorkoutsList/WorkoutsList';
 import WorkoutAnalyze from './components/views/WorkoutAnalyze/WorkoutAnalyze';
+import FormMonitor from './components/views/FormMonitor/FormMonitor';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
                 path="analysis/:workoutPlanId"
                 element={<WorkoutAnalyze />}
               />
+              <Route path="monitor" element={<FormMonitor />} />
             </Routes>
           </Grid>
         </HashRouter>

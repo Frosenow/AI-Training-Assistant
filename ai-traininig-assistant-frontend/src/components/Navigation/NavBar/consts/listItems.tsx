@@ -5,6 +5,7 @@ import {
   Logout,
   FitnessCenter,
   BarChart,
+  CameraFront,
 } from '@mui/icons-material';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -44,6 +45,12 @@ export const loggedUserItems = [
   },
   {
     id: 3,
+    icon: <CameraFront />,
+    label: 'Form Monitor',
+    route: '/monitor',
+  },
+  {
+    id: 4,
     icon: <Logout />,
     label: 'Logout',
     route: '/login',
