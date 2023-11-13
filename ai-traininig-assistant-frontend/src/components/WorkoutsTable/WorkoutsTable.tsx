@@ -10,7 +10,6 @@ import { Box, Collapse, IconButton, Typography } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-import moment from 'moment';
 import { DeleteExerciseButton } from '../Buttons/DeleteButton/DeleteExerciseButton/DeleteExerciseButton';
 import CollapsibleTableForm from './CollapsibleTableForm';
 import { ProgressionField } from '../Progression/CreateProgressionForm/ProgressionField';
@@ -25,16 +24,16 @@ import {
 import { WorkoutsTableProps, ProgressTracker } from '../../types/types';
 
 const columns: readonly Column[] = [
-  { id: 'exerciseName', label: 'Exercise', minWidth: 100 },
+  { id: 'exerciseName', label: 'Exercise', minWidth: 350 },
   {
     id: 'sets',
     label: 'Sets',
-    minWidth: 70,
+    minWidth: 100,
   },
   {
     id: 'reps',
     label: 'Reps',
-    minWidth: 70,
+    minWidth: 150,
   },
 ];
 
@@ -99,20 +98,20 @@ function ProgressRow({
         const value = rowProgress[column.id];
         return (
           <TableCell key={column.id} sx={{ minWidth: column.minWidth }}>
+            {column.id === 'trainingDate' && (
+              <DeleteProgressionButton
+                workoutPlanId={workoutPlanId}
+                exerciseId={exerciseId}
+                progressionId={id}
+                trainingDay={trainingDay}
+              />
+            )}
             {column.format && typeof value === 'number'
               ? column.format(value)
               : value}
           </TableCell>
         );
       })}
-      <TableCell>
-        <DeleteProgressionButton
-          workoutPlanId={workoutPlanId}
-          exerciseId={exerciseId}
-          progressionId={id}
-          trainingDay={trainingDay}
-        />
-      </TableCell>
     </TableRow>
   );
 }
@@ -132,13 +131,20 @@ function Row({ row, workoutPlanId, trainingDay, exerciseId }: RowProps) {
               sx={{ minWidth: column.minWidth }}
             >
               {column.id === 'exerciseName' && (
-                <IconButton
-                  aria-label="expand row"
-                  size="small"
-                  onClick={() => setOpen(!open)}
-                >
-                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </IconButton>
+                <>
+                  <DeleteExerciseButton
+                    workoutPlanId={workoutPlanId}
+                    exerciseId={row.id}
+                    exerciseDay={trainingDay}
+                  />
+                  <IconButton
+                    aria-label="expand row"
+                    size="small"
+                    onClick={() => setOpen(!open)}
+                  >
+                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                  </IconButton>
+                </>
               )}
               {column.format && typeof value === 'number'
                 ? column.format(value)
@@ -146,13 +152,6 @@ function Row({ row, workoutPlanId, trainingDay, exerciseId }: RowProps) {
             </TableCell>
           );
         })}
-        <TableCell>
-          <DeleteExerciseButton
-            workoutPlanId={workoutPlanId}
-            exerciseId={row.id}
-            exerciseDay={trainingDay}
-          />
-        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -253,7 +252,7 @@ export default function WorkoutsTable({
       >
         {trainingDay}
       </Typography>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <TableContainer sx={{ maxHeight: 440, width: '100%' }}>
         <Table stickyHeader aria-label="sticky table" size="medium">
           <TableHead>
             <TableRow>

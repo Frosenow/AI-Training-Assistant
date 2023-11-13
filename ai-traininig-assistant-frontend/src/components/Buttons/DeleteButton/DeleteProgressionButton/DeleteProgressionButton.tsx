@@ -10,6 +10,7 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  IconButton,
 } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -52,15 +53,9 @@ export const DeleteProgressionButton: React.FC<
 
   return (
     <>
-      <Button
-        aria-label="settings"
-        onClick={handleClickOpen}
-        variant="contained"
-        color="error"
-        size="small"
-      >
+      <IconButton aria-label="settings" onClick={handleClickOpen}>
         <ClearIcon />
-      </Button>
+      </IconButton>
       <Dialog
         fullScreen={fullScreen}
         open={open}

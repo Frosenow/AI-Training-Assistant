@@ -21,7 +21,7 @@ const columns = [
     id: 'trainingDate',
     label: `Date`,
     align: 'left',
-    minWidth: 120,
+    minWidth: 70,
   },
   {
     id: 'volume',
