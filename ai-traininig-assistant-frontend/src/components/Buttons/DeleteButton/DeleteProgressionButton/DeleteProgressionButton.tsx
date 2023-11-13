@@ -53,7 +53,7 @@ export const DeleteProgressionButton: React.FC<
 
   return (
     <>
-      <IconButton aria-label="settings" onClick={handleClickOpen}>
+      <IconButton aria-label="settings" onClick={handleClickOpen} size="small">
         <ClearIcon />
       </IconButton>
       <Dialog

@@ -79,7 +79,7 @@ export const ProgressionField = ({
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell color="secondary" sx={{ minWidth: 100 }}>
+              <TableCell color="secondary" sx={{ minWidth: 150 }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date"
@@ -129,7 +129,7 @@ export const ProgressionField = ({
                           : values.reps,
                     });
                   }}
-                  sx={{ maxWidth: 50, mr: 1 }}
+                  sx={{ mr: 1 }}
                 />
               </TableCell>
               <TableCell sx={{ minWidth: 100 }}>
