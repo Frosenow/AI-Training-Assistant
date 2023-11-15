@@ -8,13 +8,21 @@ import { qrcode } from 'vite-plugin-qrcode';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), qrcode()],
+  plugins: [
+    react({
+      jsxImportSource: '@emotion/react',
+      babel: {
+        plugins: ['@emotion/babel-plugin'],
+      },
+    }),
+    qrcode(),
+  ],
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/test/setupTests.ts',
   },
   optimizeDeps: {
-    include: ['@emotion/styled'],
+    include: ['@emotion/react', '@emotion/styled', '@mui/material/Tooltip'],
   },
 });
