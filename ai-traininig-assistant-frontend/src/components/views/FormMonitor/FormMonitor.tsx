@@ -12,6 +12,7 @@ import {
   drawSkeleton,
 } from './utils/poseDetection';
 import SnackBarError from '../../SnackBarError/SnackBarError';
+import SnackBarFormDetectionError from '../../SnackBarError/SnackBarFormDetectionError';
 
 interface ErrorState {
   cameraAllowed?: ApolloError | null;
@@ -79,11 +80,11 @@ export default function FormMonitor() {
       });
   };
 
-  console.log(error);
-
   const draw = (p5) => {
     if (video) {
-      p5.image(video, 0, 0);
+      p5.translate(video.width, 0);
+      p5.scale(-1, 1);
+      p5.image(video, 0, 0, video.width, video.height);
       const currentPose = poseRef.current;
       const currentSkeleton = skeletonRef.current;
 
@@ -146,7 +147,10 @@ export default function FormMonitor() {
         <>
           <Sketch setup={setup} draw={draw} />
           {error.detectedKeypoints && (
-            <SnackBarError error={error.detectedKeypoints} />
+            <SnackBarFormDetectionError
+              error={error.detectedKeypoints}
+              open={!checkAllKeypoints}
+            />
           )}
         </>
       )}
