@@ -3,6 +3,7 @@ import * as ml5 from 'ml5';
 import { Alert, AlertTitle, Container, IconButton, Paper } from '@mui/material';
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography';
 import Sketch from 'react-p5';
+import { ApolloError } from '@apollo/client';
 
 import {
   calculatedDistanceFromTheCamera,
@@ -12,13 +13,18 @@ import {
 } from './utils/poseDetection';
 import SnackBarError from '../../SnackBarError/SnackBarError';
 
+interface ErrorState {
+  cameraAllowed?: ApolloError | null;
+  detectedKeypoints?: ApolloError | null;
+}
+
 export default function FormMonitor() {
   const [video, setVideo] = useState(null);
-  const [error, setError] = useState({
+  const [error, setError] = useState<ErrorState>({
     cameraAllowed: null,
-    allKeypointsDetected: null,
+    detectedKeypoints: null,
   });
-  const [checkAllKeypoints, setcheckAllKeypoints] = useState(false);
+  const [checkAllKeypoints, setCheckAllKeypoints] = useState(false);
   const poseRef = useRef(null);
   const skeletonRef = useRef(null);
 
@@ -26,9 +32,9 @@ export default function FormMonitor() {
     if (!checkAllKeypoints) {
       setError((prevError) => ({
         ...prevError,
-        detectedKeypoints: {
-          message: `In order to correctly detect pose, all joints should be visible in the camera.`,
-        },
+        detectedKeypoints: new ApolloError({
+          errorMessage: `In order to correctly detect pose, all joints should be visible in the camera.`,
+        }),
       }));
     } else {
       setError((prevError) => ({
@@ -66,12 +72,14 @@ export default function FormMonitor() {
         console.error('Failed to access the camera:', err);
         setError((prevError) => ({
           ...prevError,
-          cameraAllowed: {
-            message: `Failed to access the camera: ${err.message}`,
-          },
+          cameraAllowed: new ApolloError({
+            errorMessage: `Failed to access the camera: ${err.message}`,
+          }),
         }));
       });
   };
+
+  console.log(error);
 
   const draw = (p5) => {
     if (video) {
@@ -82,7 +90,7 @@ export default function FormMonitor() {
       const CONFIDENCE_LEVEL = 0.6;
 
       if (currentPose) {
-        setcheckAllKeypoints(
+        setCheckAllKeypoints(
           checkConfidenceLevel(currentPose, CONFIDENCE_LEVEL)
         );
 
@@ -117,7 +125,8 @@ export default function FormMonitor() {
         <Container
           sx={{
             width: '100%',
-            margin: '0 auto',
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           <Alert severity="error">
