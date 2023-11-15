@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import * as ml5 from 'ml5';
 import { Alert, AlertTitle, Container, IconButton, Paper } from '@mui/material';
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography';
@@ -10,12 +10,33 @@ import {
   drawKeypoints,
   drawSkeleton,
 } from './utils/poseDetection';
+import SnackBarError from '../../SnackBarError/SnackBarError';
 
 export default function FormMonitor() {
   const [video, setVideo] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState({
+    cameraAllowed: null,
+    allKeypointsDetected: null,
+  });
+  const [checkAllKeypoints, setcheckAllKeypoints] = useState(false);
   const poseRef = useRef(null);
   const skeletonRef = useRef(null);
+
+  useEffect(() => {
+    if (!checkAllKeypoints) {
+      setError((prevError) => ({
+        ...prevError,
+        detectedKeypoints: {
+          message: `In order to correctly detect pose, all joints should be visible in the camera.`,
+        },
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        detectedKeypoints: null,
+      }));
+    }
+  }, [checkAllKeypoints]);
 
   function gotPoses(poses) {
     if (poses.length > 0) {
@@ -43,7 +64,12 @@ export default function FormMonitor() {
       })
       .catch((err) => {
         console.error('Failed to access the camera:', err);
-        setError(`Failed to access the camera: ${err.message}`);
+        setError((prevError) => ({
+          ...prevError,
+          cameraAllowed: {
+            message: `Failed to access the camera: ${err.message}`,
+          },
+        }));
       });
   };
 
@@ -53,10 +79,12 @@ export default function FormMonitor() {
       const currentPose = poseRef.current;
       const currentSkeleton = skeletonRef.current;
 
-      const CONFIDENCE_LEVEL = 0.8;
+      const CONFIDENCE_LEVEL = 0.6;
 
       if (currentPose) {
-        checkConfidenceLevel(currentPose, CONFIDENCE_LEVEL);
+        setcheckAllKeypoints(
+          checkConfidenceLevel(currentPose, CONFIDENCE_LEVEL)
+        );
 
         const distance = calculatedDistanceFromTheCamera(currentPose, p5);
 
@@ -85,7 +113,7 @@ export default function FormMonitor() {
         minWidth: { xl: '490px', xs: '290px' },
       }}
     >
-      {error && (
+      {error.cameraAllowed ? (
         <Container
           sx={{
             width: '100%',
@@ -94,23 +122,25 @@ export default function FormMonitor() {
         >
           <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
-            {error}
+            {error.cameraAllowed.message}
           </Alert>
+          <IconButton disabled>
+            <NoPhotographyIcon
+              sx={{
+                height: '340px',
+                width: '280px',
+              }}
+            />
+          </IconButton>
         </Container>
-      )}
-      {error ? (
-        <IconButton disabled>
-          <NoPhotographyIcon
-            sx={{
-              height: '340px',
-              width: '280px',
-            }}
-          />
-        </IconButton>
       ) : (
-        <Sketch setup={setup} draw={draw} />
+        <>
+          <Sketch setup={setup} draw={draw} />
+          {error.detectedKeypoints && (
+            <SnackBarError error={error.detectedKeypoints} />
+          )}
+        </>
       )}
     </Paper>
-    // </Container>
   );
 }
