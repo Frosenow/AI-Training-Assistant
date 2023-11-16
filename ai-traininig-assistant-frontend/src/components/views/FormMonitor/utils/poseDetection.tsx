@@ -71,25 +71,22 @@ export function calculateAngleBetweenJoints(jointA, jointB, jointC, p5) {
   return normalizeAngle(angle);
 }
 
-export function checkConfidenceLevelOfJoints(joints, CONFIDENCE_LEVEL) {
-  const jointsArr = [];
+export function getMaxConfidenceLevel(joints) {
+  let maxConfidence = 0;
 
   joints.forEach((joint) => {
-    if (joint.confidence >= CONFIDENCE_LEVEL) {
-      jointsArr.push(joint);
+    if (joint.confidence > maxConfidence) {
+      maxConfidence = joint.confidence;
     }
   });
 
-  // Check if all joints are correctly detected
-  return jointsArr.length === joints.length;
+  return maxConfidence;
 }
 
 function analyzeMovement(buffer, MOVEMENT_THRESHOLD) {
-  // Here, you might analyze if the buffer shows a full range of motion
-  // For simplicity, let's say we check for a complete increase and decrease in angle
   const minAngle = Math.min(...buffer);
   const maxAngle = Math.max(...buffer);
-  return maxAngle - minAngle > MOVEMENT_THRESHOLD; // Example threshold
+  return maxAngle - minAngle > MOVEMENT_THRESHOLD;
 }
 
 function runRepsCalculation(
@@ -149,14 +146,58 @@ export function calculateReps(
       currentPose.rightAnkle,
     ];
 
-    runRepsCalculation(
-      leftArm,
-      'leftArm',
-      musclesBuffer,
-      extendedRef,
-      MOVEMENT_THRESHOLD,
-      setReps,
-      p5
-    );
+    const leftArmConfidenceLevel = getMaxConfidenceLevel(leftArm);
+
+    const rightArmConfidenceLevel = getMaxConfidenceLevel(rightArm);
+
+    // The confidence of moving hand will be smaller
+    if (leftArmConfidenceLevel < rightArmConfidenceLevel) {
+      runRepsCalculation(
+        leftArm,
+        'leftArm',
+        musclesBuffer,
+        extendedRef,
+        MOVEMENT_THRESHOLD,
+        setReps,
+        p5
+      );
+    } else {
+      runRepsCalculation(
+        rightArm,
+        'rightArm',
+        musclesBuffer,
+        extendedRef,
+        MOVEMENT_THRESHOLD,
+        setReps,
+        p5
+      );
+    }
+
+    const leftLegConfidenceLevel = getMaxConfidenceLevel(leftLeg);
+
+    const rightLegConfidenceLevel = getMaxConfidenceLevel(rightLeg);
+
+    // The confidence of moving leg will be smaller
+    if (leftLegConfidenceLevel < rightLegConfidenceLevel) {
+      runRepsCalculation(
+        leftLeg,
+        'leftLeg',
+        musclesBuffer,
+        extendedRef,
+        MOVEMENT_THRESHOLD,
+        setReps,
+        p5
+      );
+    } else {
+      runRepsCalculation(
+        rightLeg,
+        'rightLeg',
+        musclesBuffer,
+        extendedRef,
+        MOVEMENT_THRESHOLD,
+        setReps,
+        p5
+      );
+    }
   }
 }
