@@ -5,7 +5,7 @@ import {
   Logout,
   FitnessCenter,
   BarChart,
-  CameraFront,
+  Calculate,
 } from '@mui/icons-material';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -45,8 +45,8 @@ export const loggedUserItems = [
   },
   {
     id: 3,
-    icon: <CameraFront />,
-    label: 'Form Monitor',
+    icon: <Calculate />,
+    label: 'Reps Calculator',
     route: '/monitor',
   },
   {

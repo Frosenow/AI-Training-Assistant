@@ -1,17 +1,24 @@
 import { useState, useRef, useEffect } from 'react';
 import * as ml5 from 'ml5';
-import { Alert, AlertTitle, Container, IconButton, Paper } from '@mui/material';
+import {
+  Alert,
+  AlertTitle,
+  Button,
+  Container,
+  IconButton,
+  Paper,
+} from '@mui/material';
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography';
 import Sketch from 'react-p5';
 import { ApolloError } from '@apollo/client';
 
 import {
+  calculateReps,
   calculatedDistanceFromTheCamera,
   checkConfidenceLevel,
   drawKeypoints,
   drawSkeleton,
 } from './utils/poseDetection';
-import SnackBarError from '../../SnackBarError/SnackBarError';
 import SnackBarFormDetectionError from '../../SnackBarError/SnackBarFormDetectionError';
 
 interface ErrorState {
@@ -26,8 +33,21 @@ export default function FormMonitor() {
     detectedKeypoints: null,
   });
   const [checkAllKeypoints, setCheckAllKeypoints] = useState(false);
+  const [reps, setReps] = useState(0);
   const poseRef = useRef(null);
   const skeletonRef = useRef(null);
+  const extendedRef = useRef({
+    leftArm: false,
+    rightArm: false,
+    leftLeg: false,
+    rightLeg: false,
+  });
+  const musclesBuffer = useRef({
+    leftArm: Array(10).fill(null),
+    rightArm: Array(10).fill(null),
+    leftLeg: Array(10).fill(null),
+    rightLeg: Array(10).fill(null),
+  });
 
   useEffect(() => {
     if (!checkAllKeypoints) {
@@ -53,8 +73,6 @@ export default function FormMonitor() {
   }
 
   const setup = (p5, canvasParentRef) => {
-    p5.createCanvas(640, 480).parent(canvasParentRef);
-
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {
@@ -62,6 +80,14 @@ export default function FormMonitor() {
         videoElement.elt.srcObject = stream;
         videoElement.hide();
         setVideo(videoElement);
+
+        videoElement.elt.onloadedmetadata = () => {
+          // Get the video dimensions
+          const videoWidth = videoElement.width;
+          const videoHeight = videoElement.height;
+
+          p5.createCanvas(videoWidth, videoHeight).parent(canvasParentRef);
+        };
 
         const poseNet = ml5.poseNet(videoElement, () =>
           console.log('Model loaded')
@@ -88,12 +114,30 @@ export default function FormMonitor() {
       const currentPose = poseRef.current;
       const currentSkeleton = skeletonRef.current;
 
-      const CONFIDENCE_LEVEL = 0.6;
+      const CONFIDENCE_LEVEL = 0.75;
 
       if (currentPose) {
-        setCheckAllKeypoints(
-          checkConfidenceLevel(currentPose, CONFIDENCE_LEVEL)
+        const confidenceLevel = checkConfidenceLevel(
+          currentPose,
+          CONFIDENCE_LEVEL
         );
+
+        setCheckAllKeypoints(confidenceLevel);
+
+        // If correctly detected pose, run reps calculator
+        if (confidenceLevel) {
+          const MOVEMENT_THRESHOLD = 10;
+
+          calculateReps(
+            poseRef.current,
+            CONFIDENCE_LEVEL,
+            MOVEMENT_THRESHOLD,
+            p5,
+            musclesBuffer,
+            extendedRef,
+            setReps
+          );
+        }
 
         const distance = calculatedDistanceFromTheCamera(currentPose, p5);
 
@@ -120,6 +164,7 @@ export default function FormMonitor() {
         justifyContent: 'center',
         flexDirection: 'column',
         minWidth: { xl: '490px', xs: '290px' },
+        position: 'relative',
       }}
     >
       {error.cameraAllowed ? (
@@ -146,6 +191,30 @@ export default function FormMonitor() {
       ) : (
         <>
           <Sketch setup={setup} draw={draw} />
+          <Container
+            sx={{
+              position: 'absolute',
+              bottom: 20,
+              left: 0,
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              padding: '10px',
+              opacity: '50%',
+            }}
+          >
+            <Button variant="contained" color="secondary">
+              Reps: {reps}
+            </Button>
+            <Button
+              onClick={() => setReps(0)}
+              variant="contained"
+              color="secondary"
+            >
+              Reset Reps
+            </Button>
+          </Container>
           {error.detectedKeypoints && (
             <SnackBarFormDetectionError
               error={error.detectedKeypoints}
