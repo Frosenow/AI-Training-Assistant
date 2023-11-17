@@ -15,7 +15,7 @@ const server = new ApolloServer({
 });
 
 try {
-  await mongoose.connect(process.env.MONGODB_CONNECTION_STRING, {
+  await mongoose.connect(String(process.env.MONGODB_CONNECTION_STRING), {
     useNewUrlParser: true,
   });
   console.log('Connected to DB...');
