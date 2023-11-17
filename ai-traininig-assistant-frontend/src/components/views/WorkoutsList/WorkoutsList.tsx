@@ -29,7 +29,7 @@ export default function WorkoutsList() {
       navigate('/login');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   const { loading, error, data } = useQuery(FETCH_USER_WORKOUTS_QUERY, {
     variables: {

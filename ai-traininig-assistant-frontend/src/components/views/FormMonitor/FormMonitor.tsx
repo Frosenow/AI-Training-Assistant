@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as ml5 from 'ml5';
 import {
   Alert,
@@ -20,6 +21,7 @@ import {
   drawSkeleton,
 } from './utils/poseDetection';
 import SnackBarFormDetectionError from '../../SnackBarError/SnackBarFormDetectionError';
+import { AuthContext } from '../../../context/auth';
 
 interface ErrorState {
   cameraAllowed?: ApolloError | null;
@@ -27,6 +29,8 @@ interface ErrorState {
 }
 
 export default function FormMonitor() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [video, setVideo] = useState(null);
   const [error, setError] = useState<ErrorState>({
     cameraAllowed: null,
@@ -48,6 +52,13 @@ export default function FormMonitor() {
     leftLeg: Array(10).fill(null),
     rightLeg: Array(10).fill(null),
   });
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   useEffect(() => {
     if (!checkAllKeypoints) {

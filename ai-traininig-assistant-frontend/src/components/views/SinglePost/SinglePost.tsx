@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -36,10 +36,12 @@ export default function SinglePost() {
     },
   });
 
-  if (!user) {
-    // Backslash prevent from concatenation of urls
-    navigate('/login');
-  }
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   if (loading) {
     return (

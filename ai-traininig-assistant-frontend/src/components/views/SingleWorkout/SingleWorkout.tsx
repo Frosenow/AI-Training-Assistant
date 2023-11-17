@@ -26,7 +26,7 @@ export default function SingleWorkout() {
       navigate('/login');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   const { loading, error, data } = useQuery(FETCH_SINGLE_WORKOUT_QUERY, {
     variables: {
