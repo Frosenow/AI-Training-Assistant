@@ -10,7 +10,11 @@ export default function SnackBarFormDetectionError(props) {
   const { open } = props;
 
   return (
-    <Snackbar key={error ? error.message : undefined} open={open}>
+    <Snackbar
+      key={error ? error.message : undefined}
+      open={open}
+      autoHideDuration={5000}
+    >
       <Alert severity="info">{error.message}</Alert>
     </Snackbar>
   );

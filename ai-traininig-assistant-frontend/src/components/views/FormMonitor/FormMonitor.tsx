@@ -114,7 +114,7 @@ export default function FormMonitor() {
       const currentPose = poseRef.current;
       const currentSkeleton = skeletonRef.current;
 
-      const CONFIDENCE_LEVEL = 0.75;
+      const CONFIDENCE_LEVEL = 0.5;
 
       if (currentPose) {
         const confidenceLevel = checkConfidenceLevel(

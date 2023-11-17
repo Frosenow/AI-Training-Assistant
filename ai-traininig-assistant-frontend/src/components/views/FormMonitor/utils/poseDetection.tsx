@@ -45,7 +45,11 @@ export function checkConfidenceLevel(currentPose, CONFIDENCE_LEVEL) {
 
   // If all keypoints pass the confidence level
   // There is 12 keypoints
-  return keypointsArr.length >= 5;
+
+  return (
+    currentPose.keypoints.length - notUsedKeypoints.length <=
+    keypointsArr.length
+  );
 }
 
 function normalizeAngle(angle) {
@@ -86,6 +90,7 @@ export function getMaxConfidenceLevel(joints) {
 function analyzeMovement(buffer, MOVEMENT_THRESHOLD) {
   const minAngle = Math.min(...buffer);
   const maxAngle = Math.max(...buffer);
+
   return maxAngle - minAngle > MOVEMENT_THRESHOLD;
 }
 
@@ -151,7 +156,7 @@ export function calculateReps(
     const rightArmConfidenceLevel = getMaxConfidenceLevel(rightArm);
 
     // The confidence of moving hand will be smaller
-    if (leftArmConfidenceLevel < rightArmConfidenceLevel) {
+    if (leftArmConfidenceLevel > rightArmConfidenceLevel) {
       runRepsCalculation(
         leftArm,
         'leftArm',
@@ -178,7 +183,7 @@ export function calculateReps(
     const rightLegConfidenceLevel = getMaxConfidenceLevel(rightLeg);
 
     // The confidence of moving leg will be smaller
-    if (leftLegConfidenceLevel < rightLegConfidenceLevel) {
+    if (leftLegConfidenceLevel > rightLegConfidenceLevel) {
       runRepsCalculation(
         leftLeg,
         'leftLeg',
