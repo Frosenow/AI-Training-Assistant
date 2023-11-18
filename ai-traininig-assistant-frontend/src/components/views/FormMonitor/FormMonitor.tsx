@@ -85,8 +85,15 @@ export default function FormMonitor() {
   }
 
   const setup = (p5, canvasParentRef) => {
+    const constraints = {
+      video: {
+        facingMode: 'environment', // Use the selected camera type
+      },
+      audio: false, // Assuming you don't need audio for this
+    };
+
     navigator.mediaDevices
-      .getUserMedia({ video: true })
+      .getUserMedia(constraints)
       .then((stream) => {
         const videoElement = p5.createCapture(p5.VIDEO);
         videoElement.elt.srcObject = stream;
