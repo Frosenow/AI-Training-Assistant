@@ -8,6 +8,7 @@ import {
   Container,
   IconButton,
   Paper,
+  Stack,
 } from '@mui/material';
 import NoPhotographyIcon from '@mui/icons-material/NoPhotography';
 import Sketch from 'react-p5';
@@ -90,14 +91,37 @@ export default function FormMonitor() {
         const videoElement = p5.createCapture(p5.VIDEO);
         videoElement.elt.srcObject = stream;
         videoElement.hide();
-        setVideo(videoElement);
 
         videoElement.elt.onloadedmetadata = () => {
           // Get the video dimensions
           const videoWidth = videoElement.width;
           const videoHeight = videoElement.height;
 
-          p5.createCanvas(videoWidth, videoHeight).parent(canvasParentRef);
+          const aspectRatio = videoWidth / videoHeight;
+          const maxWidth = window.innerWidth;
+          const maxHeight = window.innerHeight;
+
+          // Slightly reduce canvas width to account for padding/margins
+          const canvasWidth =
+            Math.min(maxWidth, maxHeight * aspectRatio) * 0.95;
+
+          const canvasHeight = canvasWidth / aspectRatio;
+
+          // Calculate scale for videoElement
+          const videoScale = Math.min(
+            canvasWidth / videoElement.width,
+            canvasHeight / videoElement.height
+          );
+          const scaledVideoWidth = videoElement.width * videoScale;
+          const scaledVideoHeight = videoElement.height * videoScale;
+
+          // Apply the calculated scale to videoElement
+          videoElement.size(scaledVideoWidth, scaledVideoHeight);
+
+          // Now set the video state with the scaled videoElement
+          setVideo(videoElement);
+
+          p5.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
         };
 
         const poseNet = ml5.poseNet(videoElement, () =>
@@ -174,7 +198,6 @@ export default function FormMonitor() {
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
-        minWidth: { xl: '490px', xs: '290px' },
         position: 'relative',
       }}
     >
@@ -200,7 +223,7 @@ export default function FormMonitor() {
           </IconButton>
         </Container>
       ) : (
-        <>
+        <Stack>
           <Sketch setup={setup} draw={draw} />
           <Container
             sx={{
@@ -232,7 +255,7 @@ export default function FormMonitor() {
               open={!checkAllKeypoints}
             />
           )}
-        </>
+        </Stack>
       )}
     </Paper>
   );
