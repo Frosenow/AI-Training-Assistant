@@ -12,7 +12,7 @@ import './index.css';
 
 const httpLink = new HttpLink({
   // TODO: Change this in production
-  uri: 'http://192.168.0.227:5000/',
+  uri: 'https://liftlogic-backend-service.onrender.com/',
 });
 
 const authLink = setContext(() => {
