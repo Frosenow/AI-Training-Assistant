@@ -87,9 +87,11 @@ export default function FormMonitor() {
   const setup = (p5, canvasParentRef) => {
     const constraints = {
       video: {
-        facingMode: 'environment', // Use the selected camera type
+        facingMode: {
+          exact: 'environment',
+        },
       },
-      audio: false, // Assuming you don't need audio for this
+      audio: false,
     };
 
     navigator.mediaDevices
