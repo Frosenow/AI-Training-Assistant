@@ -87,9 +87,7 @@ export default function FormMonitor() {
   const setup = (p5, canvasParentRef) => {
     const constraints = {
       video: {
-        facingMode: {
-          exact: 'environment',
-        },
+        facingMode: 'user',
       },
       audio: false,
     };
